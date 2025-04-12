@@ -56,7 +56,7 @@ const SignupPage = () => {
                       </defs>
                     </svg>
                   </span>
-                  Faça Login com o Google
+                  Entre com o Google
                 </button>
 
                 
