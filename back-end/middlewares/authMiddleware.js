@@ -1,0 +1,1 @@
+// Rotas públicas que não requerem autenticação (login, register, index )
