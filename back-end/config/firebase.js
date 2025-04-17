@@ -6,6 +6,7 @@ admin.initializeApp({
   databaseURL: 'https://cr-cursos-eded0-default-rtdb.firebaseio.com'
 });
 
-const db = admin.firestore();
+const db = admin.database();
 
 module.exports = { admin, db };
+
