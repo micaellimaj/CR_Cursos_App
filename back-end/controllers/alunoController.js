@@ -5,7 +5,7 @@ const createAluno = async (req, res) => {
   const { first_name, last_name, email } = req.body;
 
   try {
-    const newAlunoRef = db.ref('alunos').push(); // gera um ID único
+    const newAlunoRef = db.ref('alunos').push(); 
     await newAlunoRef.set({
       first_name,
       last_name,

@@ -1,24 +1,27 @@
-require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const alunoRoutes = require('./routes/alunoRoutes');
-
-// Inicializa o app
 const app = express();
+
+// 🔹 Importando as rotas corretamente:
+const alunoRoutes = require('./routes/alunoRoutes');
+const professorRoutes = require('./routes/professorRoutes');
 
 // Middleware para aceitar JSON e habilitar CORS
 app.use(express.json());
 app.use(cors());
 
-// Rotas da API
+// Rota base para teste
 app.get('/', (req, res) => {
   res.send('API rodando com sucesso! 🚀');
 });
 
+// Rotas da API
+app.use('/api', alunoRoutes);              // Alunos em: http://localhost:5000/api
+app.use('/professores', professorRoutes);  // Professores em: http://localhost:5000/professores
 
-app.use('/api', alunoRoutes);
-
+// Inicializando servidor
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta: http://localhost:${PORT}`);
 });
+

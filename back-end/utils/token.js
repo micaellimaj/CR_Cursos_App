@@ -1,0 +1,1 @@
+// geração e verificação de tokens
