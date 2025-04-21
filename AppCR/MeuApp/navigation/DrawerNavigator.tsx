@@ -1,0 +1,55 @@
+import React from 'react';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useTheme } from '../contexts/ThemeContext';
+import LoginScreen from '../LoginScreen';
+import HomeScreen from '../HomeScreen';
+import CustomDrawerContent from './CustomDrawerContent';
+import RegisterScreen from '../screens/RegisterScreen';
+import { TouchableOpacity, Text } from 'react-native';
+
+const Drawer = createDrawerNavigator();
+
+type DrawerParamList = {
+  Login: undefined;
+  Home: undefined;
+  Register: undefined;
+};
+
+type NavigationProps = DrawerNavigationProp<DrawerParamList>;
+
+interface SuaTelaComponentProps {
+  navigation: NavigationProps;
+}
+
+function SuaTelaComponent({ navigation }: SuaTelaComponentProps) {
+  return (
+    <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+      <Text>Ir para Cadastro</Text>
+    </TouchableOpacity>
+  );
+}
+
+export default function DrawerNavigator() {
+  const { theme } = useTheme();
+  
+  return (
+    <Drawer.Navigator
+      drawerContent={(props) => <CustomDrawerContent {...props} />}
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: theme === 'light' ? '#f5f7fa' : '#0f172a',
+        },
+        headerTintColor: theme === 'light' ? '#333' : '#e2e8f0',
+        drawerStyle: {
+          backgroundColor: theme === 'light' ? '#f5f7fa' : '#0f172a',
+        },
+      }}
+    >
+      <Drawer.Screen name="Login" component={LoginScreen} />
+      <Drawer.Screen name="Register" component={RegisterScreen} />
+      <Drawer.Screen name="Home" component={HomeScreen} />
+    </Drawer.Navigator>
+  );
+}
