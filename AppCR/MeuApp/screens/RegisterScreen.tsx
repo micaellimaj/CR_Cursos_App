@@ -13,6 +13,7 @@ import { useTheme } from '../contexts/ThemeContext';
 
 const { width } = Dimensions.get('window');
 
+
 //função pra deixar cpf bonito
 const formatCPF = (value: string) => {
   const cleaned = value.replace(/\D/g, ''); // Remove tudo que não for número
@@ -89,6 +90,9 @@ export default function RegisterScreen({ navigation }: any) {
       instagram: '',
       cpf: '',
     });
+
+      // Só redireciona se o cadastro foi bem-sucedido
+      navigation.navigate('Login');
   };
 
   return (
@@ -218,8 +222,11 @@ export default function RegisterScreen({ navigation }: any) {
           />
 
           {/* Botão de cadastro */}
-          <TouchableOpacity style={[styles.loginButton, { backgroundColor: isLightTheme ? '#42b72a' : '#16a34a' }]} onPress={handleSubmit}>
-            <Text style={styles.loginButtonText}>Cadastrar</Text>
+          <TouchableOpacity
+             style={[styles.loginButton, { backgroundColor: isLightTheme ? '#42b72a' : '#16a34a' }]}
+              onPress={handleSubmit}
+          >
+             <Text style={styles.loginButtonText}>Cadastrar</Text>
           </TouchableOpacity>
         </View>
       </View>
