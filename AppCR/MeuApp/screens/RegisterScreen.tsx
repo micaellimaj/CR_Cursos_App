@@ -13,6 +13,34 @@ import { useTheme } from '../contexts/ThemeContext';
 
 const { width } = Dimensions.get('window');
 
+//função pra deixar cpf bonito
+const formatCPF = (value: string) => {
+  const cleaned = value.replace(/\D/g, ''); // Remove tudo que não for número
+  return cleaned
+    .replace(/^(\d{3})(\d)/, '$1.$2')
+    .replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3')
+    .replace(/^(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4')
+    .slice(0, 14); //coloca o limite de números 
+};
+
+//função pra deixar telefone bonito
+const formatPhone = (value: string) => {
+  const cleaned = value.replace(/\D/g, ''); // Remove tudo que não for número
+  return cleaned
+    .replace(/^(\d{2})(\d)/, '($1) $2')
+    .replace(/(\d{5})(\d{4})$/, '$1-$2')
+    .slice(0, 15); //coloca o limite de números
+};
+
+//deixa a data de nascimento bonita
+const formatDate = (value: string) => {
+  const cleaned = value.replace(/\D/g, ''); // Remove tudo que não for número
+  return cleaned
+    .replace(/^(\d{2})(\d)/, '$1/$2')          // dd/
+    .replace(/^(\d{2})\/(\d{2})(\d)/, '$1/$2/$3') // dd/mm/
+    .slice(0, 10); // Limita a 10 caracteres no total
+};
+
 type UserType = 'student' | 'teacher';
 
 export default function RegisterScreen({ navigation }: any) {
@@ -47,8 +75,20 @@ export default function RegisterScreen({ navigation }: any) {
       alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
+     
 
     alert('Cadastro realizado com sucesso!');
+
+    setFormData({
+      fullName: '',
+      age: '',
+      phone: '',
+      address: '',
+      email: '',
+      password: '',
+      instagram: '',
+      cpf: '',
+    });
   };
 
   return (
@@ -93,8 +133,9 @@ export default function RegisterScreen({ navigation }: any) {
               ]}
               placeholder="CPF"
               placeholderTextColor={isLightTheme ? '#65676b' : '#9ca3af'}
+              keyboardType='numeric'
               value={formData.cpf}
-              onChangeText={(value) => handleInputChange('cpf', value)}
+              onChangeText={(value) => handleInputChange('cpf', formatCPF(value))}
             />
           )}
 
@@ -107,10 +148,11 @@ export default function RegisterScreen({ navigation }: any) {
                 color: isLightTheme ? '#000' : '#fff',
               },
             ]}
-            placeholder="Idade"
+            placeholder="Data de nascimento"
             placeholderTextColor={isLightTheme ? '#65676b' : '#9ca3af'}
+            keyboardType='numeric'
             value={formData.age}
-            onChangeText={(value) => handleInputChange('age', value)}
+            onChangeText={(value) => handleInputChange('age', formatDate(value))}
           />
 
           <TextInput
@@ -124,8 +166,9 @@ export default function RegisterScreen({ navigation }: any) {
             ]}
             placeholder="Telefone"
             placeholderTextColor={isLightTheme ? '#65676b' : '#9ca3af'}
+            keyboardType='numeric'
             value={formData.phone}
-            onChangeText={(value) => handleInputChange('phone', value)}
+            onChangeText={(value) => handleInputChange('phone', formatPhone(value))}
           />
 
           <TextInput
