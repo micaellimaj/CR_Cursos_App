@@ -5,6 +5,7 @@ const app = express();
 // 🔹 Importando as rotas corretamente:
 const alunoRoutes = require('./routes/alunoRoutes');
 const professorRoutes = require('./routes/professorRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 // Middleware para aceitar JSON e habilitar CORS
 app.use(express.json());
@@ -18,6 +19,7 @@ app.get('/', (req, res) => {
 // Rotas da API
 app.use('/api', alunoRoutes);              // Alunos em: http://localhost:5000/api
 app.use('/professores', professorRoutes);  // Professores em: http://localhost:5000/professores
+app.use('/', authRoutes);                 // Login (alunos/professore) em: http://localhost:5000/login
 
 // Inicializando servidor
 const PORT = process.env.PORT || 5000;
