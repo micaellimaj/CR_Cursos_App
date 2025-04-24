@@ -64,21 +64,11 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
         </Text>
         
         <DrawerItem
-          label="Login"
+          label="Login/Cadastre-se"
           icon={({ color, size }) => (
             <Icon name="login" size={size} color={theme === 'light' ? '#4a90e2' : '#63b3ed'} />
           )}
           onPress={() => props.navigation.navigate('Login')}
-          style={styles.drawerItem}
-          labelStyle={[styles.drawerLabel, { color: theme === 'light' ? '#2d3748' : '#e2e8f0' }]}
-        />
-
-        <DrawerItem
-          label="Cadastro"
-          icon={({ color, size }) => (
-            <Icon name="person-add" size={size} color={theme === 'light' ? '#4a90e2' : '#63b3ed'} />
-          )}
-          onPress={() => props.navigation.navigate('Register')}
           style={styles.drawerItem}
           labelStyle={[styles.drawerLabel, { color: theme === 'light' ? '#2d3748' : '#e2e8f0' }]}
         />

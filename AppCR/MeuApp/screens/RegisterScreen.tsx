@@ -8,11 +8,11 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5, Feather, MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from '../contexts/ThemeContext';
+import styles from '../styles/RegisterScreenStyles'; // Importando os estilos
 
 const { width } = Dimensions.get('window');
-
 
 //função pra deixar cpf bonito
 const formatCPF = (value: string) => {
@@ -53,12 +53,12 @@ export default function RegisterScreen({ navigation }: any) {
     fullName: '',
     age: '',
     phone: '',
-    address: '',
     email: '',
     password: '',
     instagram: '',
-    cpf: '',
   });
+
+  const [successMessage, setSuccessMessage] = useState(false);
 
   const handleInputChange = (field: keyof typeof formData, value: string) => {
     setFormData((prev) => ({
@@ -69,35 +69,45 @@ export default function RegisterScreen({ navigation }: any) {
 
   const handleSubmit = () => {
     // Validação simples
-    const requiredFields: (keyof typeof formData)[] = ['fullName', 'age', 'phone', 'address', 'email', 'password'];
+    const requiredFields: (keyof typeof formData)[] = ['fullName', 'age', 'phone', 'email', 'password'];
     const emptyFields = requiredFields.filter((field) => !formData[field]);
 
     if (emptyFields.length > 0) {
       alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
-     
 
-    alert('Cadastro realizado com sucesso!');
+    // Exibe a mensagem de sucesso
+    setSuccessMessage(true);
 
-    setFormData({
-      fullName: '',
-      age: '',
-      phone: '',
-      address: '',
-      email: '',
-      password: '',
-      instagram: '',
-      cpf: '',
-    });
+    // Limpa os campos do formulário após 3 segundos
+    setTimeout(() => {
+      setSuccessMessage(false);
+      setFormData({
+        fullName: '',
+        age: '',
+        phone: '',
+        email: '',
+        password: '',
+        instagram: '',
+      });
 
-      // Só redireciona se o cadastro foi bem-sucedido
+      // Redireciona para a tela de login
       navigation.navigate('Login');
+    }, 3000);
   };
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: isLightTheme ? '#f5f7fa' : '#0f172a' }]}>
       <View style={styles.content}>
+        {/* Mensagem de sucesso */}
+        {successMessage && (
+          <View style={styles.successMessage}>
+            <FontAwesome5 name="check-circle" size={20} color="#fff" />
+            <Text style={styles.successText}>Cadastro concluído com Sucesso!</Text>
+          </View>
+        )}
+
         {/* Logo com título */}
         <View style={styles.logoContainer}>
           <Text style={[styles.logoText, { color: isLightTheme ? '#2e2f33' : '#e2e8f0' }]}>
@@ -110,22 +120,9 @@ export default function RegisterScreen({ navigation }: any) {
 
         {/* Formulário de cadastro */}
         <View style={styles.formContainer}>
-          <TextInput
-            style={[
-              styles.input,
-              {
-                backgroundColor: isLightTheme ? '#f5f6f7' : '#1e293b',
-                borderColor: isLightTheme ? '#dddfe2' : '#4b5563',
-                color: isLightTheme ? '#000' : '#fff',
-              },
-            ]}
-            placeholder="Nome Completo"
-            placeholderTextColor={isLightTheme ? '#65676b' : '#9ca3af'}
-            value={formData.fullName}
-            onChangeText={(value) => handleInputChange('fullName', value)}
-          />
-
-          {userType === 'student' && (
+          {/* Nome Completo */}
+          <View style={styles.inputContainer}>
+            <Feather name="user" size={20} color={isLightTheme ? '#2563eb' : '#60a5fa'} style={styles.icon} />
             <TextInput
               style={[
                 styles.input,
@@ -135,151 +132,101 @@ export default function RegisterScreen({ navigation }: any) {
                   color: isLightTheme ? '#000' : '#fff',
                 },
               ]}
-              placeholder="CPF"
+              placeholder="Nome Completo"
               placeholderTextColor={isLightTheme ? '#65676b' : '#9ca3af'}
-              keyboardType='numeric'
-              value={formData.cpf}
-              onChangeText={(value) => handleInputChange('cpf', formatCPF(value))}
+              value={formData.fullName}
+              onChangeText={(value) => handleInputChange('fullName', value)}
             />
-          )}
+          </View>
 
-          <TextInput
-            style={[
-              styles.input,
-              {
-                backgroundColor: isLightTheme ? '#f5f6f7' : '#1e293b',
-                borderColor: isLightTheme ? '#dddfe2' : '#4b5563',
-                color: isLightTheme ? '#000' : '#fff',
-              },
-            ]}
-            placeholder="Data de nascimento"
-            placeholderTextColor={isLightTheme ? '#65676b' : '#9ca3af'}
-            keyboardType='numeric'
-            value={formData.age}
-            onChangeText={(value) => handleInputChange('age', formatDate(value))}
-          />
+          {/* Data de Nascimento */}
+          <View style={styles.inputContainer}>
+            <MaterialIcons name="calendar-today" size={20} color={isLightTheme ? '#2563eb' : '#60a5fa'} style={styles.icon} />
+            <TextInput
+              style={[
+                styles.input,
+                {
+                  backgroundColor: isLightTheme ? '#f5f6f7' : '#1e293b',
+                  borderColor: isLightTheme ? '#dddfe2' : '#4b5563',
+                  color: isLightTheme ? '#000' : '#fff',
+                },
+              ]}
+              placeholder="Data de nascimento"
+              placeholderTextColor={isLightTheme ? '#65676b' : '#9ca3af'}
+              keyboardType="numeric"
+              value={formData.age}
+              onChangeText={(value) => handleInputChange('age', formatDate(value))}
+            />
+          </View>
 
-          <TextInput
-            style={[
-              styles.input,
-              {
-                backgroundColor: isLightTheme ? '#f5f6f7' : '#1e293b',
-                borderColor: isLightTheme ? '#dddfe2' : '#4b5563',
-                color: isLightTheme ? '#000' : '#fff',
-              },
-            ]}
-            placeholder="Telefone"
-            placeholderTextColor={isLightTheme ? '#65676b' : '#9ca3af'}
-            keyboardType='numeric'
-            value={formData.phone}
-            onChangeText={(value) => handleInputChange('phone', formatPhone(value))}
-          />
+          {/* Telefone */}
+          <View style={styles.inputContainer}>
+            <Feather name="phone" size={20} color={isLightTheme ? '#2563eb' : '#60a5fa'} style={styles.icon} />
+            <TextInput
+              style={[
+                styles.input,
+                {
+                  backgroundColor: isLightTheme ? '#f5f6f7' : '#1e293b',
+                  borderColor: isLightTheme ? '#dddfe2' : '#4b5563',
+                  color: isLightTheme ? '#000' : '#fff',
+                },
+              ]}
+              placeholder="Telefone"
+              placeholderTextColor={isLightTheme ? '#65676b' : '#9ca3af'}
+              keyboardType="numeric"
+              value={formData.phone}
+              onChangeText={(value) => handleInputChange('phone', formatPhone(value))}
+            />
+          </View>
 
-          <TextInput
-            style={[
-              styles.input,
-              {
-                backgroundColor: isLightTheme ? '#f5f6f7' : '#1e293b',
-                borderColor: isLightTheme ? '#dddfe2' : '#4b5563',
-                color: isLightTheme ? '#000' : '#fff',
-              },
-            ]}
-            placeholder="Endereço"
-            placeholderTextColor={isLightTheme ? '#65676b' : '#9ca3af'}
-            value={formData.address}
-            onChangeText={(value) => handleInputChange('address', value)}
-          />
+          {/* Email */}
+          <View style={styles.inputContainer}>
+            <Feather name="mail" size={20} color={isLightTheme ? '#2563eb' : '#60a5fa'} style={styles.icon} />
+            <TextInput
+              style={[
+                styles.input,
+                {
+                  backgroundColor: isLightTheme ? '#f5f6f7' : '#1e293b',
+                  borderColor: isLightTheme ? '#dddfe2' : '#4b5563',
+                  color: isLightTheme ? '#000' : '#fff',
+                },
+              ]}
+              placeholder="Email"
+              placeholderTextColor={isLightTheme ? '#65676b' : '#9ca3af'}
+              value={formData.email}
+              onChangeText={(value) => handleInputChange('email', value)}
+            />
+          </View>
 
-          <TextInput
-            style={[
-              styles.input,
-              {
-                backgroundColor: isLightTheme ? '#f5f6f7' : '#1e293b',
-                borderColor: isLightTheme ? '#dddfe2' : '#4b5563',
-                color: isLightTheme ? '#000' : '#fff',
-              },
-            ]}
-            placeholder="Email"
-            placeholderTextColor={isLightTheme ? '#65676b' : '#9ca3af'}
-            value={formData.email}
-            onChangeText={(value) => handleInputChange('email', value)}
-          />
-
-          <TextInput
-            style={[
-              styles.input,
-              {
-                backgroundColor: isLightTheme ? '#f5f6f7' : '#1e293b',
-                borderColor: isLightTheme ? '#dddfe2' : '#4b5563',
-                color: isLightTheme ? '#000' : '#fff',
-              },
-            ]}
-            placeholder="Senha"
-            placeholderTextColor={isLightTheme ? '#65676b' : '#9ca3af'}
-            value={formData.password}
-            onChangeText={(value) => handleInputChange('password', value)}
-            secureTextEntry
-          />
+          {/* Senha */}
+          <View style={styles.inputContainer}>
+            <Feather name="lock" size={20} color={isLightTheme ? '#2563eb' : '#60a5fa'} style={styles.icon} />
+            <TextInput
+              style={[
+                styles.input,
+                {
+                  backgroundColor: isLightTheme ? '#f5f6f7' : '#1e293b',
+                  borderColor: isLightTheme ? '#dddfe2' : '#4b5563',
+                  color: isLightTheme ? '#000' : '#fff',
+                },
+              ]}
+              placeholder="Senha"
+              placeholderTextColor={isLightTheme ? '#65676b' : '#9ca3af'}
+              value={formData.password}
+              onChangeText={(value) => handleInputChange('password', value)}
+              secureTextEntry
+            />
+          </View>
 
           {/* Botão de cadastro */}
           <TouchableOpacity
-             style={[styles.loginButton, { backgroundColor: isLightTheme ? '#42b72a' : '#16a34a' }]}
-              onPress={handleSubmit}
+            style={[styles.loginButton, { backgroundColor: isLightTheme ? '#42b72a' : '#16a34a' }]}
+            onPress={handleSubmit}
           >
-             <Text style={styles.loginButtonText}>Cadastrar</Text>
+            <Text style={styles.loginButtonText}>Cadastrar</Text>
           </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  content: {
-    flex: 1,
-    padding: 20,
-    justifyContent: 'space-between',
-  },
-  logoContainer: {
-    alignItems: 'center',
-    marginTop: 60,
-    marginBottom: 30,
-  },
-  logoText: {
-    fontSize: 32,
-    fontWeight: 'bold',
-  },
-  subtitle: {
-    fontSize: 14,
-    textAlign: 'center',
-  },
-  formContainer: {
-    width: '100%',
-    alignItems: 'center',
-  },
-  input: {
-    width: '100%',
-    height: 50,
-    borderRadius: 8,
-    marginBottom: 12,
-    paddingHorizontal: 16,
-    fontSize: 16,
-    borderWidth: 1,
-  },
-  loginButton: {
-    width: '100%',
-    height: 50,
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  loginButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-});

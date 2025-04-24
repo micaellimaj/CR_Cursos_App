@@ -88,7 +88,7 @@ export default function LoginScreen({ navigation }: any) {
           {/* Divisor visual */}
           <View style={styles.divider}>
             <View style={[styles.dividerLine, { backgroundColor: isLightTheme ? '#dadde1' : '#374151' }]} />
-            <Text style={[styles.dividerText, { color: isLightTheme ? '#65676b' : '#9ca3af' }]}>ou</Text>
+            <Text style={[styles.dividerText, { color: isLightTheme ? '#65676b' : '#9ca3af' }]}>Faça login com Google, ou Cadastre-se</Text>
             <View style={[styles.dividerLine, { backgroundColor: isLightTheme ? '#dadde1' : '#374151' }]} />
           </View>
 
