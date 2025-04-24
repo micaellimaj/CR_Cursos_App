@@ -1,35 +1,13 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { DrawerNavigationProp } from '@react-navigation/drawer';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../contexts/ThemeContext';
 import LoginScreen from '../LoginScreen';
 import HomeScreen from '../HomeScreen';
+import ProfileScreen from '../ProfileScreen';
 import CustomDrawerContent from './CustomDrawerContent';
 import RegisterScreen from '../screens/RegisterScreen';
-import { TouchableOpacity, Text } from 'react-native';
 
 const Drawer = createDrawerNavigator();
-
-type DrawerParamList = {
-  Login: undefined;
-  Home: undefined;
-  Register: undefined;
-};
-
-type NavigationProps = DrawerNavigationProp<DrawerParamList>;
-
-interface SuaTelaComponentProps {
-  navigation: NavigationProps;
-}
-
-function SuaTelaComponent({ navigation }: SuaTelaComponentProps) {
-  return (
-    <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-      <Text>Ir para Cadastro</Text>
-    </TouchableOpacity>
-  );
-}
 
 export default function DrawerNavigator() {
   const { theme } = useTheme();
@@ -50,6 +28,7 @@ export default function DrawerNavigator() {
       <Drawer.Screen name="Login" component={LoginScreen} />
       <Drawer.Screen name="Register" component={RegisterScreen} />
       <Drawer.Screen name="Home" component={HomeScreen} />
+      <Drawer.Screen name="ProfileScreen" component={ProfileScreen} />
     </Drawer.Navigator>
   );
 }

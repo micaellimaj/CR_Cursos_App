@@ -99,6 +99,16 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
           style={styles.drawerItem}
           labelStyle={[styles.drawerLabel, { color: theme === 'light' ? '#2d3748' : '#e2e8f0' }]}
         />
+
+        <DrawerItem
+          label="Perfil"
+          icon={({ color, size }) => (
+            <Ionicons name="person-circle" size={size} color={theme === 'light' ? '#4a90e2' : '#63b3ed'} />
+          )}
+          onPress={() => props.navigation.navigate('ProfileScreen')} // Navega para a tela de Perfil
+          style={styles.drawerItem}
+          labelStyle={[styles.drawerLabel, { color: theme === 'light' ? '#2d3748' : '#e2e8f0' }]}
+        />
       </View>
 
       {/* Seção de Configurações */}
@@ -108,18 +118,18 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
         </Text>
 
         <DrawerItem
-    label="Configurações"
-    icon={({ size }) => (
-      <Ionicons
-        name="settings-sharp"
-        size={size}
-        color={theme === 'light' ? '#4a90e2' : '#63b3ed'}
-      />
-    )}
-    onPress={() => props.navigation.navigate('Settings')}
-    style={styles.drawerItem}
-    labelStyle={[styles.drawerLabel, { color: theme === 'light' ? '#2d3748' : '#e2e8f0' }]}
-  />
+          label="Configurações"
+          icon={({ size }) => (
+            <Ionicons
+              name="settings-sharp"
+              size={size}
+              color={theme === 'light' ? '#4a90e2' : '#63b3ed'}
+            />
+          )}
+          onPress={() => props.navigation.navigate('Settings')}
+          style={styles.drawerItem}
+          labelStyle={[styles.drawerLabel, { color: theme === 'light' ? '#2d3748' : '#e2e8f0' }]}
+        />
         
         <DrawerItem
           label="Alternar Tema"
