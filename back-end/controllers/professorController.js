@@ -3,19 +3,15 @@ const { db } = require('../config/firebase');
 // Criar novo Professor
 const createProfessor = async (req, res) => {
   const { 
-    first_name,
-    last_name, 
+    full_name,
     email,
-    cpf: hashedCpf,
     senha: hashedSenha,
     confirmarSenha,
     telefone,
-    instagram,
-    endereco,
     data_nascimento, 
   } = req.body;
 
-  if (!first_name || !email || !senha || 'undefined') {
+  if (!full_name || !email || !senha || 'undefined') {
     return res.status(400).send('Campos obrigatórios faltando');
   }
 
@@ -25,11 +21,9 @@ const createProfessor = async (req, res) => {
  
   try {
     const hashedSenha = await bcrypt.hash(senha, 10);
-    const hashedCpf = cpf ? await bcrypt.hash(cpf, 10) : null;
     const ref = db.ref('professores').push();
     await ref.set({
-      first_name,
-      last_name,
+      full_name,
       email,
       created_at: new Date().toISOString()
     });
