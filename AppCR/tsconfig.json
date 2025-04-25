@@ -1,0 +1,9 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "jsx": "react", // Suporte a JSX
+    "target": "es5", // Define o alvo de compilação
+    "module": "commonjs" // Define o sistema de módulos
+  }
+}

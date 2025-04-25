@@ -1,0 +1,14 @@
+{
+    "name": "cr_cursos_fullstack",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+      "dev": "concurrently \"npm run dev:back\" \"npm run dev:front\"",
+      "dev:back": "cd back-end && npm run dev",
+      "dev:front": "cd AppCR && npx expo start"
+    },
+    "devDependencies": {
+      "concurrently": "^8.2.0"
+    }
+  }
+  
