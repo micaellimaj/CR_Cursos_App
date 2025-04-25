@@ -68,7 +68,7 @@ export default function ProfileScreen() {
             { label: 'Data de Nascimento', value: user.birthDate, field: 'birthDate' },
             { label: 'Senha', value: user.password, field: 'password' },
           ].map((item, index) => (
-            <View key={index} style={styles.row}>
+            <View style={styles.row}>
               <Text style={[styles.label, { color: isLightTheme ? '#2e2f33' : '#e2e8f0' }]}>{item.label}:</Text>
               <Text style={[styles.value, { color: isLightTheme ? '#65676b' : '#cbd5e1' }]}>{item.value}</Text>
               <TouchableOpacity onPress={() => handleEdit(item.field)} style={styles.editButton}>
