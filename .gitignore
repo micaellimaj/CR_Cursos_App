@@ -135,6 +135,5 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-
 # Firebase credentials
 back-end/config/firebaseServiceAccountKey.json
