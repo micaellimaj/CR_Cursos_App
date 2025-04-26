@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   StyleSheet,
   Dimensions,
+  Alert,
 } from 'react-native';
 import { FontAwesome5, Feather, MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from '../contexts/ThemeContext';
@@ -44,18 +45,34 @@ const formatDate = (value: string) => {
 
 type UserType = 'student' | 'teacher';
 
+type FormFields = {
+  fullName: string;
+  birthDate: string;
+  phone: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  responsibleFullName: string;
+  responsibleEmail: string;
+  responsiblePhone: string;
+};
+
+
 export default function RegisterScreen({ navigation }: any) {
   const { theme } = useTheme();
   const isLightTheme = theme === 'light';
 
   const [userType, setUserType] = useState<UserType>('student');
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormFields>({
     fullName: '',
-    age: '',
+    birthDate: '',
     phone: '',
     email: '',
     password: '',
-    instagram: '',
+    confirmPassword: '',
+    responsibleFullName: '',
+    responsibleEmail: '',
+    responsiblePhone: '',
   });
 
   const [successMessage, setSuccessMessage] = useState(false);
@@ -67,35 +84,92 @@ export default function RegisterScreen({ navigation }: any) {
     }));
   };
 
-  const handleSubmit = () => {
-    // Validação simples
-    const requiredFields: (keyof typeof formData)[] = ['fullName', 'age', 'phone', 'email', 'password'];
-    const emptyFields = requiredFields.filter((field) => !formData[field]);
-
+  const handleSubmit = async () => {
+    const {
+      fullName,
+      birthDate,
+      phone,
+      email,
+      password,
+      confirmPassword,
+      responsibleFullName,
+      responsibleEmail,
+      responsiblePhone
+    } = formData;
+  
+    const requiredFields: (keyof FormFields)[] = ['fullName', 'birthDate', 'phone', 'email', 'password', 'confirmPassword'];
+  
+    const emptyFields = requiredFields.filter((field) => formData[field].trim() === '');
     if (emptyFields.length > 0) {
       alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
-
-    // Exibe a mensagem de sucesso
-    setSuccessMessage(true);
-
-    // Limpa os campos do formulário após 3 segundos
-    setTimeout(() => {
-      setSuccessMessage(false);
-      setFormData({
-        fullName: '',
-        age: '',
-        phone: '',
-        email: '',
-        password: '',
-        instagram: '',
+  
+    if (password !== confirmPassword) {
+      alert('Erro: As senhas não coincidem.');
+      return;
+    }
+  
+    // Calcular idade para saber se precisa do responsável
+    const today = new Date();
+    const birth = new Date(birthDate);
+    const age = today.getFullYear() - birth.getFullYear();
+  
+    const alunoPayload: any = {
+      full_name: fullName,
+      birth_date: birthDate,
+      phone,
+      email,
+      password,
+    };
+  
+    // Se for menor de idade, exige dados do responsável
+    if (age < 18) {
+      if (!responsibleFullName || !responsibleEmail || !responsiblePhone) {
+        alert('Por favor, preencha os dados do responsável.');
+        return;
+      }
+  
+      alunoPayload.responsible = {
+        full_name: responsibleFullName,
+        email: responsibleEmail,
+        phone: responsiblePhone
+      };
+    }
+  
+    try {
+      const response = await fetch('http://localhost:5000/api/alunos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(alunoPayload),
       });
-
-      // Redireciona para a tela de login
-      navigation.navigate('Login');
-    }, 3000);
+  
+      if (response.ok) {
+        setSuccessMessage(true);
+        setTimeout(() => {
+          setSuccessMessage(false);
+          setFormData({
+            fullName: '',
+            birthDate: '',
+            phone: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
+            responsibleFullName: '',
+            responsibleEmail: '',
+            responsiblePhone: '',
+          });
+          navigation.navigate('Login');
+        }, 3000);
+      } else {
+        const error = await response.json();
+        Alert.alert('Erro no cadastro', error.message || 'Tente novamente.');
+      }
+    } catch (error) {
+      Alert.alert('Erro de rede', 'Não foi possível conectar ao servidor.');
+    }
   };
+  
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: isLightTheme ? '#f5f7fa' : '#0f172a' }]}>
@@ -154,8 +228,8 @@ export default function RegisterScreen({ navigation }: any) {
               placeholder="Data de nascimento"
               placeholderTextColor={isLightTheme ? '#65676b' : '#9ca3af'}
               keyboardType="numeric"
-              value={formData.age}
-              onChangeText={(value) => handleInputChange('age', formatDate(value))}
+              value={formData.birthDate}
+              onChangeText={(value) => handleInputChange('birthDate', formatDate(value))}
             />
           </View>
 
@@ -217,6 +291,77 @@ export default function RegisterScreen({ navigation }: any) {
               secureTextEntry
             />
           </View>
+
+          {/* Confirmar Senha */}
+          <View style={styles.inputContainer}>
+            <Feather name="lock" size={20} color={isLightTheme ? '#2563eb' : '#60a5fa'} style={styles.icon} />
+            <TextInput
+              style={[
+                styles.input,
+                {
+                  backgroundColor: isLightTheme ? '#f5f6f7' : '#1e293b',
+                  borderColor: isLightTheme ? '#dddfe2' : '#4b5563',
+                  color: isLightTheme ? '#000' : '#fff',
+                },
+              ]}
+              placeholder="Confirmar Senha"
+              placeholderTextColor={isLightTheme ? '#65676b' : '#9ca3af'}
+              value={formData.confirmPassword}
+              onChangeText={(value) => handleInputChange('confirmPassword', value)}
+              secureTextEntry
+            />
+          </View>
+
+          {/* Campos do responsável (opcional) */}
+        <Text style={{ marginTop: 20, fontWeight: 'bold', color: isLightTheme ? '#000' : '#fff' }}>
+          Dados do Responsável (caso menor de idade)
+        </Text>
+
+        <View style={styles.inputContainer}>
+          <Feather name="user" size={20} color={isLightTheme ? '#2563eb' : '#60a5fa'} style={styles.icon} />
+          <TextInput
+            style={[styles.input, {
+              backgroundColor: isLightTheme ? '#f5f6f7' : '#1e293b',
+              borderColor: isLightTheme ? '#dddfe2' : '#4b5563',
+              color: isLightTheme ? '#000' : '#fff',
+            }]}
+            placeholder="Nome do Responsável"
+            placeholderTextColor={isLightTheme ? '#65676b' : '#9ca3af'}
+            value={formData.responsibleFullName}
+            onChangeText={(value) => handleInputChange('responsibleFullName', value)}
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <Feather name="mail" size={20} color={isLightTheme ? '#2563eb' : '#60a5fa'} style={styles.icon} />
+          <TextInput
+            style={[styles.input, {
+              backgroundColor: isLightTheme ? '#f5f6f7' : '#1e293b',
+              borderColor: isLightTheme ? '#dddfe2' : '#4b5563',
+              color: isLightTheme ? '#000' : '#fff',
+            }]}
+            placeholder="Email do Responsável"
+            placeholderTextColor={isLightTheme ? '#65676b' : '#9ca3af'}
+            value={formData.responsibleEmail}
+            onChangeText={(value) => handleInputChange('responsibleEmail', value)}
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <Feather name="phone" size={20} color={isLightTheme ? '#2563eb' : '#60a5fa'} style={styles.icon} />
+          <TextInput
+            style={[styles.input, {
+              backgroundColor: isLightTheme ? '#f5f6f7' : '#1e293b',
+              borderColor: isLightTheme ? '#dddfe2' : '#4b5563',
+              color: isLightTheme ? '#000' : '#fff',
+            }]}
+            placeholder="Telefone do Responsável"
+            placeholderTextColor={isLightTheme ? '#65676b' : '#9ca3af'}
+            value={formData.responsiblePhone}
+            onChangeText={(value) => handleInputChange('responsiblePhone', value)}
+          />
+        </View>
+
 
           {/* Botão de cadastro */}
           <TouchableOpacity
