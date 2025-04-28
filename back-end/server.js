@@ -2,6 +2,10 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 
+// Rota de imagem //
+const imagemRoutes = require('./routes/imagemRoutes');
+app.use('/api/imagem', imagemRoutes);
+
 // 🔹 Importando as rotas corretamente:
 const alunoRoutes = require('./routes/alunoRoutes');
 const professorRoutes = require('./routes/professorRoutes');
