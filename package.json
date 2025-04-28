@@ -1,14 +1,20 @@
 {
-    "name": "cr_cursos_fullstack",
-    "version": "1.0.0",
-    "private": true,
-    "scripts": {
-      "dev": "concurrently \"npm run dev:back\" \"npm run dev:front\"",
-      "dev:back": "cd back-end && npm run dev",
-      "dev:front": "cd AppCR && npx expo start"
-    },
-    "devDependencies": {
-      "concurrently": "^8.2.0"
-    }
+  "name": "cr_cursos_fullstack",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:back\" \"npm run dev:front\"",
+    "dev:back": "cd back-end && npm run dev",
+    "dev:front": "cd AppCR && npx expo start"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0",
+    "typescript": "^5.3.3",
+    "@types/react": "~18.3.12"
+  },
+  "dependencies": {
+    "axios": "^1.9.0",
+    "expo": "^52.0.46",
+    "@react-native-async-storage/async-storage": "1.23.1"
   }
-  
+}
