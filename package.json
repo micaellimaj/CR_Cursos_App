@@ -8,13 +8,13 @@
     "dev:front": "cd AppCR && npx expo start"
   },
   "devDependencies": {
+    "@types/react": "~18.3.12",
     "concurrently": "^8.2.0",
-    "typescript": "^5.3.3",
-    "@types/react": "~18.3.12"
+    "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "1.23.1",
     "axios": "^1.9.0",
-    "expo": "^52.0.46",
-    "@react-native-async-storage/async-storage": "1.23.1"
+    "expo": "^52.0.46"
   }
 }
