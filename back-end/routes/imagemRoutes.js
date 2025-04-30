@@ -6,6 +6,8 @@ const multer = require("multer");
 
 const upload = multer({ dest: "uploads/" });
 
+// ⚠️ Aqui está o provável erro:
+// Verifique se "auth" está exportando uma função middleware corretamente
 router.post("/upload", auth, upload.single("imagem"), imagemController.uploadImagemAluno);
 
 module.exports = router;

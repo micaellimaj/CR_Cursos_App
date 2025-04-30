@@ -3,10 +3,13 @@ const serviceAccount = require('./firebaseServiceAccountKey.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: 'https://cr-cursos-eded0-default-rtdb.firebaseio.com'
+  databaseURL: 'https://cr-cursos-eded0-default-rtdb.firebaseio.com',
+  storageBucket: 'cr-cursos-eded0.appspot.com' // <- ESSA LINHA É ESSENCIAL
 });
 
 const db = admin.database();
+const bucket = admin.storage().bucket();
 
-module.exports = { admin, db };
+module.exports = { admin, db, bucket };
+
 

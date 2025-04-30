@@ -45,6 +45,22 @@ const login = async (req, res) => {
       return res.status(200).send({ token, tipo: 'professor', id, nome: prof.full_name });
     }
 
+    // 3. Tenta encontrar o usuário em administradores
+    const adminSnap = await db.ref('administradores').orderByChild('email').equalTo(email).once('value');
+    const admins = adminSnap.val();
+
+    if (admins) {
+      const id = Object.keys(admins)[0];
+      const admin = admins[id];
+
+      const senhaCorreta = await bcrypt.compare(senha, admin.senha);
+      if (!senhaCorreta) return res.status(401).send('Senha incorreta');
+
+      const token = jwt.sign({ id, tipo: 'admin' }, SECRET_KEY, { expiresIn: '1h' });
+
+      return res.status(200).send({ token, tipo: 'admin', id, nome: admin.full_name });
+    }
+
     // Se não encontrar em nenhum
     return res.status(404).send('Usuário não encontrado');
   } catch (error) {
