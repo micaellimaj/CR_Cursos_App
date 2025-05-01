@@ -4,6 +4,10 @@ const jwt = require('jsonwebtoken');
 
 const SECRET_KEY = process.env.JWT_SECRET || 'chave_secreta_teste';
 
+// Defina o único admin autorizado
+const ADMIN_EMAIL = 'admin@crcursos.com';
+const ADMIN_SENHA = 'admin123';
+
 // Função de login
 const login = async (req, res) => {
   const { email, senha } = req.body;
@@ -45,23 +49,41 @@ const login = async (req, res) => {
       return res.status(200).send({ token, tipo: 'professor', id, nome: prof.full_name });
     }
 
-    // 3. Tenta encontrar o usuário em administradores
-    const adminSnap = await db.ref('administradores').orderByChild('email').equalTo(email).once('value');
-    const admins = adminSnap.val();
+    // 3. Se o email for do admin autorizado
+    if (email === ADMIN_EMAIL) {
+      const adminSnap = await db.ref('administradores').orderByChild('email').equalTo(email).once('value');
+      const admins = adminSnap.val();
 
-    if (admins) {
-      const id = Object.keys(admins)[0];
-      const admin = admins[id];
+      // Se admin já existe
+      if (admins) {
+        const id = Object.keys(admins)[0];
+        const admin = admins[id];
 
-      const senhaCorreta = await bcrypt.compare(senha, admin.senha);
-      if (!senhaCorreta) return res.status(401).send('Senha incorreta');
+        const senhaCorreta = await bcrypt.compare(senha, admin.senha);
+        if (!senhaCorreta) return res.status(401).send('Senha incorreta');
 
-      const token = jwt.sign({ id, tipo: 'admin' }, SECRET_KEY, { expiresIn: '1h' });
+        const token = jwt.sign({ id, tipo: 'admin' }, SECRET_KEY, { expiresIn: '1h' });
 
-      return res.status(200).send({ token, tipo: 'admin', id, nome: admin.full_name });
+        return res.status(200).send({ token, tipo: 'admin', id, nome: admin.full_name });
+      }
+
+      // Se admin ainda não está cadastrado, cria automaticamente
+      const hashSenha = await bcrypt.hash(ADMIN_SENHA, 10);
+      const novoAdminRef = db.ref('administradores').push();
+      const novoAdmin = {
+        full_name: 'Administrador Principal',
+        email: ADMIN_EMAIL,
+        senha: hashSenha,
+      };
+
+      await novoAdminRef.set(novoAdmin);
+
+      const token = jwt.sign({ id: novoAdminRef.key, tipo: 'admin' }, SECRET_KEY, { expiresIn: '1h' });
+
+      return res.status(201).send({ token, tipo: 'admin', id: novoAdminRef.key, nome: novoAdmin.full_name });
     }
 
-    // Se não encontrar em nenhum
+    // 4. Email não pertence a nenhum usuário
     return res.status(404).send('Usuário não encontrado');
   } catch (error) {
     console.error('Erro no login:', error);
