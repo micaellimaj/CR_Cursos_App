@@ -45,3 +45,16 @@ CR_Cursos_App/
 ├── .gitignore
 └── README.md
 ```
+
+
+* POST http://localhost:5000/professores
+* GET http://localhost:5000/professores
+* GET http://localhost:5000/professores/:id
+* PUT http://localhost:5000/professores/:id
+* DELETE http://localhost:5000/professores/:id
+
+* POST http://localhost:5000/api/alunos
+* GET http://localhost:5000/api/alunos
+* GET http://localhost:5000/api/alunos/:id
+* PUT http://localhost:5000/api/alunos/:id
+* DELETE http://localhost:5000/api/alunos/:id
