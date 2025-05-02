@@ -109,6 +109,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  input: {
+    borderWidth: 1,
+    borderColor: '#cbd5e1',
+    borderRadius: 8,
+    padding: 10,
+    marginTop: 8,
+    marginBottom: 16,
+    fontSize: 16,
+    color: '#0f172a',
+    backgroundColor: '#fff',
+  },
+  
 });
 
 export default styles;

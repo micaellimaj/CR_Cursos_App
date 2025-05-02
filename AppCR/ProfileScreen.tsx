@@ -1,93 +1,201 @@
-import React, { useState } from 'react';
-import { 
-  View, 
-  Text, 
-  TextInput, 
-  TouchableOpacity, 
-  SafeAreaView, 
-  Image, 
-  Alert 
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  SafeAreaView,
+  Image,
+  Alert,
+  ScrollView
 } from 'react-native';
 import { Feather, MaterialIcons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import { useTheme } from './contexts/ThemeContext';
-import styles from './styles/ProfileScreenStyles'; // Importando os estilos
+import styles from './styles/ProfileScreenStyles';
 
 export default function ProfileScreen() {
   const { theme } = useTheme();
   const isLightTheme = theme === 'light';
 
-  // Dados fictícios do usuário
   const [user, setUser] = useState({
-    name: 'Matheus Feliciano',
-    email: 'matheusfeliciano@email.com',
-    phone: '(11) 98765-4321',
-    birthDate: '1990-05-15',
-    password: '********',
-    course: 'Engenharia de Software',
-    registrationId: '123456789',
-    validity: '12/2025',
+    fullName: '',
+    birthDate: '',
+    phone: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    responsibleFullName: '',
+    responsibleEmail: '',
+    responsiblePhone: '',
   });
 
-  const handleEdit = (field: string) => {
-    Alert.alert('Editar', `Você clicou para editar o campo: ${field}`);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = await AsyncStorage.getItem('token');
+      const id = await AsyncStorage.getItem('id');
+
+      try {
+        const response = await axios.get(`http://localhost:5000/api/alunos/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = response.data;
+        setUser({
+          fullName: data.full_name || '',
+          birthDate: data.data_nascimento || '',
+          phone: data.telefone || '',
+          email: data.email || '',
+          password: '********',
+          confirmPassword: '********',
+          responsibleFullName: data.responsavel_nome || '',
+          responsibleEmail: data.responsavel_email || '',
+          responsiblePhone: data.responsavel_telefone || '',
+        });
+      } catch (error) {
+        console.error('Erro ao buscar dados do aluno:', error);
+        Alert.alert('Erro', 'Não foi possível carregar os dados do aluno.');
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const handleUpdate = async () => {
+    const token = await AsyncStorage.getItem('token');
+    const id = await AsyncStorage.getItem('id');
+
+    try {
+      await axios.put(`http://localhost:5000/api/alunos/${id}`, {
+        full_name: user.fullName,
+        data_nascimento: user.birthDate,
+        telefone: user.phone,
+        email: user.email,
+        responsavel_nome: user.responsibleFullName,
+        responsavel_email: user.responsibleEmail,
+        responsavel_telefone: user.responsiblePhone,
+        // Envie a senha se o campo for alterado
+        ...(user.password !== '********' && { password: user.password }),
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      Alert.alert('Sucesso', 'Seus dados foram atualizados.');
+    } catch (error) {
+      console.error('Erro ao atualizar dados:', error);
+      Alert.alert('Erro', 'Não foi possível atualizar os dados.');
+    }
+  };
+
+  const handleChange = (field: string, value: string) => {
+    setUser((prev) => ({ ...prev, [field]: value }));
   };
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: isLightTheme ? '#f5f7fa' : '#0f172a' }]}>
-      <View style={styles.content}>
-        {/* Cabeçalho */}
+      <ScrollView style={styles.content}>
         <View style={styles.header}>
           <View style={styles.avatarContainer}>
-            <Image 
-              source={require('./assets/aluno.png')} // Substitua com a imagem do usuário
+            <Image
+              source={require('./assets/aluno.png')}
               style={styles.avatar}
             />
             <TouchableOpacity style={styles.cameraButton}>
               <MaterialIcons name="camera-alt" size={20} color="#fff" />
             </TouchableOpacity>
-            </View>
-<Text style={styles.name}>{user.name}</Text>
-<Text style={styles.info}>{user.email}</Text>
-<Text style={styles.info}>{user.phone}</Text>
-<Text style={styles.userCourse}>Curso: {user.course}</Text>
-</View>
-
-        {/* Cartão com dados institucionais */}
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Dados Institucionais</Text>
-          <Text style={styles.cardContent}>Matrícula: {user.registrationId}</Text>
-          <Text style={styles.cardContent}>Validade: {user.validity}</Text>
+          </View>
+          <Text style={styles.name}>{user.fullName}</Text>
+          <Text style={styles.info}>{user.email}</Text>
+          <Text style={styles.info}>{user.phone}</Text>
         </View>
 
-        {/* Meus Dados */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Meus Dados</Text>
-          {[
-            { label: 'E-mail', value: user.email, field: 'email' },
-            { label: 'Telefone', value: user.phone, field: 'phone' },
-            { label: 'Data de Nascimento', value: user.birthDate, field: 'birthDate' },
-            { label: 'Senha', value: user.password, field: 'password' },
-          ].map((item, index) => (
-            <View style={styles.row}>
-              <Text style={[styles.label, { color: isLightTheme ? '#2e2f33' : '#e2e8f0' }]}>{item.label}:</Text>
-              <Text style={[styles.value, { color: isLightTheme ? '#65676b' : '#cbd5e1' }]}>{item.value}</Text>
-              <TouchableOpacity onPress={() => handleEdit(item.field)} style={styles.editButton}>
-                <Feather name="edit-2" size={20} color={isLightTheme ? '#2563eb' : '#60a5fa'} />
-              </TouchableOpacity>
-            </View>
-          ))}
+
+          <Text style={styles.label}>Nome completo</Text>
+          <TextInput
+            style={styles.input}
+            value={user.fullName}
+            onChangeText={(text) => handleChange('fullName', text)}
+          />
+
+          <Text style={styles.label}>Data de nascimento</Text>
+          <TextInput
+            style={styles.input}
+            value={user.birthDate}
+            onChangeText={(text) => handleChange('birthDate', text)}
+          />
+
+          <Text style={styles.label}>Telefone</Text>
+          <TextInput
+            style={styles.input}
+            value={user.phone}
+            onChangeText={(text) => handleChange('phone', text)}
+          />
+
+          <Text style={styles.label}>E-mail</Text>
+          <TextInput
+            style={styles.input}
+            value={user.email}
+            onChangeText={(text) => handleChange('email', text)}
+          />
+
+          <Text style={styles.label}>Senha</Text>
+          <TextInput
+            style={styles.input}
+            secureTextEntry
+            value={user.password}
+            onChangeText={(text) => handleChange('password', text)}
+          />
+
+          <Text style={styles.label}>Confirmar Senha</Text>
+          <TextInput
+            style={styles.input}
+            secureTextEntry
+            value={user.confirmPassword}
+            onChangeText={(text) => handleChange('confirmPassword', text)}
+          />
         </View>
 
-        {/* Botões */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Dados do Responsável</Text>
+
+          <Text style={styles.label}>Nome completo</Text>
+          <TextInput
+            style={styles.input}
+            value={user.responsibleFullName}
+            onChangeText={(text) => handleChange('responsibleFullName', text)}
+          />
+
+          <Text style={styles.label}>E-mail</Text>
+          <TextInput
+            style={styles.input}
+            value={user.responsibleEmail}
+            onChangeText={(text) => handleChange('responsibleEmail', text)}
+          />
+
+          <Text style={styles.label}>Telefone</Text>
+          <TextInput
+            style={styles.input}
+            value={user.responsiblePhone}
+            onChangeText={(text) => handleChange('responsiblePhone', text)}
+          />
+        </View>
+
         <View style={styles.buttonsContainer}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.updateButton, { backgroundColor: isLightTheme ? '#2563eb' : '#60a5fa' }]}
-            onPress={() => Alert.alert('Atualizado!', 'Seus dados foram atualizados com sucesso.')}
+            onPress={handleUpdate}
           >
             <Text style={styles.updateButtonText}>Atualizar Dados</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
