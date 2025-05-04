@@ -14,6 +14,7 @@ import { useTheme } from './contexts/ThemeContext';
 import styles from './styles/LoginScreenStyles'; // Importando os estilos
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+// import logoImage from './assets/images/aluno.png';
 
 
 const { width } = Dimensions.get('window');
@@ -32,7 +33,7 @@ export default function LoginScreen({ navigation }: any) {
     }
   
     try {
-      const response = await axios.post('http://192.168.1.10:5000/login', {
+      const response = await axios.post('http://192.168.100.83:5000/login', {
         email,
         senha: password,
       });
@@ -58,16 +59,19 @@ export default function LoginScreen({ navigation }: any) {
     }
   };
   
-
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: isLightTheme ? '#f5f7fa' : '#0f172a' }]}>
       <View style={styles.content}>
         {/* Logo com ícone e título */}
         <View style={styles.logoContainer}>
-          <Image 
-            source={require('./assets/logo.png')} // Substitua com sua imagem de logo
-            style={styles.logoImage}
-          />
+        
+       {/*
+        <Image
+          source={logoImage}
+          style={styles.logoImage}
+        />
+*/}
+
           <Text style={[styles.logoText, { color: isLightTheme ? '#2e2f33' : '#e2e8f0' }]}>
             CR Cursos
           </Text>

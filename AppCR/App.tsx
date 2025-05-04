@@ -12,14 +12,16 @@ export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
   // Carrega a fonte Poppins
+  const customFonts = {
+    Poppins: require('./assets/fonts/Poppins-Regular.ttf'),
+    'Poppins-Bold': require('./assets/fonts/Poppins-Bold.ttf'),
+  };
+  
   const loadFonts = async () => {
-    await Font.loadAsync({
-      Poppins: require('./assets/fonts/Poppins-Regular.ttf'),
-      'Poppins-Bold': require('./assets/fonts/Poppins-Bold.ttf'),
-    });
+    await Font.loadAsync(customFonts);
     setFontsLoaded(true);
   };
-
+  
   useEffect(() => {
     loadFonts();
     const timer = setTimeout(() => {

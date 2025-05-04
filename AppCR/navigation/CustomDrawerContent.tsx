@@ -14,6 +14,7 @@ import {
   Ionicons,
   SimpleLineIcons 
 } from '@expo/vector-icons';
+// import logoImage from './assets/images/aluno.png';
 
 // Define interface for styles
 interface Styles {
@@ -49,10 +50,12 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
         style={styles.headerGradient}
       >
         <View style={styles.headerContent}>
-          <Image 
-            source={require('../assets/logo.png')}
-            style={styles.logo}
-          />
+          {/*
+        <Image
+          source={logoImage}
+          style={styles.logo}
+        />
+*/}
           <Text style={styles.headerTitle}>CR Cursos</Text>
         </View>
       </LinearGradient>
