@@ -4,6 +4,6 @@
     "strict": true,
     "jsx": "react", // Suporte a JSX
     "target": "es5", // Define o alvo de compilação
-    "module": "commonjs" // Define o sistema de módulos
+    "module":  "es2015" // Define o sistema de módulos
   }
 }
