@@ -14,6 +14,7 @@ import { useTheme } from './contexts/ThemeContext';
 import styles from './styles/LoginScreenStyles'; // Importando os estilos
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+
 // import logoImage from './assets/images/aluno.png';
 
 

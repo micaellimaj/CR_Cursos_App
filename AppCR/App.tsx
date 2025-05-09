@@ -3,7 +3,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { View, ActivityIndicator, Text } from 'react-native';
 import * as Font from 'expo-font';
-import AppLoading from 'expo-app-loading';
 import styles from './styles/AppStyles'; // Importando os estilos
 import DrawerNavigator from './navigation/DrawerNavigator';
 
@@ -12,15 +11,13 @@ export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
   // Carrega a fonte Poppins
-  const customFonts = {
-    Poppins: require('./assets/fonts/Poppins-Regular.ttf'),
-    'Poppins-Bold': require('./assets/fonts/Poppins-Bold.ttf'),
-  };
-  
   const loadFonts = async () => {
-    await Font.loadAsync(customFonts);
+    await Font.loadAsync({
+      Poppins: require('./assets/fonts/Poppins-Regular.ttf'),
+      'Poppins-Bold': require('./assets/fonts/Poppins-Bold.ttf'),
+    });
     setFontsLoaded(true);
-  };
+  };  
   
   useEffect(() => {
     loadFonts();
@@ -32,7 +29,12 @@ export default function App() {
   }, []);
 
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#2563eb" />
+        <Text>Carregando fontes...</Text>
+      </View>
+    );
   }
 
   if (isLoading) {

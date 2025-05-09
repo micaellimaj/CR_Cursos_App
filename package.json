@@ -5,11 +5,11 @@
   "scripts": {
     "dev": "concurrently \"npm run dev:back\" \"npm run dev:front\"",
     "dev:back": "cd back-end && npm run dev",
-    "dev:front": "cd AppCR && start cmd /k \"npx expo start --tunnel\""
+    "dev:front": "cd AppCR && npx expo start"
   },
   "devDependencies": {
     "@babel/plugin-transform-private-methods": "^7.27.1",
-    "@types/react": "^18.2.0",
+    "@types/react": "^19.0.0",
     "concurrently": "^8.2.0",
     "typescript": "^5.3.3"
   },
@@ -17,6 +17,6 @@
     "@react-native-async-storage/async-storage": "1.23.1",
     "axios": "^1.9.0",
     "expo": "^53.0.0",
-    "react": "^18.2.0"
+    "react": "^19.0.0"
   }
 }
