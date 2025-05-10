@@ -9,14 +9,15 @@
   },
   "devDependencies": {
     "@babel/plugin-transform-private-methods": "^7.27.1",
-    "@types/react": "^19.0.0",
+    "@types/react": "~19.0.10",
     "concurrently": "^8.2.0",
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "1.23.1",
+    "@react-native-async-storage/async-storage": "^2.1.2",
     "axios": "^1.9.0",
-    "expo": "^53.0.0",
-    "react": "^19.0.0"
+    "expo": "^53.0.9",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   }
 }

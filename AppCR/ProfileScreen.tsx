@@ -35,7 +35,7 @@ export default function ProfileScreen() {
   useEffect(() => {
     const fetchUserData = async () => {
       const token = await AsyncStorage.getItem('token');
-      const id = await AsyncStorage.getItem('id');
+      const id = await AsyncStorage.getItem('userId');
 
       try {
         const response = await axios.get(`http://192.168.100.83:5000/api/alunos/${id}`, {

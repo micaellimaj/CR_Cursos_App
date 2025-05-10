@@ -2,6 +2,7 @@
   "expo": {
     "name": "AppCR",
     "slug": "AppCR",
+    "entryPoint": "./App.tsx",
     "version": "1.0.0",
     "jsEngine": "jsc",
     "orientation": "portrait",
