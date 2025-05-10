@@ -1,25 +1,60 @@
-import React from 'react';
-import { SafeAreaView, Text, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { ThemeProvider } from './contexts/ThemeContext';
+import { View, ActivityIndicator, Text } from 'react-native';
+import * as Font from 'expo-font';
+import styles from './styles/AppStyles'; // Importando os estilos
+import DrawerNavigator from './navigation/DrawerNavigator';
 
-const App = () => {
+export default function App() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  // Carrega a fonte Poppins
+  const loadFonts = async () => {
+    await Font.loadAsync({
+      Poppins: require('./assets/fonts/Poppins-Regular.ttf'),
+      'Poppins-Bold': require('./assets/fonts/Poppins-Bold.ttf'),
+    });
+    setFontsLoaded(true);
+  };  
+  
+  useEffect(() => {
+    loadFonts();
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000); // 2 segundos de delay para simular carregamento
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!fontsLoaded) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#2563eb" />
+        <Text>Carregando fontes...</Text>
+      </View>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#2563eb" style={styles.loadingIndicator} />
+        <Text style={styles.loadingText}>
+          Espere um pouquinho, estamos{"\n"}
+          preparando tudo pra você curtir{"\n"}
+          o app!
+        </Text>
+      </View>
+    );
+  }
+
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>Olá, CR Cursos App está funcionando! 🎉</Text>
-    </SafeAreaView>
+    <ThemeProvider>
+      <NavigationContainer>
+        <DrawerNavigator />
+      </NavigationContainer>
+    </ThemeProvider>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-  },
-  text: {
-    fontSize: 18,
-    color: '#333',
-  },
-});
-
-export default App;
+}
