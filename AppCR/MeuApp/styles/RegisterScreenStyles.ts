@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 12,
-    width: '100%',
+    width: '80%',
   },
   icon: {
     marginRight: 10,
@@ -58,12 +58,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   loginButton: {
-    width: '100%',
+    width: '80%',
     height: 50,
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 30,
   },
   loginButtonText: {
     color: '#fff',

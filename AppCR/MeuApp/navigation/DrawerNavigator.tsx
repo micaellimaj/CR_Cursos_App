@@ -7,6 +7,7 @@ import ProfileScreen from '../ProfileScreen';
 import CustomDrawerContent from './CustomDrawerContent';
 import RegisterScreen from '../screens/RegisterScreen';
 
+
 const Drawer = createDrawerNavigator();
 
 export default function DrawerNavigator() {

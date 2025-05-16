@@ -2,32 +2,55 @@ import { StyleSheet, Dimensions } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
+export const getDynamicStyles = (isLightTheme: boolean) => ({
+  container: {
+    backgroundColor: isLightTheme ? '#e0f2fe' : '#1e3a8a', // Azul claro para claro, azul escuro para escuro
+  },
+  content: {
+    backgroundColor: isLightTheme ? '#e0f2fe' : '#1e3a8a', // Fundo do conteúdo
+  },
+  input: {
+    backgroundColor: isLightTheme ? '#e0f2fe' : '#1e3a8a', // Fundo dos inputs
+  },
+});
+
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'center', // Centraliza verticalmente
+    alignItems: 'center', // Centraliza horizontalmente
+    paddingHorizontal: 20, // Espaçamento lateral
   },
   content: {
-    flex: 1,
+    width: '100%',
+    maxWidth: 400, // Limita a largura máxima para telas maiores
     padding: 20,
-    justifyContent: 'space-between',
+    borderRadius: 10, // Bordas arredondadas
+    elevation: 10, // Sombra para Android
+    shadowColor: '#030', // Sombra para iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   logoContainer: {
     alignItems: 'center',
-    marginTop: 60,
-    marginBottom: 30,
+    marginBottom: 30, // Espaçamento abaixo do logo
   },
   logoImage: {
-    width: 60,
-    height: 60,
+    width: 80,
+    height: 80,
     marginBottom: 10,
   },
   logoText: {
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: 'bold',
+    color: '#2e2f33',
   },
   subtitle: {
     fontSize: 14,
     textAlign: 'center',
+    color: '#65676b',
+    marginBottom: 20,
   },
   formContainer: {
     width: '100%',
@@ -41,6 +64,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 16,
     fontSize: 16,
     borderWidth: 1,
+    borderColor: '#dddfe2',
   },
   loginButton: {
     width: '100%',
@@ -49,6 +73,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 10,
+    backgroundColor: '#2563eb',
   },
   loginButtonText: {
     color: '#fff',
@@ -62,6 +87,7 @@ export const styles = StyleSheet.create({
   forgotPasswordText: {
     fontSize: 14,
     fontWeight: '500',
+    color: '#1877f2',
   },
   divider: {
     flexDirection: 'row',
@@ -72,15 +98,18 @@ export const styles = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: 1,
+    backgroundColor: '#dddfe2',
   },
   dividerText: {
     marginHorizontal: 10,
     fontSize: 14,
+    color: '#65676b',
   },
   socialButtonsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
+    marginTop: 20,
   },
   socialButton: {
     flexDirection: 'row',
@@ -96,32 +125,9 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#dddfe2',
   },
-  facebookButton: {
-    backgroundColor: '#1877f2',
-  },
   googleText: {
     fontWeight: '500',
-  },
-  facebookText: {
-    fontWeight: '500',
-    color: '#fff',
-  },
-  bottomContainer: {
-    width: '100%',
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  createAccountButton: {
-    width: '100%',
-    height: 50,
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  createAccountText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    color: '#2e2f33',
   },
 });
 

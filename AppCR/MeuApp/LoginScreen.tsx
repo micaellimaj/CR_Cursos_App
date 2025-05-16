@@ -5,18 +5,14 @@ import {
   TextInput, 
   TouchableOpacity, 
   SafeAreaView,
-  Image,
-  Dimensions,
   Alert,
+  Dimensions,
 } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useTheme } from './contexts/ThemeContext';
 import styles from './styles/LoginScreenStyles'; // Importando os estilos
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-
-// import logoImage from './assets/images/aluno.png';
-
 
 const { width } = Dimensions.get('window');
 
@@ -32,24 +28,22 @@ export default function LoginScreen({ navigation }: any) {
       Alert.alert('Erro', 'Por favor, preencha todos os campos');
       return;
     }
-  
+
     try {
       const response = await axios.post('http://192.168.100.83:5000/login', {
         email,
         senha: password,
       });
-  
+
       const { token, tipo, id, nome } = response.data;
-  
+
       await AsyncStorage.setItem('token', token);
       await AsyncStorage.setItem('userType', tipo);
       await AsyncStorage.setItem('userId', id);
       await AsyncStorage.setItem('userName', nome);
-  
+
       Alert.alert('Sucesso', `Bem-vindo, ${nome}!`);
-  
-      navigation.navigate('Home'); // ou o nome da sua tela inicial após login
-  
+      navigation.navigate('Home'); // Redireciona para a tela inicial após login
     } catch (error: any) {
       if (error.response) {
         Alert.alert('Erro ao logar', error.response.data || 'Erro desconhecido');
@@ -59,20 +53,12 @@ export default function LoginScreen({ navigation }: any) {
       console.error(error);
     }
   };
-  
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: isLightTheme ? '#f5f7fa' : '#0f172a' }]}>
       <View style={styles.content}>
-        {/* Logo com ícone e título */}
+        {/* Logo com título */}
         <View style={styles.logoContainer}>
-        
-       {/*
-        <Image
-          source={logoImage}
-          style={styles.logoImage}
-        />
-*/}
-
           <Text style={[styles.logoText, { color: isLightTheme ? '#2e2f33' : '#e2e8f0' }]}>
             CR Cursos
           </Text>
@@ -124,8 +110,7 @@ export default function LoginScreen({ navigation }: any) {
             <Text style={styles.loginButtonText}>Entrar</Text>
           </TouchableOpacity>
 
-
-          {/* Link para "esqueceu a senha" alinhado à direita */}
+          {/* Link para "esqueceu a senha" */}
           <TouchableOpacity style={styles.forgotPassword}>
             <Text style={[styles.forgotPasswordText, { color: isLightTheme ? '#1877f2' : '#60a5fa' }]}>
               Esqueceu a senha?
@@ -135,27 +120,28 @@ export default function LoginScreen({ navigation }: any) {
           {/* Divisor visual */}
           <View style={styles.divider}>
             <View style={[styles.dividerLine, { backgroundColor: isLightTheme ? '#dadde1' : '#374151' }]} />
-            <Text style={[styles.dividerText, { color: isLightTheme ? '#65676b' : '#9ca3af' }]}>Faça login com Google, ou Cadastre-se</Text>
+            <Text style={[styles.dividerText, { color: isLightTheme ? '#65676b' : '#9ca3af' }]}>
+              Faça login com Google, ou Cadastre-se
+            </Text>
             <View style={[styles.dividerLine, { backgroundColor: isLightTheme ? '#dadde1' : '#374151' }]} />
           </View>
 
-          {/* Botão social do Google */}
+          {/* Botões sociais */}
           <View style={styles.socialButtonsContainer}>
+            {/* Botão do Google */}
             <TouchableOpacity style={[styles.socialButton, styles.googleButton]}>
               <FontAwesome5 name="google" size={20} color="#db4437" style={{ marginRight: 8 }} />
               <Text style={[styles.googleText, { color: isLightTheme ? '#2e2f33' : '#fff' }]}>Google</Text>
             </TouchableOpacity>
-          </View>
-        </View>
 
-        {/* Área inferior com link de cadastro */}
-        <View style={styles.bottomContainer}>
-          <TouchableOpacity 
-            style={[styles.createAccountButton, { backgroundColor: isLightTheme ? '#42b72a' : '#16a34a' }]}
-            onPress={() => navigation.navigate('Register')}
-          >
-            <Text style={styles.createAccountText}>Criar nova conta</Text>
-          </TouchableOpacity>
+            {/* Botão Criar nova conta */}
+            <TouchableOpacity 
+              style={[styles.socialButton, styles.createAccountButton, { backgroundColor: isLightTheme ? '#42b72a' : '#16a34a' }]}
+              onPress={() => navigation.navigate('Register')}
+            >
+              <Text style={[styles.createAccountText, { color: '#fff' }]}>Criar nova conta</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </SafeAreaView>
