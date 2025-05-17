@@ -7,6 +7,7 @@ import ProfileScreen from '../ProfileScreen';
 import CustomDrawerContent from './CustomDrawerContent';
 import RegisterScreen from '../screens/RegisterScreen';
 import AulasScreen from '../AulasScreen';
+import ConteudoScreen from '../ConteudoScreen';
 
 
 const Drawer = createDrawerNavigator();
@@ -32,6 +33,7 @@ export default function DrawerNavigator() {
       <Drawer.Screen name="Home" component={HomeScreen} />
       <Drawer.Screen name="ProfileScreen" component={ProfileScreen} />
        <Drawer.Screen name="AulasScreen" component={AulasScreen} />
+       <Drawer.Screen name="ConteudoScreen" component={ConteudoScreen} />
     </Drawer.Navigator>
   );
 }
