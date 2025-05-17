@@ -65,7 +65,10 @@ export default function HomeScreen({ navigation }: any) { // Adicione o objeto n
 
           <View style={[styles.grid, { marginTop: 20 }]}>
             {/* Conteúdos extras */}
-            <TouchableOpacity style={styles.gridCard}>
+            <TouchableOpacity
+              style={styles.gridCard}
+              onPress={() => navigation.navigate('ConteudoScreen')}
+            >
               <Feather name="book-open" size={24} color="#fff" />
               <Text style={styles.gridCardText}>Conteúdos extras</Text>
             </TouchableOpacity>
