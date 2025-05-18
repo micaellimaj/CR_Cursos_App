@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
-const calcularIdade = require('../utils/calcularIdade');
-const validarEmail = require('../utils/validarEmail');
+const calcularIdade = require('../utils/aluno/calcularIdade');
+const validarEmail = require('../utils/aluno/validarEmail');
 const { db } = require('../config/firebase');
 const {
   emailExiste,

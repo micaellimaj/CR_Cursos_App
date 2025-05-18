@@ -1,7 +1,7 @@
 const { db } = require('../config/firebase');
 const bcrypt = require('bcryptjs');
-const calcularIdade = require('../utils/calcularIdade');
-const gerarIdPersonalizado = require('../utils/gerarIdPersonalizado');
+const calcularIdade = require('../utils/aluno/calcularIdade');
+const gerarIdPersonalizado = require('../utils/aluno/gerarIdPersonalizado');
 
 async function emailExiste(email) {
   const snapshot = await db.ref('alunos').orderByChild('email').equalTo(email).once('value');

@@ -1,6 +1,6 @@
 const { db } = require('../config/firebase');
 const bcrypt = require('bcryptjs');
-const gerarIdProfessor = require('../utils/gerarIdProfessor');
+const gerarIdProfessor = require('../utils/professor/gerarIdProfessor');
 
 const createProfessorService = async (professorData) => {
   const { full_name, email, senha, confirmarSenha, telefone, data_nascimento } = professorData;
