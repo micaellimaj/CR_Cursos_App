@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
 
 // Rotas da API
 app.use('/api', alunoRoutes);              // Alunos em: http://localhost:5000/api
-app.use('/professores', professorRoutes);  // Professores em: http://localhost:5000/professores
+app.use('/api', professorRoutes);  // Professores em: http://localhost:5000/professores / 
 app.use('/', authRoutes);                 // Login (alunos/professore) em: http://localhost:5000/login
 
 // Inicializando servidor
