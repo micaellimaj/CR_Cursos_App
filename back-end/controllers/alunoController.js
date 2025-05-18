@@ -1,28 +1,15 @@
-const { db } = require('../config/firebase');
 const bcrypt = require('bcryptjs');
-
-// Função para gerar ID personalizado
-const gerarIdPersonalizado = () => {
-  const agora = new Date();
-  const ano = agora.getFullYear();
-  const mes = String(agora.getMonth() + 1).padStart(2, '0'); 
-  const aleatorio = Math.floor(100000 + Math.random() * 900000); 
-  return `${ano}${mes}${aleatorio}`;
-};
-
-// Função auxiliar para calcular idade
-const calcularIdade = (dataNascimento) => {
-  const hoje = new Date();
-  const nascimento = new Date(dataNascimento);
-  let idade = hoje.getFullYear() - nascimento.getFullYear();
-  const m = hoje.getMonth() - nascimento.getMonth();
-
-  if (m < 0 || (m === 0 && hoje.getDate() < nascimento.getDate())) {
-    idade--;
-  }
-
-  return idade;
-};
+const calcularIdade = require('../utils/calcularIdade');
+const validarEmail = require('../utils/validarEmail');
+const { db } = require('../config/firebase');
+const {
+  emailExiste,
+  criarAluno,
+  getTodosAlunos,
+  getAlunoPorId,
+  atualizarAluno,
+  deletarAluno
+} = require('../services/alunoService');
 
 // Criar novo Aluno
 const createAluno = async (req, res) => {
@@ -42,33 +29,34 @@ const createAluno = async (req, res) => {
     return res.status(400).send('Campos obrigatórios faltando');
   }
 
+  if (!validarEmail(email)) {
+    return res.status(400).send('Email inválido');
+  }
+
   if (senha !== confirmarSenha) {
     return res.status(400).send('As senhas não coincidem');
   }
 
   const idade = calcularIdade(data_nascimento);
 
-  if (idade < 18) {
-    if (!nome_responsavel || !email_responsavel || !telefone_responsavel) {
-      return res.status(400).send('Responsável obrigatório para menores de idade');
-    }
+  if (idade < 18 && (!nome_responsavel || !email_responsavel || !telefone_responsavel)) {
+    return res.status(400).send('Responsável obrigatório para menores de idade');
   }
 
   try {
-    const hashedSenha = await bcrypt.hash(senha, 10);
-    const customId = gerarIdPersonalizado();
+    if (await emailExiste(email)) {
+      return res.status(400).send('Já existe um aluno com esse e-mail');
+    }
 
-    await db.ref(`alunos/${customId}`).set({
+    const customId = await criarAluno({
       full_name,
       email,
-      senha: hashedSenha,
+      senha,
       data_nascimento,
-      idade,
-      nome_responsavel: idade < 18 ? nome_responsavel : null,
-      email_responsavel: idade < 18 ? email_responsavel : null,
-      telefone_responsavel: idade < 18 ? telefone_responsavel : null,
-      telefone: telefone || null,
-      created_at: new Date().toISOString()
+      nome_responsavel,
+      email_responsavel,
+      telefone_responsavel,
+      telefone: telefone || null
     });
 
     res.status(201).send({ id: customId, message: 'Aluno criado com sucesso' });
@@ -78,103 +66,68 @@ const createAluno = async (req, res) => {
   }
 };
 
-// Retornar todos os Alunos (sem senha)
+// Buscar todos os alunos
 const getAllAlunos = async (req, res) => {
   try {
-    const snapshot = await db.ref('alunos').once('value');
-    const data = snapshot.val();
-
-    if (!data) return res.status(200).send([]);
-
-    const alunos = Object.keys(data).map(id => {
-      const aluno = data[id];
-      delete aluno.senha;
-      return { id, ...aluno };
-    });
-
-    res.status(200).send(alunos);
+    const alunos = await getTodosAlunos();
+    res.status(200).json(alunos);
   } catch (error) {
     console.error('Erro ao buscar alunos:', error);
-    res.status(500).send('Erro interno');
+    res.status(500).send('Erro ao buscar alunos');
   }
 };
 
-// Retornar Aluno por ID (sem senha)
+// Buscar aluno por ID
 const getAlunoById = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const snapshot = await db.ref(`alunos/${id}`).once('value');
-    const aluno = snapshot.val();
-
-    if (!aluno) {
-      return res.status(404).send('Aluno não encontrado');
-    }
-
-    delete aluno.senha;
-    res.status(200).send({ id, ...aluno });
+    const aluno = await getAlunoPorId(id);
+    if (!aluno) return res.status(404).send('Aluno não encontrado');
+    res.status(200).json({ id, ...aluno });
   } catch (error) {
-    console.error('Erro ao buscar aluno por ID:', error);
-    res.status(500).send('Erro interno');
+    console.error('Erro ao buscar aluno:', error);
+    res.status(500).send('Erro ao buscar aluno');
   }
 };
 
-// Atualizar Aluno
+// Atualizar aluno
 const updateAluno = async (req, res) => {
   const { id } = req.params;
-  const dados = req.body;
+  const novosDados = req.body;
+
+  if (novosDados.email && !validarEmail(novosDados.email)) {
+    return res.status(400).send('Email inválido');
+  }
+
+  if (novosDados.data_nascimento) {
+    const idade = calcularIdade(novosDados.data_nascimento);
+    if (idade < 18 && (!novosDados.nome_responsavel || !novosDados.email_responsavel || !novosDados.telefone_responsavel)) {
+      return res.status(400).send('Dados do responsável são obrigatórios para menores de idade');
+    }
+  }
 
   try {
-    // Verifica idade se data_nascimento for fornecida
-    if (dados.data_nascimento) {
-      const nascimento = new Date(dados.data_nascimento);
-      const hoje = new Date();
-      const idade = hoje.getFullYear() - nascimento.getFullYear();
-      const mes = hoje.getMonth() - nascimento.getMonth();
-      const dia = hoje.getDate() - nascimento.getDate();
-      const menorDeIdade = idade < 18 || (idade === 18 && (mes < 0 || (mes === 0 && dia < 0)));
-
-      // Se for menor de idade, exige os campos do responsável
-      if (menorDeIdade) {
-        if (
-          !dados.nome_responsavel ||
-          !dados.email_responsavel ||
-          !dados.telefone_responsavel
-        ) {
-          return res.status(400).send('Campos do responsável obrigatórios para menores de idade');
-        }
-      } else {
-        // Se for maior de idade, limpa dados do responsável
-        dados.nome_responsavel = null;
-        dados.email_responsavel = null;
-        dados.telefone_responsavel = null;
-      }
-    }
-
-    // Atualiza senha se fornecida
-    if (dados.senha) {
-      dados.senha = await bcrypt.hash(dados.senha, 10);
-    }
-
-    await db.ref(`alunos/${id}`).update(dados);
+    const sucesso = await atualizarAluno(id, novosDados);
+    if (!sucesso) return res.status(404).send('Aluno não encontrado');
     res.status(200).send('Aluno atualizado com sucesso');
   } catch (error) {
     console.error('Erro ao atualizar aluno:', error);
-    res.status(500).send('Erro interno');
+    res.status(500).send('Erro ao atualizar aluno');
   }
 };
 
-
-// Deletar Aluno
+// Deletar aluno
 const deleteAluno = async (req, res) => {
   const { id } = req.params;
 
   try {
-    await db.ref(`alunos/${id}`).remove();
-    res.status(200).send('Aluno excluído com sucesso');
+    const sucesso = await deletarAluno(id);
+    if (!sucesso) return res.status(404).send('Aluno não encontrado');
+    res.status(200).send('Aluno removido com sucesso');
   } catch (error) {
-    console.error('Erro ao excluir aluno:', error);
-    res.status(500).send('Erro interno');
+    console.error('Erro ao deletar aluno:', error);
+    res.status(500).send('Erro ao deletar aluno');
   }
 };
 
