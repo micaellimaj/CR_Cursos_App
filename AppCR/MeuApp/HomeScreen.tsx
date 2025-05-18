@@ -57,7 +57,8 @@ export default function HomeScreen({ navigation }: any) { // Adicione o objeto n
             </TouchableOpacity>
 
             {/* Notas e histórico */}
-            <TouchableOpacity style={styles.gridCard}>
+            <TouchableOpacity style={styles.gridCard}
+            onPress={() => navigation.navigate('Notas')}>
               <MaterialIcons name="insert-chart-outlined" size={26} color="#fff" />
               <Text style={styles.gridCardText}>Notas e histórico</Text>
             </TouchableOpacity>
