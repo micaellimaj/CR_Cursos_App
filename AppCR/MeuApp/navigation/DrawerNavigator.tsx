@@ -9,6 +9,7 @@ import RegisterScreen from '../screens/RegisterScreen';
 import AulasScreen from '../AulasScreen';
 import ConteudoScreen from '../ConteudoScreen';
 import Notas from '../Notas';
+import TelaConteudos from '../TelaConteudos';
 
 
 
@@ -37,6 +38,7 @@ export default function DrawerNavigator() {
        <Drawer.Screen name="AulasScreen" component={AulasScreen} />
        <Drawer.Screen name="ConteudoScreen" component={ConteudoScreen} />
        <Drawer.Screen name="Notas" component={Notas} />
+       <Drawer.Screen name="TelaConteudos" component={TelaConteudos} />
     </Drawer.Navigator>
   );
 }

@@ -129,6 +129,23 @@ export const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#2e2f33',
   },
+  createAccountButton: {
+    backgroundColor: '#42b72a', // Verde para o tema claro
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%', // Responsivo
+    marginTop: 10, // Espaçamento superior
+  },
+  createAccountButtonDark: {
+    backgroundColor: '#16a34a', // Verde para o tema escuro
+  },
+  createAccountText: {
+    color: '#fff', // Texto branco
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
 });
 
 export default styles;
