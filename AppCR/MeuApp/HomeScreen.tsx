@@ -75,11 +75,14 @@ export default function HomeScreen({ navigation }: any) { // Adicione o objeto n
                 <Text style={styles.gridCardText}>Aulas</Text>
               </TouchableOpacity>
 
-              {/* Grid "Cursos" */}
-              <TouchableOpacity style={styles.gridCard}>
-                <FontAwesome5 name="chalkboard-teacher" size={24} color="#fff" />
-                <Text style={styles.gridCardText}>Cursos</Text>
-              </TouchableOpacity>
+             {/* Grid "Cursos" */}
+<TouchableOpacity
+  style={styles.gridCard}
+  onPress={() => navigation.navigate('Cursos')} // Navega para a tela Cursos
+>
+  <FontAwesome5 name="chalkboard-teacher" size={24} color="#fff" />
+  <Text style={styles.gridCardText}>Cursos</Text>
+</TouchableOpacity>
             </View>
         
 
