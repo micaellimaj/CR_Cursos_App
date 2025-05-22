@@ -8,51 +8,47 @@ import {
   Modal,
 } from "react-native";
 import { useTheme } from "./contexts/ThemeContext"; // Para alternar entre temas
+import { MaterialIcons } from "@expo/vector-icons"; // Biblioteca de ícones
 import styles from "./styles/CursosStyles";
 
-const cursos = [
+type Curso = {
+  id: number;
+  titulo: string;
+  tipo: string;
+  duracao: string;
+  modalidades: string[];
+  destaque: string;
+  descricao: string;
+  imagem: any;
+};
+
+const cursos: Curso[] = [
   {
     id: 1,
-    titulo: "Administração",
-    tipo: "Bacharelado",
-    duracao: "4 anos",
-    modalidades: ["Ao vivo", "Digital (EaD)", "Semipresencial", "Presencial"],
+    titulo: "Designer Gráfico",
+    tipo: "Presencial",
+    duracao: "12 meses",
+    modalidades: ["CorelDraw", "Illustrator", "Photoshop", "InDesign"],
     destaque: "Destaque",
     descricao:
-      "O curso de Administração prepara você para liderar e gerenciar empresas.",
-    imagem: require("./assets/adm.jpg"),
+      "O curso de Designer Gráfico capacita você para criar projetos visuais utilizando ferramentas como CorelDraw, Illustrator, Photoshop e InDesign.",
+    imagem: require("./assets/designer.jpg"),
   },
   {
     id: 2,
-    titulo: "Análise e Desenvolvimento de Sistemas",
-    tipo: "Tecnólogo",
-    duracao: "2,5 anos",
-    modalidades: ["Ao vivo", "Digital (EaD)", "Semipresencial", "Presencial"],
-    destaque: "Destaque",
-    descricao:
-      "Aprenda a desenvolver sistemas e soluções tecnológicas inovadoras.",
-    imagem: require("./assets/ads.jpg"),
-  },
-  {
-    id: 3,
-    titulo: "Direito",
-    tipo: "Bacharelado",
-    duracao: "5 anos",
-    modalidades: ["Presencial"],
-    destaque: "Destaque",
-    descricao: "O curso de Direito forma profissionais para atuar na área jurídica.",
-    imagem: require("./assets/direito.jpg"),
-  },
-  {
-    id: 4,
-    titulo: "Enfermagem",
-    tipo: "Bacharelado",
-    duracao: "5 anos",
-    modalidades: ["Presencial"],
+    titulo: "Informática Profissional",
+    tipo: "Presencial",
+    duracao: "12 meses",
+    modalidades: [
+      "Sistemas Operacionais",
+      "Pacote Office",
+      "Noções Básicas de Edição de Vídeo",
+      "Montagem e Manutenção",
+    ],
     destaque: "Mais procurado",
     descricao:
-      "O curso de Enfermagem capacita profissionais para cuidar da saúde das pessoas.",
-    imagem: require("./assets/enfermagem.jpg"),
+      "O curso de Informática Profissional prepara você para atuar em diversas áreas da tecnologia, incluindo sistemas operacionais, pacote Office, edição de vídeo e manutenção de computadores.",
+    imagem: require("./assets/informatica.jpg"),
   },
 ];
 
@@ -61,9 +57,9 @@ export default function Cursos() {
   const isDarkTheme = theme === "dark";
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [cursoSelecionado, setCursoSelecionado] = useState(null);
+  const [cursoSelecionado, setCursoSelecionado] = useState<Curso | null>(null);
 
-  const abrirModal = (curso) => {
+  const abrirModal = (curso: Curso) => {
     setCursoSelecionado(curso);
     setModalVisible(true);
   };
@@ -73,7 +69,7 @@ export default function Cursos() {
     setCursoSelecionado(null);
   };
 
-  const renderCurso = ({ item }) => (
+  const renderCurso = ({ item }: { item: Curso }) => (
     <View style={[styles.card, isDarkTheme && styles.cardDark]}>
       <Image source={item.imagem} style={styles.imagem} />
 
@@ -127,6 +123,18 @@ export default function Cursos() {
             <Text style={styles.modalDescricao}>
               {cursoSelecionado?.descricao}
             </Text>
+            <Text style={styles.sectionTitle}>Módulos:</Text>
+            {cursoSelecionado?.modalidades.map((modulo, index) => (
+              <View key={index} style={styles.modalModuloContainer}>
+                <MaterialIcons
+                  name="check-circle"
+                  size={24}
+                  color="#2563eb"
+                  style={styles.modalIcon}
+                />
+                <Text style={styles.modalModulo}>{modulo}</Text>
+              </View>
+            ))}
             <TouchableOpacity style={styles.modalBotao} onPress={fecharModal}>
               <Text style={styles.modalBotaoTexto}>Fechar</Text>
             </TouchableOpacity>

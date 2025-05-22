@@ -6,21 +6,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#f9f9f9", // Cor de fundo para o tema claro
     paddingVertical: 24,
     paddingHorizontal: 16,
-    alignItems: "center", // Centraliza os itens horizontalmente
   },
   containerDark: {
     backgroundColor: "#1a202c", // Cor de fundo para o tema escuro
-    alignItems: "center", // Centraliza os itens horizontalmente
   },
   flatListContainer: {
-    paddingHorizontal: 16, // Espaçamento lateral para os cards
-    alignItems: "center", // Centraliza os cards no eixo horizontal
+    paddingBottom: 16, // Espaçamento inferior para o conteúdo do FlatList
+    paddingHorizontal: 8, // Espaçamento lateral para os cards
   },
   card: {
-    width: 220, // Aumentado o tamanho dos cards
-    backgroundColor: "#fff", // Fundo branco para o card
+    width: 220,
+    backgroundColor: "#fff",
     borderRadius: 12,
-    margin: 16, // Margem ao redor do card
+    margin: 16,
     elevation: 4,
     shadowColor: "#000",
     shadowOpacity: 0.1,
@@ -28,11 +26,11 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
   },
   cardDark: {
-    backgroundColor: "#2d3748", // Fundo escuro para o tema escuro
+    backgroundColor: "#2d3748",
   },
   imagem: {
     width: "100%",
-    height: 160, // Aumentado o tamanho da imagem
+    height: 140,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
   },
@@ -54,23 +52,20 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   titulo: {
-    fontSize: 18, // Aumentado o tamanho do título
+    fontSize: 18,
     fontWeight: "bold",
     color: "#2563eb",
-    textAlign: "center", // Centraliza o texto do título
   },
   subtitulo: {
-    fontSize: 14, // Aumentado o tamanho do subtítulo
+    fontSize: 14,
     color: "#666",
     marginVertical: 4,
-    textAlign: "center", // Centraliza o texto do subtítulo
   },
   tagsContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 4,
     marginVertical: 6,
-    justifyContent: "center", // Centraliza as tags
   },
   tag: {
     backgroundColor: "#e0f2fe",
@@ -120,6 +115,25 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 20,
   },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#2563eb",
+    marginBottom: 8,
+  },
+  modalModuloContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  modalIcon: {
+    marginRight: 8,
+  },
+  modalModulo: {
+    fontSize: 16, // Aumentado o tamanho do texto
+    color: "#333",
+    textAlign: "left",
+      },
   modalBotao: {
     backgroundColor: "#2563eb",
     padding: 10,
