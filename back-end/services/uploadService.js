@@ -1,39 +1,26 @@
-const { bucket, db } = require('../config/firebase');
-const { v4: uuidv4 } = require('uuid');
-const path = require('path');
+const path = require("path");
+const fs = require("fs");
+const { generateFileName } = require("../utils/uploadUtils");
 
-const salvarArquivo = async (arquivo, professorId) => {
-  const extensao = path.extname(arquivo.originalname).toLowerCase();
-  const nomeArquivo = `${uuidv4()}${extensao}`;
-  const arquivoBucket = bucket.file(`uploads/${professorId}/${nomeArquivo}`);
+const uploadDir = path.join(__dirname, "../uploads");
 
-  const stream = arquivoBucket.createWriteStream({
-    metadata: {
-      contentType: arquivo.mimetype
-    }
-  });
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
 
-  return new Promise((resolve, reject) => {
-    stream.on('error', (err) => reject(err));
+function saveFile(file) {
+  const fileName = generateFileName(file.originalname);
+  const filePath = path.join(uploadDir, fileName);
 
-    stream.on('finish', async () => {
-      const url = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(arquivoBucket.name)}?alt=media`;
+  fs.writeFileSync(filePath, file.buffer);
+  
+  return {
+    fileName,
+    path: filePath,
+    url: `/uploads/${fileName}`, // se você servir os arquivos via Express
+  };
+}
 
-      const dados = {
-        nome: arquivo.originalname,
-        tipo: extensao,
-        url,
-        dataEnvio: new Date().toISOString()
-      };
-
-      const novoUploadRef = db.ref(`uploads/${professorId}`).push();
-      await novoUploadRef.set(dados);
-
-      resolve({ id: novoUploadRef.key, ...dados });
-    });
-
-    stream.end(arquivo.buffer);
-  });
+module.exports = {
+  saveFile,
 };
-
-module.exports = { salvarArquivo };

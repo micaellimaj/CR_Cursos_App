@@ -1,19 +1,23 @@
-const uploadService = require('../services/uploadService');
+const uploadService = require("../services/uploadService");
 
-const uploadArquivo = async (req, res) => {
+const uploadFile = (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ erro: 'Nenhum arquivo enviado' });
+      return res.status(400).json({ error: "Nenhum arquivo enviado" });
     }
 
-    const professorId = req.user.id;
-    const resultado = await uploadService.salvarArquivo(req.file, professorId);
+    const result = uploadService.saveFile(req.file);
 
-    res.status(201).json({ mensagem: 'Upload realizado com sucesso', dados: resultado });
+    return res.status(200).json({
+      message: "Arquivo salvo com sucesso!",
+      file: result,
+    });
   } catch (error) {
-    console.error('Erro no uploadController:', error);
-    res.status(500).json({ erro: 'Erro ao realizar upload' });
+    console.error("Erro ao salvar o arquivo:", error);
+    return res.status(500).json({ error: "Erro interno ao salvar o arquivo" });
   }
 };
 
-module.exports = { uploadArquivo };
+module.exports = {
+  uploadFile,
+};

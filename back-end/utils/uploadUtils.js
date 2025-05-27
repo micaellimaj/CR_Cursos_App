@@ -1,15 +1,12 @@
-// Exemplo de função para validação futura
-const tiposPermitidos = [
-  'application/pdf',
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  'application/msword',
-  'application/vnd.ms-powerpoint',
-  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-  'text/plain'
-];
+const path = require("path");
+const { v4: uuidv4 } = require("uuid");
 
-const validarTipoArquivo = (mimetype) => {
-  return tiposPermitidos.includes(mimetype);
+function generateFileName(originalName) {
+  const extension = path.extname(originalName);
+  const uniqueName = uuidv4();
+  return `${uniqueName}${extension}`;
+}
+
+module.exports = {
+  generateFileName,
 };
-
-module.exports = { validarTipoArquivo };

@@ -1,25 +1,38 @@
 const express = require('express');
-const router = express.Router();
 const multer = require('multer');
-const authMiddleware = require('../middlewares/authMiddleware');
-const uploadController = require('../controllers/uploadController');
+const path = require('path');
+const fs = require('fs');
 
-// Armazena os arquivos em memória para enviar ao Firebase direto
-const storage = multer.memoryStorage();
-const upload = multer({
-  storage,
-  limits: { fileSize: 20 * 1024 * 1024 }, // até 20MB
-  fileFilter: (req, file, cb) => {
-    const tiposPermitidos = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'text/plain'];
+const router = express.Router();
 
-    if (tiposPermitidos.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(new Error('Tipo de arquivo não permitido'));
-    }
+// Garante que a pasta 'uploads' exista
+const uploadDir = path.join(__dirname, '..', 'uploads');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
+// Configuração do Multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir); // Pasta onde os arquivos serão salvos
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`); // Nome do arquivo salvo
   }
 });
 
-router.post('/upload', authMiddleware, upload.single('arquivo'), uploadController.uploadArquivo);
+const upload = multer({ storage });
+
+// Rota de upload de arquivo
+router.post('/', upload.single('arquivo'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ erro: 'Nenhum arquivo enviado.' });
+  }
+
+  res.json({
+    mensagem: 'Arquivo enviado com sucesso!',
+    arquivo: req.file,
+  });
+});
 
 module.exports = router;
