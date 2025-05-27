@@ -25,6 +25,15 @@ app.use('/api', alunoRoutes);              // Alunos em: http://localhost:5000/a
 app.use('/api', professorRoutes);  // Professores em: http://localhost:5000/professores / 
 app.use('/', authRoutes);                 // Login (alunos/professore) em: http://localhost:5000/login
 
+// Para servir os arquivos da pasta 'uploads'
+app.use('/uploads', express.static('uploads'));
+
+// Importa e usa as rotas de upload
+const uploadRoutes = require('../back-end/routes/uploadRoutes');
+app.use('/api/upload', uploadRoutes);
+
+
+
 // Inicializando servidor
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

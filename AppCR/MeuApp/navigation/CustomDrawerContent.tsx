@@ -81,7 +81,7 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
         </Text>
         
         <DrawerItem
-          label="Home"
+          label="Início"
           icon={({ color, size }) => (
             <Icon name="home" size={size} color={theme === 'light' ? '#4a90e2' : '#63b3ed'} />
           )}

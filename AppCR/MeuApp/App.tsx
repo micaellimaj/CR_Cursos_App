@@ -24,7 +24,7 @@ export default function App() {
     loadFonts();
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2000); // 2 segundos de delay para simular carregamento
+    }, 1000); // 1 segundos de delay para simular carregamento
 
     return () => clearTimeout(timer);
   }, []);

@@ -32,9 +32,9 @@ export default function HomeScreen({ navigation }: any) { // Adicione o objeto n
         />
       </View>
 
-      {/* Conteúdo principal */}
-      <View style={globalStyles.body}>
-        <Text style={styles.title}>Cursos</Text> {/* Texto ajustado */}
+       {/* Seção de "Meu curso" */}
+       <View style={{ paddingHorizontal: 20, marginTop: 20 }}>
+          <Text style={styles.sectionTitle}>Disciplina em andamento</Text>
         
         {/* Card clicável */}
         <TouchableOpacity 
@@ -42,7 +42,7 @@ export default function HomeScreen({ navigation }: any) { // Adicione o objeto n
           onPress={handleOpenInstagram} // Redireciona para o Instagram
         >
           <Text style={styles.subtitle}>Continue de onde parou</Text>
-          <Text style={styles.cardTitle}>Tema 2 - Estruturas de dados heterogêneas</Text>
+          <Text style={styles.cardTitle}>Módulo 1 - Sistemas Operacional</Text>
         </TouchableOpacity>
 
         {/* Seção de "Meu curso" */}
@@ -64,6 +64,47 @@ export default function HomeScreen({ navigation }: any) { // Adicione o objeto n
             </TouchableOpacity>
           </View>
 
+         
+            <View style={[styles.grid, { marginTop: 20 }]}>
+              {/* Grid "Aulas" */}
+              <TouchableOpacity 
+                style={styles.gridCard}
+                onPress={() => navigation.navigate('AulasScreen')} // Redireciona para AulasScreen
+              >
+                <MaterialIcons name="play-circle-outline" size={24} color="#fff" />
+                <Text style={styles.gridCardText}>Aulas</Text>
+              </TouchableOpacity>
+
+             {/* Grid "Cursos" */}
+<TouchableOpacity
+  style={styles.gridCard}
+  onPress={() => navigation.navigate('Cursos')} // Navega para a tela Cursos
+>
+  <FontAwesome5 name="chalkboard-teacher" size={24} color="#fff" />
+  <Text style={styles.gridCardText}>Cursos</Text>
+</TouchableOpacity>
+            </View>
+        
+
+         
+
+          {/* Botão de expandir/recolher */}
+          <TouchableOpacity
+            style={styles.expandButton}
+            onPress={() => setIsExpanded(!isExpanded)} // Alterna o estado
+          >
+            <Text style={styles.expandButtonText}>
+              {isExpanded ? 'Recolher' : 'Expandir'} {/* Texto dinâmico */}
+            </Text>
+            <MaterialIcons
+              name={isExpanded ? 'keyboard-arrow-up' : 'keyboard-arrow-down'} // Ícone dinâmico
+              size={24}
+              color="#2563eb"
+            />
+          </TouchableOpacity>
+          
+           {/* Grid "Aulas" e "Cursos" */}
+           {isExpanded && (
           <View style={[styles.grid, { marginTop: 20 }]}>
             {/* Conteúdos extras */}
             <TouchableOpacity
@@ -80,48 +121,12 @@ export default function HomeScreen({ navigation }: any) { // Adicione o objeto n
               <Text style={styles.gridCardText}>Certificados</Text>
             </TouchableOpacity>
           </View>
-
-          {/* Botão de expandir/recolher */}
-          <TouchableOpacity
-            style={styles.expandButton}
-            onPress={() => setIsExpanded(!isExpanded)} // Alterna o estado
-          >
-            <Text style={styles.expandButtonText}>
-              {isExpanded ? 'Recolher' : 'Expandir'} {/* Texto dinâmico */}
-            </Text>
-            <MaterialIcons
-              name={isExpanded ? 'keyboard-arrow-up' : 'keyboard-arrow-down'} // Ícone dinâmico
-              size={24}
-              color="#2563eb"
-            />
-          </TouchableOpacity>
-
-          {/* Grid "Aulas" e "Cursos" */}
-          {isExpanded && (
-            <View style={[styles.grid, { marginTop: 20 }]}>
-              {/* Grid "Aulas" */}
-              <TouchableOpacity 
-                style={styles.gridCard}
-                onPress={() => navigation.navigate('AulasScreen')} // Redireciona para AulasScreen
-              >
-                <MaterialIcons name="play-circle-outline" size={24} color="#fff" />
-                <Text style={styles.gridCardText}>Aulas</Text>
-              </TouchableOpacity>
-
-              {/* Grid "Cursos" */}
-              <TouchableOpacity style={styles.gridCard}>
-                <FontAwesome5 name="chalkboard-teacher" size={24} color="#fff" />
-                <Text style={styles.gridCardText}>Cursos</Text>
-              </TouchableOpacity>
-            </View>
-          )}
+            )}
         </View>
+        
       </View>
 
-      {/* Rodapé */}
-      <View style={globalStyles.footer}>
-        <Text style={globalStyles.footerText}>Desenvolvido por CR Cursos Educacional</Text>
-      </View>
+     
     </View>
   );
 }
