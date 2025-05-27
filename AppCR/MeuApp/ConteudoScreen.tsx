@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { useTheme } from './contexts/ThemeContext';
+import { getGlobalStyles } from './styles/globalStyles';
 
 const conteudos = [
     { id: 1, titulo: 'Introdução ao Curso', descricao: 'Conheça o objetivo e estrutura do curso.' },
@@ -9,14 +11,21 @@ const conteudos = [
 ];
 
 export default function Conteudoext() {
+    const { theme } = useTheme();
+    const globalStyles = getGlobalStyles(theme);
+
+    const cardBg = '#1e3a8a';
+    const cardText = theme === 'dark' ? '#fff' : '#1e293b';
+    const bgColor = theme === 'dark' ? undefined : '#fff';
+
     return (
-        <View style={styles.container}>
-            <Text style={styles.titulo}>Conteúdos do Curso</Text>
+        <View style={[globalStyles.container, bgColor ? { backgroundColor: bgColor } : {}]}>
+            <Text style={[styles.titulo, { color: cardText }]}>Conteúdos do Curso</Text>
             <ScrollView>
                 {conteudos.map(item => (
-                    <View key={item.id} style={styles.card}>
-                        <Text style={styles.cardTitulo}>{item.titulo}</Text>
-                        <Text style={styles.cardDescricao}>{item.descricao}</Text>
+                    <View key={item.id} style={[styles.card, { backgroundColor: cardBg }]}>
+                        <Text style={[styles.cardTitulo, { color: '#fff' }]}>{item.titulo}</Text>
+                        <Text style={[styles.cardDescricao, { color: '#cbd5e1' }]}>{item.descricao}</Text>
                     </View>
                 ))}
             </ScrollView>
@@ -25,18 +34,13 @@ export default function Conteudoext() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: '#fff',
-    },
     titulo: {
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 20,
     },
     card: {
-        backgroundColor: '#f2f2f2',
+        backgroundColor: '#1e3a8a',
         borderRadius: 8,
         padding: 16,
         marginBottom: 15,
