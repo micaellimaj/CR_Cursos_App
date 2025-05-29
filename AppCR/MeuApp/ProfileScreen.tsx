@@ -14,6 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useTheme } from './contexts/ThemeContext';
 import styles from './styles/ProfileScreenStyles';
+import { API_URL } from '@env';
 // import logoImage from './assets/images/aluno.png';
 
 export default function ProfileScreen() {
@@ -38,7 +39,7 @@ export default function ProfileScreen() {
       const id = await AsyncStorage.getItem('id');
 
       try {
-        const response = await axios.get(`http://192.168.100.83:5000/api/alunos/${id}`, {
+        const response = await axios.get(`${API_URL}/api/alunos/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -70,7 +71,7 @@ export default function ProfileScreen() {
     const id = await AsyncStorage.getItem('id');
 
     try {
-      await axios.put(`http://192.168.100.83:5000/api/alunos/${id}`, {
+      await axios.put(`${API_URL}/api/alunos/${id}`, {
         full_name: user.fullName,
         data_nascimento: user.birthDate,
         telefone: user.phone,
