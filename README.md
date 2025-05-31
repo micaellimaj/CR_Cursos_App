@@ -1,7 +1,21 @@
-# Projeto_Javascripto
+# CR Cursos - App Mobile
+
+## Introdução:
+
+## Objetivo:
+
+## Tecnologias:
+
+## Etapas do Projeto:
+
+1. Front-End:
+
+2. Back-end:
+
+3. Banco de dados e Deploy:
 
 
-
+## Estrutura do Projeto:
 ```
 CR_Cursos_App/
 │
@@ -46,15 +60,4 @@ CR_Cursos_App/
 └── README.md
 ```
 
-
-* POST http://localhost:5000/professores
-* GET http://localhost:5000/professores
-* GET http://localhost:5000/professores/:id
-* PUT http://localhost:5000/professores/:id
-* DELETE http://localhost:5000/professores/:id
-
-* POST http://localhost:5000/api/alunos
-* GET http://localhost:5000/api/alunos
-* GET http://localhost:5000/api/alunos/:id
-* PUT http://localhost:5000/api/alunos/:id
-* DELETE http://localhost:5000/api/alunos/:id
+## Conclusão:
