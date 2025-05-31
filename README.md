@@ -8,6 +8,18 @@ A plataforma tem como obejetivo oferecer uma plataforma mobile para os alunos da
 
 ## Tecnologias:
 
+<div align="center" style="display: inline_block">
+  <img align="center" alt="Node.js" src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" />
+  <img align="center" alt="React Native" src="https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
+  <img align="center" alt="Firebase" src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black" />
+  <img align="center" alt="Express.js" src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white" />
+  <img align="center" alt="Docker" src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" />
+  <img align="center" alt="Render" src="https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=white" />
+  <img align="center" alt="Expo" src="https://img.shields.io/badge/Expo-000020?style=for-the-badge&logo=expo&logoColor=white" />
+  <img align="center" alt="TypeScript" src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
+</div>
+
+
 ## Funcionalidades:
 
 A plataforma é dividida em três perfis de usuários:
@@ -32,45 +44,64 @@ A plataforma é dividida em três perfis de usuários:
 ```
 CR_Cursos_App/
 │
-├── frontend/                     # Projeto Next.js com Tailwind CSS
-│   ├── public/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── styles/
-│   │   └── utils/
-│   ├── .env.local
-│   ├── next.config.js
-│   └── package.json
+├── app/                          # Projeto React Native (frontend mobile)
+│   ├── components/              # Componentes reutilizáveis da interface
+│   ├── constants/               # Constantes globais (ex: cores, strings fixas)
+│   ├── navigation/              # Lógica de navegação entre telas (React Navigation)
+│   ├── screens/                 # Telas da aplicação
+│   │   ├── styles/              # Estilos específicos das telas
+│   │   ├── testes/              # Testes das telas (unitários ou de integração)
+│   ├── styles/                  # Estilos globais
+│   ├── assets/                  # Imagens, fontes, ícones e outros recursos visuais
+│   ├── App.js                   # Arquivo principal da aplicação
+│   ├── App.test.js              # Teste principal
+│   ├── firebaseConfig.js        # Configuração do Firebase
+│   ├── index.js                 # Entrada principal da aplicação
+│   ├── package.json             # Dependências e scripts do projeto
+│   ├── babel.config.js          # Configurações do Babel
+│   ├── metro.config.js          # Configurações do Metro Bundler
+│   └── tsconfig.json            # Configurações do TypeScript (se aplicável)
 │
-├── backend/                      # Projeto Node.js com Express + Firebase
-│   ├── config/                   # Inicializações e configs (ex: firebase.js)
-│   │   └── firebase.js
+├── backend/                     # Backend Node.js com Express + Firebase Admin
+│   ├── firebase/                # Chave de serviço Firebase e configs
+│   │   └── firebaseServiceAccountKey.json
 │   │
-│   ├── controllers/              # Lógica das rotas (ex: criar usuário)
-│   │   └── userController.js
+│   ├── controllers/             # Lógica das rotas (ex: criar aluno, enviar arquivos)
+│   │   ├── alunoController.js
+│   │   ├── imagemController.js
+│   │   ├── professorController.js
+│   │   └── uploadController.js
 │   │
-│   ├── routes/                   # Rotas da API
-│   │   └── userRoutes.js
+│   ├── routes/                  # Rotas da API Express
+│   │   ├── alunoRoutes.js
+│   │   ├── imagemRoutes.js
+│   │   ├── professorRoutes.js
+│   │   └── uploadRoutes.js
 │   │
-│   ├── models/                   # Modelos de dados (ex: User.js com Sequelize ou esquema lógico)
-│   │   └── userModel.js
-│   │
-│   ├── middlewares/             # Verificação de autenticação, erros, logs etc.
+│   ├── middlewares/            # Verificações, autenticação, validações
 │   │   └── authMiddleware.js
 │   │
-│   ├── services/                 # Serviços externos (ex: integração com Firebase Auth, Storage etc.)
-│   │   └── firebaseService.js
+│   ├── services/                # Serviços auxiliares (ex: upload, user service)
+│   │   ├── alunoService.js
+│   │   ├── professorService.js
+│   │   ├── uploadService.js
+│   │   └── utils.js             # Funções utilitárias diversas
 │   │
-│   ├── utils/                    # Funções auxiliares, helpers, validações etc.
-│   │   └── formatDate.js
+│   ├── uploads/                 # Diretório onde os arquivos enviados são armazenados
+│   │   ├── aluno/               # Uploads dos alunos
+│   │   ├── professor/           # Uploads dos professores
+│   │   ├── utils/               # Scripts auxiliares de upload
+│   │   └── uploadUtil.js        # Lógica de manipulação de uploads
 │   │
-│   ├── .env                      # Variáveis de ambiente (ex: credenciais Firebase)
-│   ├── server.js                 # Arquivo principal do servidor Express
-│   └── package.json
+│   ├── server.js                # Inicialização do servidor Express
+│   ├── .env                     # Variáveis de ambiente (credenciais, configs)
+│   ├── package.json             # Dependências e scripts do backend
+│   ├── Dockerfile               # Imagem Docker do backend
+│   └── docker-compose.yml       # Orquestração de contêineres (se aplicável)
 │
-├── .gitignore
-└── README.md
+├── .gitignore                   # Arquivos e pastas ignorados pelo Git
+├── README.md                    # Documentação geral do projeto
+
 ```
 
 ## Conclusão:
