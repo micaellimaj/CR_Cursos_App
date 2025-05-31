@@ -24,21 +24,59 @@ A plataforma tem como obejetivo oferecer uma plataforma mobile para os alunos da
 
 A plataforma é dividida em três perfis de usuários:
 
-1. Aluno:
+1. **Aluno**:
 * Acesso aos cursos em que está matriculado.
 * Visualização e download de conteúdos das aulas.
 * Realização e envio de atividades propostas pelos professores.
 * Perfil personalizado.
 
-2. Professor:
+2. **Professor**:
 * Upload de conteúdos educacionais (aulas, PDFs, vídeos, etc).
 * Cadastro e gerenciamento de atividades para os alunos.
 * Perfil personalizado com controle sobre suas turmas.
 
-3. Administrador (ADM):
+3. **Administrador (ADM)**:
 * Gerenciamento completo da plataforma.
 * Cadastro e controle de usuários (alunos e professores).
 * Supervisão geral da organização dos cursos e turmas.
+
+## Etapas do Projeto:
+
+### Front-End:
+
+### Back-End:
+* Projeto modularizado com separação clara de responsabilidades: controllers/, routes/, services/, middlewares/, utils/, e config/.
+* Utiliza Node.js com o framework Express.js para construção da API REST.
+* Arquivo principal do servidor: server.js, responsável por configurar middlewares, rotas e iniciar o servidor.
+
+1. **Estrutura Técnica**:
+* controllers/: Lógica de controle das requisições HTTP, separada por domínio:
+  * alunoController.js, professorController.js, authController.js, etc.
+* routes/: Define as rotas da API agrupadas por entidade (aluno, professor, auth, upload, imagem).
+* services/: Camada de regra de negócio, responsável por interações com Firebase e manipulações lógicas dos dados.
+* middlewares/: Middleware de autenticação JWT (authMiddleware.js) para proteger rotas sensíveis.
+* utils/:
+  * Funções auxiliares para cálculo de idade, geração de senhas e validação de e-mails (calcularIdade.js, gerarIdPersonalizado.js, validarEmail.js).
+* uploads/:
+  * Pasta para gerenciamento e armazenamento temporário de arquivos enviados.
+
+2. **Autenticação e Segurança**:
+* Autenticação via JWT (JSON Web Token), implementada em authService.js e verificada por middleware.
+* Separação entre usuários do tipo aluno, professor e administrador.
+* Validações customizadas e geração de identificadores únicos para usuários.
+
+### Banco de dados:
+
+1. **Firebase Realtime Database**
+* Utilizado como banco NoSQL em tempo real para persistência dos dados dos alunos, professores e administradores.
+* Configuração feita em config/firebase.js com a chave de serviço firebaseServiceAccountKey.json.
+* Interação com o Firebase feita exclusivamente pela camada de services/, promovendo separação e reuso de código.
+
+2. **Docker (Docker Desktop)**
+* Utilizado principalmente para o gerenciamento de upload de arquivos.
+* Composição feita via docker-compose.yml para orquestração de containers.
+* Imagem definida no Dockerfile, permitindo que o back-end seja facilmente containerizado e replicável.
+* Arquivos são enviados através do uploadController.js, processados por uploadService.js e armazenados localmente em uploads/.
 
 ## Estrutura do Projeto:
 ```
