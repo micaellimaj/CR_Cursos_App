@@ -1,12 +1,12 @@
-# CR Cursos - App Mobile
+# <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMm4wbzVvMWRpNjZzaDhsb2Fic2hkcjM1MmU4YmQweHJiNTBtaWxhaSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/8f3nS1Gajtv70qNicE/giphy.gif" alt="class" width="50" height="50" /> CR Cursos - App Mobile
 
-## 📱 Introdução:
+## <img src= "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMWtodDlnZng5dDk4MXo5ZHNtbHV3ejFnMzI2MmZlMGtmNXc5ZnNxaSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/U3DTrGnuwfDpkNsr3d/giphy.gif" alt="class" width="50" height="50" /> Introdução:
 A plataforma CR Cursos está sendo desenvolvida em parceria com a escola profissionalizante CR Cursos, localizada na cidade de Toritama - PE, junto aos alunos da Unifavip Wyden, como parte das atividades da disciplina Programação para Dispositivos Móveis em Android, sob orientação do professor Wolney. O projeto é resultado da aplicação prática dos conhecimentos adquiridos em sala de aula, com o objetivo de gerar impacto real para a comunidade escolar.
 
-## Objetivo:
+## <img src= "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ21oOW9vYzFwYmprc3ltb2tpdGl0cXhkbHplMGR2MGZqdm0wdGlneSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/VbDDnwHgbsmXdCY2TG/giphy.gif" alt="class" width="50" height="50" /> Objetivo:
 A plataforma tem como obejetivo oferecer uma plataforma mobile para os alunos da instituição "CR Curso" para que possam acompanhar o curso em que estão matriculados e uma conexão entre os alunos ou professores, pois através da plataforma os professores podem enviar os conteudos de suas aulas para a plataforma e atividades para os alunos , e os alunos podem consumir o conteudo das aulas e fazer as atividades, e tanto os alunos como os professores tem sua area de usuario, com personalização de seu conteudo, autenticação de usuário e também a um terceiro user chamado ADM que fica responsável por gerenciar os demais usuários do sistema e também é o resposável por cadastrar o progessor na plataforma.
 
-## Tecnologias:
+##  <img src= "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExajh0OXc4bzlzNTlqOWdvOHk5MWwyb2IwZmcwOWgyOHp6a3F2M3B6eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/J6td6BTmG1PeGinoqB/giphy.gif" alt="class" width="50" height="50" /> Tecnologias:
 
 <div align="center" style="display: inline_block">
   <img align="center" alt="Node.js" src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" />
@@ -20,7 +20,7 @@ A plataforma tem como obejetivo oferecer uma plataforma mobile para os alunos da
 </div>
 
 
-## Funcionalidades:
+##  <img src= "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExdzU2Y3Z3a284czJ4N3R0d2hoaXRrZWx1aW1rcnVqb3ZhbG1yYW95byZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/jVTkFo55fUIRUJsw3z/giphy.gif" alt="class" width="50" height="50" /> Funcionalidades:
 
 A plataforma é dividida em três perfis de usuários:
 
@@ -40,7 +40,7 @@ A plataforma é dividida em três perfis de usuários:
 * Cadastro e controle de usuários (alunos e professores).
 * Supervisão geral da organização dos cursos e turmas.
 
-## Etapas do Projeto:
+##  <img src= "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXQxdGV6dXQzM3hrbGx2NjhtdGpjZXR5a2M1N3E2emphZWRidWFxdiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Q8DYzZxZweZpLS4y6s/giphy.gif" alt="class" width="50" height="50" /> Etapas do Projeto:
 
 ### Front-End:
 
@@ -78,7 +78,7 @@ A plataforma é dividida em três perfis de usuários:
 * Imagem definida no Dockerfile, permitindo que o back-end seja facilmente containerizado e replicável.
 * Arquivos são enviados através do uploadController.js, processados por uploadService.js e armazenados localmente em uploads/.
 
-## Estrutura do Projeto:
+##  <img src= "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExYnI1NHB4YjRzeWU0enBpOWJ2bjV2enk2eDA3am50bGJxb21ic3F2ciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/8Fo162g5cK3tQVj909/giphy.gif" alt="class" width="50" height="50" /> Estrutura do Projeto:
 ```
 CR_Cursos_App/
 │
@@ -142,6 +142,6 @@ CR_Cursos_App/
 
 ```
 
-## Conclusão:
+##  <img src= "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExemx1ZTJ5bG9nenp1NnhzN2RibWtiNWN5NmZ1bTdrdHI2ZWh2dmV0MSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/HKBzxh3pdv3Fe/giphy.gif" alt="class" width="50" height="50" /> Conclusão:
 
 Com esta plataforma, a CR Cursos de Toritama amplia suas possibilidades de ensino, alcançando alunos de maneira mais dinâmica, moderna e acessível. A iniciativa representa um avanço importante na digitalização do ensino profissionalizante na região do Agreste Pernambucano.
