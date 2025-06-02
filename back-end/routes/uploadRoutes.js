@@ -3,36 +3,40 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
+const uploadController = require('../controllers/uploadController');
 const router = express.Router();
 
-// Garante que a pasta 'uploads' exista
 const uploadDir = path.join(__dirname, '..', 'uploads');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
-}
+if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
 
-// Configuração do Multer
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir); // Pasta onde os arquivos serão salvos
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`); // Nome do arquivo salvo
+const storage = multer.memoryStorage(); // Para permitir manipulação dos arquivos via buffer
+const upload = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'application/vnd.ms-powerpoint',
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+      'text/plain'
+    ];
+    if (allowedTypes.includes(file.mimetype)) cb(null, true);
+    else cb(new Error('Tipo de arquivo não suportado'), false);
   }
 });
 
-const upload = multer({ storage });
+// CREATE
+router.post('/', upload.single('arquivo'), uploadController.uploadFile);
 
-// Rota de upload de arquivo
-router.post('/', upload.single('arquivo'), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ erro: 'Nenhum arquivo enviado.' });
-  }
+// READ
+router.get('/', uploadController.listFiles);
+router.get('/:fileName', uploadController.getFile);
 
-  res.json({
-    mensagem: 'Arquivo enviado com sucesso!',
-    arquivo: req.file,
-  });
-});
+// UPDATE
+router.put('/:fileName', upload.single('arquivo'), uploadController.updateFile);
+
+// DELETE
+router.delete('/:fileName', uploadController.deleteFile);
 
 module.exports = router;
