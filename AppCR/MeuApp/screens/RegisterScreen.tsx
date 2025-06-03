@@ -12,6 +12,7 @@ import {
 import { FontAwesome5, Feather, MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from '../contexts/ThemeContext';
 import styles from '../styles/RegisterScreenStyles'; // Importando os estilos
+import { API_URL } from '@env';
 
 const { width } = Dimensions.get('window');
 
@@ -138,7 +139,7 @@ export default function RegisterScreen({ navigation }: any) {
     }
   
     try {
-      const response = await fetch('http://localhost:5000/api/alunos', {
+      const response = await fetch('${API_URL}/api/alunos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(alunoPayload),

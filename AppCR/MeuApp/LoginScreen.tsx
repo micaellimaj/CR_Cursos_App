@@ -13,6 +13,7 @@ import { useTheme } from './contexts/ThemeContext';
 import styles from './styles/LoginScreenStyles'; // Importando os estilos
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { API_URL } from '@env';
 
 const { width } = Dimensions.get('window');
 
@@ -30,7 +31,7 @@ export default function LoginScreen({ navigation }: any) {
     }
 
     try {
-      const response = await axios.post('http://192.168.100.83:5000/login', {
+      const response = await axios.post('${API_URL}/login', {
         email,
         senha: password,
       });
