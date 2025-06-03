@@ -30,7 +30,7 @@ export default function App() {
   }, []);
 
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return <AppLoading />; ,,
   }
 
   if (isLoading) {
