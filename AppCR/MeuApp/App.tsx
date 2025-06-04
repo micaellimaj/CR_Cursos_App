@@ -30,7 +30,11 @@ export default function App() {
   }, []);
 
   if (!fontsLoaded) {
+<<<<<<< HEAD
     return <AppLoading />;
+=======
+    return <AppLoading />; 
+>>>>>>> 68f884701a6f1b2cf066c9320311e154a64f40eb
   }
 
   if (isLoading) {
