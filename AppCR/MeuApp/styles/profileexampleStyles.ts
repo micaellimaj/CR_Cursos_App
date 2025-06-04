@@ -5,10 +5,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    flex: 1,
-    padding: 20,
-    justifyContent: 'space-between',
+    flex: 1
   },
+  contentContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+},
   header: {
     backgroundColor: '#2563eb', // Azul escuro
     padding: 20,

@@ -39,7 +39,10 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: isLightTheme ? '#f5f7fa' : '#0f172a' }]}>
-      <ScrollView style={styles.content}>
+      <ScrollView
+      style={styles.content}
+      contentContainerStyle={styles.contentContainer}
+    >
         <View style={styles.header}>
           <View style={styles.avatarContainer}>
             <TouchableOpacity style={styles.cameraButton}>
