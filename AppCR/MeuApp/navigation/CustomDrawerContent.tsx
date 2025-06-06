@@ -99,15 +99,7 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
           style={styles.drawerItem}
           labelStyle={[styles.drawerLabel, { color: theme === 'light' ? '#2d3748' : '#e2e8f0' }]}
         />
-        <DrawerItem
-          label=" Novo Perfil"
-          icon={({ color, size }) => (
-            <Ionicons name="person" size={size} color={theme === 'light' ? '#4a90e2' : '#63b3ed'} />
-          )}
-          onPress={() => props.navigation.navigate('profileexample')} // Navega para a tela de Perfil aluno
-          style={styles.drawerItem}
-          labelStyle={[styles.drawerLabel, { color: theme === 'light' ? '#2d3748' : '#e2e8f0' }]}
-        />
+       
 
       </View>
 

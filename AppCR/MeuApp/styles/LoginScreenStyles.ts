@@ -21,6 +21,12 @@ export const styles = StyleSheet.create({
     alignItems: "center", // Centraliza horizontalmente
     paddingHorizontal: 20, // Espaçamento lateral
   },
+  containerLight: {
+    backgroundColor: "#fff",
+  },
+  containerDark: {
+    backgroundColor: "#1a202c",
+  },
   content: {
     width: "100%",
     maxWidth: 400, // Limita a largura máxima para telas maiores
@@ -34,23 +40,12 @@ export const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: "center",
-    marginBottom: 30, // Espaçamento abaixo do logo
+    marginBottom: 5, // Espaçamento maior abaixo da logo
   },
   logoImage: {
-    width: 80,
-    height: 80,
-    marginBottom: 10,
-  },
-  logoText: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#2e2f33",
-  },
-  subtitle: {
-    fontSize: 14,
-    textAlign: "center",
-    color: "#65676b",
-    marginBottom: 20,
+    width: 180, // Aumentei o tamanho da logo
+    height: 180,
+    resizeMode: "contain",
   },
   formContainer: {
     width: "100%",
@@ -64,7 +59,16 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 16,
     fontSize: 16,
     borderWidth: 1,
+  },
+  inputLight: {
     borderColor: "#dddfe2",
+    backgroundColor: "#f9f9f9",
+    color: "#333",
+  },
+  inputDark: {
+    borderColor: "#374151",
+    backgroundColor: "#2d3748",
+    color: "#e2e8f0",
   },
   loginButton: {
     width: "100%",
@@ -73,7 +77,12 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 10,
+  },
+  loginButtonLight: {
     backgroundColor: "#2563eb",
+  },
+  loginButtonDark: {
+    backgroundColor: "#63b3ed",
   },
   loginButtonText: {
     color: "#fff",
