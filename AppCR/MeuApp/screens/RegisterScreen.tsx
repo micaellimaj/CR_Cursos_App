@@ -56,6 +56,20 @@ type FormFields = {
 };
 
 
+// Função para calcular idade a partir da data de nascimento (formato dd/mm/yyyy)
+function getAge(dateString: string) {
+  const [day, month, year] = dateString.split('/');
+  if (!day || !month || !year || year.length !== 4) return null;
+  const today = new Date();
+  const birthDate = new Date(Number(year), Number(month) - 1, Number(day));
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age;
+}
+
 export default function RegisterScreen({ navigation }: any) {
   const { theme } = useTheme();
   const isLightTheme = theme === 'light';
@@ -136,6 +150,13 @@ export default function RegisterScreen({ navigation }: any) {
       };
     }
   
+    // Validação de e-mail
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert('Por favor, insira um e-mail válido.');
+      return;
+    }
+  
     try {
       const response = await fetch(`${API_URL}/api/alunos`, {
         method: 'POST',
@@ -169,6 +190,8 @@ export default function RegisterScreen({ navigation }: any) {
     }
   };
   
+  const age = getAge(formData.birthDate);
+  const isMinor = age !== null && age < 18 && age > 0; // Só libera se idade válida e menor de 18
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: isLightTheme ? '#f5f7fa' : '#0f172a' }]}>
@@ -365,7 +388,7 @@ export default function RegisterScreen({ navigation }: any) {
             </View>
 
             {/* Campos do responsável (opcional) */}
-        <Text style={{ marginTop: 20, fontWeight: 'bold', color: isLightTheme ? '#000' : '#fff' }}>
+        <Text style={{ marginTop: 20, fontWeight: 'bold', color: isLightTheme ? '#000' : '#fff', opacity: isMinor ? 1 : 0.5 }}>
           Dados do Responsável (caso menor de idade)
         </Text>
 
@@ -376,11 +399,13 @@ export default function RegisterScreen({ navigation }: any) {
               backgroundColor: isLightTheme ? '#f5f6f7' : '#1e293b',
               borderColor: isLightTheme ? '#dddfe2' : '#4b5563',
               color: isLightTheme ? '#000' : '#fff',
+              opacity: isMinor ? 1 : 0.5,
             }]}
             placeholder="Nome do Responsável"
             placeholderTextColor={isLightTheme ? '#65676b' : '#9ca3af'}
             value={formData.responsibleFullName}
             onChangeText={(value) => handleInputChange('responsibleFullName', value)}
+            editable={isMinor}
           />
         </View>
 
@@ -391,11 +416,13 @@ export default function RegisterScreen({ navigation }: any) {
               backgroundColor: isLightTheme ? '#f5f6f7' : '#1e293b',
               borderColor: isLightTheme ? '#dddfe2' : '#4b5563',
               color: isLightTheme ? '#000' : '#fff',
+              opacity: isMinor ? 1 : 0.5,
             }]}
             placeholder="Email do Responsável"
             placeholderTextColor={isLightTheme ? '#65676b' : '#9ca3af'}
             value={formData.responsibleEmail}
             onChangeText={(value) => handleInputChange('responsibleEmail', value)}
+            editable={isMinor}
           />
         </View>
 
@@ -406,11 +433,13 @@ export default function RegisterScreen({ navigation }: any) {
               backgroundColor: isLightTheme ? '#f5f6f7' : '#1e293b',
               borderColor: isLightTheme ? '#dddfe2' : '#4b5563',
               color: isLightTheme ? '#000' : '#fff',
+              opacity: isMinor ? 1 : 0.5,
             }]}
             placeholder="Telefone do Responsável"
             placeholderTextColor={isLightTheme ? '#65676b' : '#9ca3af'}
             value={formData.responsiblePhone}
             onChangeText={(value) => handleInputChange('responsiblePhone', value)}
+            editable={isMinor}
           />
         </View>
 
