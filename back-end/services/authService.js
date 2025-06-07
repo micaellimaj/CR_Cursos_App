@@ -4,8 +4,8 @@ const jwt = require('jsonwebtoken');
 const { gerarToken, verificarSenha } = require('../utils/authUtils');
 
 const SECRET_KEY = process.env.JWT_SECRET || 'chave_secreta_teste';
-const ADMIN_EMAIL = 'admin@crcursos.com';
-const ADMIN_SENHA = 'admin123';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+const ADMIN_SENHA = process.env.ADMIN_SENHA;
 
 const loginUsuario = async (email, senha) => {
   // Aluno

@@ -9,7 +9,7 @@ const router = express.Router();
 const uploadDir = path.join(__dirname, '..', 'uploads');
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
 
-const storage = multer.memoryStorage(); // Para permitir manipulação dos arquivos via buffer
+const storage = multer.memoryStorage(); 
 const upload = multer({
   storage,
   fileFilter: (req, file, cb) => {
@@ -26,17 +26,11 @@ const upload = multer({
   }
 });
 
-// CREATE
-router.post('/', upload.single('arquivo'), uploadController.uploadFile);
 
-// READ
+router.post('/', upload.single('arquivo'), uploadController.uploadFile);
 router.get('/', uploadController.listFiles);
 router.get('/:fileName', uploadController.getFile);
-
-// UPDATE
 router.put('/:fileName', upload.single('arquivo'), uploadController.updateFile);
-
-// DELETE
 router.delete('/:fileName', uploadController.deleteFile);
 
 module.exports = router;
