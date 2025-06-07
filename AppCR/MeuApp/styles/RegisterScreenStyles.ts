@@ -70,6 +70,35 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+ radioOuter: {
+  width: 22,
+  height: 22,
+  borderRadius: 11,
+  borderWidth: 2,
+  borderColor: '#2563eb',
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginRight: 8,
+  backgroundColor: '#f5f7fa',
+},
+radioOuterSelected: {
+  borderColor: '#2563eb',
+  backgroundColor: '#e0e7ff',
+},
+radioInner: {
+  width: 10,
+  height: 10,
+  borderRadius: 5,
+  backgroundColor: '#2563eb',
+},
+radioLabel: {
+  fontSize: 16,
+},
+radioLabelSelected: {
+  color: '#2563eb',
+  fontWeight: 'bold',
+},
+
 });
 
 export default styles;

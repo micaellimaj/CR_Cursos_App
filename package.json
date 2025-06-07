@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "concurrently \"npm run dev:back\" \"npm run dev:front\"",
     "dev:back": "cd back-end && npm run dev",
-    "dev:front":  "cd AppCR/MeuApp && start cmd /k \"npx expo start\""
+    "dev:front": "cd AppCR/MeuApp && start cmd /k \"npx expo start\""
   },
   "devDependencies": {
     "@babel/plugin-transform-private-methods": "^7.27.1",
