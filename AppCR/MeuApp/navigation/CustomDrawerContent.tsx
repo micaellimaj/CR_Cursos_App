@@ -122,7 +122,7 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
           style={styles.drawerItem}
           labelStyle={[styles.drawerLabel, { color: theme === 'light' ? '#2d3748' : '#e2e8f0' }]}
         />
-        
+
         <DrawerItem
           label="Alternar Tema"
           icon={({ size }) => (
@@ -135,6 +135,21 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
           onPress={toggleTheme}
           style={styles.drawerItem}
           labelStyle={[styles.drawerLabel, { color: theme === 'light' ? '#2d3748' : '#e2e8f0' }]}
+        />
+
+        {/* Botão de Sair */}
+        <DrawerItem
+          label="Sair"
+          icon={({ size }) => (
+            <MaterialIcons
+              name="logout"
+              size={size}
+              color="#e53935"
+            />
+          )}
+          onPress={() => props.navigation.navigate('Login')}
+          style={styles.drawerItem}
+          labelStyle={[styles.drawerLabel, { color: '#e53935', fontWeight: 'bold' }]}
         />
       </View>
     </DrawerContentScrollView>
