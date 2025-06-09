@@ -42,6 +42,7 @@ export default function DrawerNavigator() {
        <Drawer.Screen name="Notas" component={Notas} />
        <Drawer.Screen name="TelaConteudos" component={TelaConteudos} />
        <Drawer.Screen name="Cursos" component={Cursos} />
+       <Drawer.Screen name="RegisterScreen" component={RegisterScreen} />
     </Drawer.Navigator>
   );
 }
