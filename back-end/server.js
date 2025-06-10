@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+require('dotenv').config();
 
 // Rota de imagem //
 const imagemRoutes = require('./routes/imagemRoutes');
@@ -29,14 +30,13 @@ app.use('/', authRoutes);                 // Login (alunos/professore) em: http:
 app.use('/uploads', express.static('uploads'));
 
 // Importa e usa as rotas de upload
-const uploadRoutes = require('../back-end/routes/uploadRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
 app.use('/api/upload', uploadRoutes);
 
 
 
-// Inicializando servidor
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+// ⛳️ Escutando em 0.0.0.0 permite que o Render acesse sua aplicação
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Servidor rodando na porta: http://localhost:${PORT}`);
 });
-
