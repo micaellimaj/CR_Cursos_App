@@ -35,18 +35,28 @@ export default function LoginScreen({ navigation }: any) {
 
       const { token, tipo, id, nome } = response.data;
 
-      await AsyncStorage.setItem('token', token);
+      console.log('Token recebido do backend:', token); // Adicione este log
+      console.log('Tipo de usuário recebido:', tipo); // Adicione este log
+
+      await AsyncStorage.setItem('userToken', token);
       await AsyncStorage.setItem('userType', tipo);
       await AsyncStorage.setItem('userId', id);
       await AsyncStorage.setItem('userName', nome);
 
+      console.log('Token salvo no AsyncStorage:', await AsyncStorage.getItem('userToken')); // Adicione este log para confirmar
+      console.log('UserType salvo no AsyncStorage:', await AsyncStorage.getItem('userType')); // Adicione este log
+
       Alert.alert('Sucesso', `Bem-vindo, ${nome}!`);
       navigation.navigate('Home'); // Redireciona para a tela inicial após login
+      // Limpar campos após o login
+      setEmail('');
+      setPassword('');
+
     } catch (error: any) {
       if (error.response) {
         Alert.alert('Erro ao logar', error.response.data || 'Erro desconhecido');
       } else {
-        Alert.alert('Erro', 'Não foi possível conectar com o servidor');
+        Alert.alert('Erro de Login:', error);
       }
       console.error(error);
     }
