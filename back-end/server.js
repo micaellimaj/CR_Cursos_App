@@ -22,9 +22,9 @@ app.get('/', (req, res) => {
 });
 
 // Rotas da API
-app.use('/api', alunoRoutes);              // Alunos em: http://localhost:5000/api
-app.use('/api', professorRoutes);  // Professores em: http://localhost:5000/professores / 
-app.use('/', authRoutes);                 // Login (alunos/professore) em: http://localhost:5000/login
+app.use('/api/alunos', alunoRoutes);              // Alunos em: http://localhost:5000/api
+app.use('/api/professores', professorRoutes);  // Professores em: http://localhost:5000/professores / 
+app.use('/api', authRoutes);                 // Login (alunos/professore) em: http://localhost:5000/login
 
 // Para servir os arquivos da pasta 'uploads'
 app.use('/uploads', express.static('uploads'));

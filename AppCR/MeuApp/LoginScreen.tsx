@@ -28,7 +28,7 @@ export default function LoginScreen({ navigation }: any) {
     }
 
     try {
-      const response = await axios.post(`${API_URL}/login`, {
+      const response = await axios.post(`${API_URL}/api/login`, {
         email,
         senha: password,
       });

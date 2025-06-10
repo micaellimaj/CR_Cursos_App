@@ -1,5 +1,5 @@
 # Imagem base
-FROM node:18
+FROM node:18-slim
 
 # Diretório de trabalho no container
 WORKDIR /app
