@@ -9,7 +9,7 @@ import {
   Image
 } from 'react-native';
 import { useTheme } from './contexts/ThemeContext';
-import styles from './styles/LoginScreenStyles'; // Importando os estilos
+import styles from '../MeuApp/styles/LoginScreenStyles'; // Importando os estilosortando os estilos
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { API_URL } from '@env';
@@ -36,6 +36,7 @@ export default function LoginScreen({ navigation }: any) {
   const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert('Erro', 'Por favor, preencha todos os campos');
+      Alert.alert('Erro', 'Por favor, preencha todos os campos');
       return;
     }
 
@@ -47,7 +48,6 @@ export default function LoginScreen({ navigation }: any) {
 
       const { token, tipo, id, nome } = response.data;
 
-<<<<<<< HEAD
       // --- Adicione estes console.log para depuração ---
       console.log('Login bem-sucedido!');
       console.log('Token recebido:', token);
@@ -57,19 +57,20 @@ export default function LoginScreen({ navigation }: any) {
       // ----------------------------------------------------
 
       await AsyncStorage.setItem('userToken', token);
-=======
-      await AsyncStorage.setItem('token', token);
->>>>>>> 85f4f65817428346f2f1390009d01b6ae0820487
       await AsyncStorage.setItem('userType', tipo);
       await AsyncStorage.setItem('userId', id);
       await AsyncStorage.setItem('userName', nome);
 
       Alert.alert('Sucesso', `Bem-vindo, ${nome}!`);
       navigation.navigate('Home'); // Redireciona para a tela inicial após login
+      Alert.alert('Sucesso', `Bem-vindo, ${nome}!`);
+      navigation.navigate('Home'); // Redireciona para a tela inicial após login
     } catch (error: any) {
       if (error.response) {
         Alert.alert('Erro ao logar', error.response.data || 'Erro desconhecido');
+        Alert.alert('Erro ao logar', error.response.data || 'Erro desconhecido');
       } else {
+        Alert.alert('Erro', 'Não foi possível conectar com o servidor');
         Alert.alert('Erro', 'Não foi possível conectar com o servidor');
       }
       console.error(error);
@@ -84,6 +85,8 @@ export default function LoginScreen({ navigation }: any) {
           <Image
             source={
               isDarkTheme
+                ? require('./assets/logoCR.png') // Logo para o tema dark
+                : require('./assets/logoCRcursos.png') // Logo para o tema light
                 ? require('./assets/logoCR.png') // Logo para o tema dark
                 : require('./assets/logoCRcursos.png') // Logo para o tema light
             }
