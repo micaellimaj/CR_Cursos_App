@@ -103,6 +103,11 @@ const updateAluno = async (req, res) => {
 
   if (novosDados.data_nascimento) {
     const idade = calcularIdade(novosDados.data_nascimento);
+    // --- ADICIONE ESTA VALIDAÇÃO AQUI TAMBÉM: ---
+    if (isNaN(idade)) {
+      return res.status(400).json({ message: 'Data de nascimento inválida para atualização. Use o formato DD/MM/AAAA.' });
+    }
+    // --- FIM DA ADIÇÃO ---
     if (idade < 18 && (!novosDados.nome_responsavel || !novosDados.email_responsavel || !novosDados.telefone_responsavel)) {
       return res.status(400).json({ message: 'Dados do responsável são obrigatórios para menores de idade' }); // --- CORREÇÃO AQUI ---
     }
