@@ -14,7 +14,7 @@ import Cursos from '../Cursos';
 import profileexample from '../profileexample';
 import Cadastro from 'screens/Cadastro';
 import TermsOfUseScreen from 'TermosdeUso';
-
+import ProfileProfessor from 'Profileprofessor'
 
 
 const Drawer = createDrawerNavigator();
@@ -39,6 +39,7 @@ export default function DrawerNavigator() {
       <Drawer.Screen name="Register" component={RegisterScreen} />
       <Drawer.Screen name="Home" component={HomeScreen} />
       <Drawer.Screen name="Profilealuno" component={Profilealuno} />
+      <Drawer.Screen name="ProfileProfessor" component={ProfileProfessor} />
        <Drawer.Screen name="AulasScreen" component={AulasScreen} />
        <Drawer.Screen name="ConteudoScreen" component={ConteudoScreen} />
        <Drawer.Screen name="Notas" component={Notas} />
