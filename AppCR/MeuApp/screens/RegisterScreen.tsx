@@ -12,6 +12,7 @@ import { FontAwesome5, Feather, MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from '../contexts/ThemeContext';
 import styles from '../styles/RegisterScreenStyles';
 import { API_URL } from '@env';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //função pra deixar cpf bonito
 const formatCPF = (value: string) => {
@@ -108,7 +109,9 @@ export default function RegisterScreen({ navigation }: any) {
       responsibleEmail,
       responsiblePhone
     } = formData;
-  
+
+    const token = await AsyncStorage.getItem('token');
+
     const requiredFields: (keyof FormFields)[] = ['fullName', 'birthDate', 'phone', 'email', 'password', 'confirmPassword'];
   
     const emptyFields = requiredFields.filter((field) => formData[field].trim() === '');
@@ -160,10 +163,13 @@ export default function RegisterScreen({ navigation }: any) {
     try {
       const response = await fetch(`${API_URL}/api/alunos`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
         body: JSON.stringify(alunoPayload),
       });
-  
+      
       if (response.ok) {
         setSuccessMessage(true);
         setTimeout(() => {
