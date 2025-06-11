@@ -10,9 +10,9 @@ export default function AulasScreen({ navigation }: any) { // Adicionado o objet
   const globalStyles = getGlobalStyles(theme);
 
   // Dados fictícios para progresso e seções
-  const progress = 50; // Progresso do aluno em porcentagem
+  const progress = 75; // Progresso do aluno em porcentagem
   const sections = [
-    { id: '1', title: 'Conteúdos', icon: <Feather name="book-open" size={24} color="#fff" />, screen: 'TelaConteudos' },
+    { id: '1', title: 'Apostilas', icon: <Feather name="book-open" size={24} color="#fff" />, screen: 'TelaConteudos' },
     { id: '2', title: 'Lista de Exercícios', icon: <FontAwesome5 name="tasks" size={24} color="#fff" /> },
     { id: '3', title: 'Simulados', icon: <MaterialIcons name="quiz" size={24} color="#fff" /> },
     { id: '4', title: 'Informações da Disciplina', icon: <FontAwesome5 name="info-circle" size={24} color="#fff" /> },
