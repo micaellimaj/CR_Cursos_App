@@ -8,6 +8,7 @@ import {
   Image,
   Alert,
   ScrollView,
+  useWindowDimensions,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -19,6 +20,20 @@ import { API_URL } from '@env';
 export default function ProfileScreen() {
   const { theme } = useTheme();
   const isLightTheme = theme === 'light';
+  const { width } = useWindowDimensions();
+
+  // Cores adaptáveis
+  const cardBg = isLightTheme ? '#fff' : '#23272f';
+  const divider = isLightTheme ? '#e1e1e1' : '#334155';
+  const mainText = isLightTheme ? '#2563eb' : '#fff';
+  const subText = isLightTheme ? '#555' : '#cbd5e1';
+  const label = isLightTheme ? '#2563eb' : '#60a5fa';
+  const iconColor = isLightTheme ? '#2563eb' : '#60a5fa';
+  const bgScreen = isLightTheme ? '#f5f7fa' : '#181a20';
+
+  // Responsividade do cartão
+  const cardWidth = width > 440 ? 400 : width * 0.92;
+  const avatarSize = width > 400 ? 60 : width * 0.14;
 
   const [user, setUser] = useState({
     fullName: '',
@@ -27,6 +42,7 @@ export default function ProfileScreen() {
     password: '',
     matricula: '',
     validade: '',
+    foto: null,
   });
 
   useEffect(() => {
@@ -51,6 +67,7 @@ export default function ProfileScreen() {
           password: '********',
           matricula: data.matricula || '',
           validade: data.validade || '',
+          foto: data.foto || null,
         });
       } catch (error) {
         console.error('Erro ao buscar dados do aluno:', error);
@@ -91,127 +108,130 @@ export default function ProfileScreen() {
   };
 
   return (
-    <SafeAreaView
-      style={[
-        styles.container,
-        { backgroundColor: isLightTheme ? '#f5f7fa' : '#0f172a' },
-      ]}
-    >
-      <ScrollView contentContainerStyle={styles.contentContainer}>
-        {/* Cabeçalho */}
-        <View style={styles.header}>
-          <View>
-            <Text
-              style={[
-                styles.name,
-                { color: isLightTheme ? '#2563eb' : '#60a5fa' },
-              ]}
-            >
-              {user.fullName}
-            </Text>
-            <Text
-              style={[
-                styles.course,
-                { color: isLightTheme ? '#2563eb' : '#60a5fa' },
-              ]}
-            >
-              Curso: Engenharia de Software
-            </Text>
-          </View>
-          <TouchableOpacity style={styles.avatarContainer}>
-            <Image
-              source={require('./assets/aluno.png')} // Substitua pelo caminho correto da imagem
-              style={styles.avatar}
-            />
-          </TouchableOpacity>
-        </View>
-
-        {/* Dados Institucionais */}
-        <View style={styles.institutionalBlock}>
-          <Text style={styles.sectionTitle}>Dados Institucionais</Text>
-          <View style={styles.infoRow}>
-            <Text style={styles.label}>Matrícula:</Text>
-            <Text style={styles.value}>{user.matricula}</Text>
-          </View>
-          <View style={styles.infoRow}>
-            <Text style={styles.label}>Validade:</Text>
-            <Text style={styles.value}>{user.validade}</Text>
-          </View>
-        </View>
-
-        {/* Meus Dados */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Meus Dados</Text>
-
-          {/* Nome */}
-          <View style={styles.infoRow}>
-            <Text style={styles.label}>Nome:</Text>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                value={user.fullName}
-                onChangeText={(text) => handleChange('fullName', text)}
+    <SafeAreaView style={{ flex: 1, backgroundColor: bgScreen }}>
+      <ScrollView contentContainerStyle={{ alignItems: 'center', paddingBottom: 32 }}>
+        <View
+          style={[
+            styles.card,
+            {
+              backgroundColor: cardBg,
+              width: cardWidth,
+              shadowColor: '#000',
+              marginTop: 32,
+              marginBottom: 32,
+              borderRadius: 10,
+              padding: 20,
+            },
+          ]}
+        >
+          {/* Cabeçalho */}
+          <View style={[styles.header, { marginBottom: 15 }]}>
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.name, { color: mainText }]}>{user.fullName}</Text>
+              <Text style={[styles.course, { color: mainText }]}>Engenharia de Software</Text>
+            </View>
+            <TouchableOpacity>
+              <Image
+                source={
+                  user.foto
+                    ? { uri: user.foto }
+                    : require('./assets/aluno.png')
+                }
+                style={{
+                  width: avatarSize,
+                  height: avatarSize,
+                  borderRadius: avatarSize / 2,
+                  backgroundColor: isLightTheme ? '#e5e7eb' : '#181a20',
+                  borderWidth: 2,
+                  borderColor: mainText,
+                }}
               />
-              <TouchableOpacity style={styles.iconButton}>
-                <Feather name="edit" size={20} color={isLightTheme ? '#2563eb' : '#60a5fa'} />
-              </TouchableOpacity>
+            </TouchableOpacity>
+          </View>
+
+          {/* Divisor */}
+          <View style={[styles.divider, { backgroundColor: divider }]} />
+
+          {/* Informações Acadêmicas */}
+          <View style={{ marginBottom: 5 }}>
+            <View style={{ marginBottom: 10 }}>
+              <Text style={[styles.label, { color: label }]}>Matrícula</Text>
+              <Text style={[styles.value, { color: mainText }]}>{user.matricula}</Text>
+            </View>
+            <View style={{ marginBottom: 10 }}>
+              <Text style={[styles.label, { color: label }]}>Validade</Text>
+              <Text style={[styles.value, { color: mainText }]}>{user.validade}</Text>
             </View>
           </View>
 
-          {/* Telefone */}
-          <View style={styles.infoRow}>
-            <Text style={styles.label}>Telefone:</Text>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                value={user.phone}
-                onChangeText={(text) => handleChange('phone', text)}
-              />
-              <TouchableOpacity style={styles.iconButton}>
-                <Feather name="edit" size={20} color={isLightTheme ? '#2563eb' : '#60a5fa'} />
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          {/* Email */}
-          <View style={styles.infoRow}>
-            <Text style={styles.label}>Email:</Text>
-            <View style={styles.inputContainer}>
-              <Text style={styles.email}>{user.email}</Text>
-              <TouchableOpacity style={styles.iconButton}>
-                <Feather name="copy" size={20} color={isLightTheme ? '#2563eb' : '#60a5fa'} />
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          {/* Senha */}
-          <View style={styles.infoRow}>
-            <Text style={styles.label}>Senha:</Text>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                secureTextEntry
-                value={user.password}
-                onChangeText={(text) => handleChange('password', text)}
-              />
-              <TouchableOpacity style={styles.iconButton}>
-                <Feather name="edit" size={20} color={isLightTheme ? '#2563eb' : '#60a5fa'} />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-
-        {/* Botão de Atualização */}
-        <View style={styles.buttonsContainer}>
-          <TouchableOpacity
-            style={[
-              styles.updateButton,
-              { backgroundColor: isLightTheme ? '#2563eb' : '#60a5fa' },
-            ]}
-            onPress={handleUpdate}
+          {/* Título "Meus dados" */}
+          <Text
+            style={{
+              fontWeight: 'bold',
+              fontSize: 16,
+              color: mainText,
+              marginTop: 10,
+              marginBottom: 8,
+            }}
           >
-            <Text style={styles.updateButtonText}>Atualizar Dados</Text>
-          </TouchableOpacity>
+            Meus dados
+          </Text>
+
+          {/* Campos de dados pessoais */}
+          <View style={{ marginBottom: 10 }}>
+            {/* Email */}
+            <View style={styles.infoRow}>
+              <View style={{ flex: 1 }}>
+                <Text style={{ color: subText, fontSize: 14, marginBottom: 2 }}>Email</Text>
+                <Text style={{ color: mainText, fontSize: 16 }}>
+                  {user.email}
+                </Text>
+              </View>
+              <TouchableOpacity style={{ marginLeft: 8 }}>
+                <Feather name="copy" size={20} color={iconColor} />
+              </TouchableOpacity>
+            </View>
+            {/* Telefone */}
+            <View style={styles.infoRow}>
+              <View style={{ flex: 1 }}>
+                <Text style={{ color: subText, fontSize: 14, marginBottom: 2 }}>Telefone</Text>
+                <Text style={{ color: mainText, fontSize: 16 }}>
+                  {user.phone}
+                </Text>
+              </View>
+              <TouchableOpacity style={{ marginLeft: 8 }}>
+                <Feather name="edit" size={20} color={iconColor} />
+              </TouchableOpacity>
+            </View>
+            {/* Senha */}
+            <View style={styles.infoRow}>
+              <View style={{ flex: 1 }}>
+                <Text style={{ color: subText, fontSize: 14, marginBottom: 2 }}>Senha</Text>
+                <Text style={{ color: mainText, fontSize: 16 }}>
+                  ********
+                </Text>
+              </View>
+              <TouchableOpacity style={{ marginLeft: 8 }}>
+                <Feather name="edit" size={20} color={iconColor} />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* Divisor */}
+          <View style={[styles.divider, { backgroundColor: divider }]} />
+
+          {/* Botão de Atualização */}
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity
+              style={[
+                styles.updateButton,
+                { backgroundColor: isLightTheme ? '#2563eb' : '#60a5fa' },
+              ]}
+              onPress={handleUpdate}
+            >
+              <Text style={styles.updateButtonText}>Atualizar Dados</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>

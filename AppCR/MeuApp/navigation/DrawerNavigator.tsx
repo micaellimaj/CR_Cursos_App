@@ -12,6 +12,7 @@ import Notas from '../Notas';
 import TelaConteudos from '../TelaConteudos';
 import Cursos from '../Cursos';
 import profileexample from '../profileexample';
+import Cadastro from 'screens/Cadastro';
 
 
 
@@ -43,6 +44,7 @@ export default function DrawerNavigator() {
        <Drawer.Screen name="TelaConteudos" component={TelaConteudos} />
        <Drawer.Screen name="Cursos" component={Cursos} />
        <Drawer.Screen name="RegisterScreen" component={RegisterScreen} />
+        <Drawer.Screen name="Cadastro" component={Cadastro} />
     </Drawer.Navigator>
   );
 }
