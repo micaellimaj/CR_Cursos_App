@@ -32,11 +32,6 @@ export const styles = StyleSheet.create({
     maxWidth: 400, // Limita a largura máxima para telas maiores
     padding: 20,
     borderRadius: 10, // Bordas arredondadas
-    elevation: 10, // Sombra para Android
-    shadowColor: "#030", // Sombra para iOS
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
   },
   logoContainer: {
     alignItems: "center",
