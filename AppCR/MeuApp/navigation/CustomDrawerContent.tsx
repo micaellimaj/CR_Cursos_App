@@ -90,7 +90,24 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
           labelStyle={[styles.drawerLabel, { color: theme === 'light' ? '#2d3748' : '#e2e8f0' }]}
         />
 
-       <DrawerItem
+        <DrawerItem
+          label="Perfil"
+          icon={({ color, size }) => (
+            <Ionicons name="person-circle" size={size} color={theme === 'light' ? '#4a90e2' : '#63b3ed'} />
+          )}
+          onPress={() => props.navigation.navigate('Profilealuno')}
+          style={styles.drawerItem}
+          labelStyle={[styles.drawerLabel, { color: theme === 'light' ? '#2d3748' : '#e2e8f0' }]}
+        />
+      </View>
+
+      {/* Seção de Administrador */}
+      <View style={styles.section}>
+        <Text style={[styles.sectionTitle, { color: theme === 'light' ? '#2d3748' : '#e2e8f0' }]}>
+          ADMINISTRADOR
+        </Text>
+
+        <DrawerItem
           label="Admin - Registrar Usuário"
           icon={({ color, size }) => (
             <Icon name="person-add" size={size} color={theme === 'light' ? '#4a90e2' : '#63b3ed'} />
@@ -103,31 +120,18 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
           ]}
         />
 
-         <DrawerItem
-        label="Admin - Lista de Usuários"
-        icon={({ color, size }) => (
-          <Icon name="supervisor-account" size={size} color={theme === 'light' ? '#4a90e2' : '#63b3ed'} />
-        )}
-        onPress={() => props.navigation.navigate('Cadastro')}
-        style={styles.drawerItem}
-        labelStyle={[
-          styles.drawerLabel,
-          { color: theme === 'light' ? '#2d3748' : '#e2e8f0' },
-        ]}
-      />
-
-
         <DrawerItem
-          label="Perfil"
+          label="Admin - Lista de Usuários"
           icon={({ color, size }) => (
-            <Ionicons name="person-circle" size={size} color={theme === 'light' ? '#4a90e2' : '#63b3ed'} />
+            <Icon name="supervisor-account" size={size} color={theme === 'light' ? '#4a90e2' : '#63b3ed'} />
           )}
-          onPress={() => props.navigation.navigate('Profilealuno')} // Navega para a tela de Perfil aluno
+          onPress={() => props.navigation.navigate('Cadastro')}
           style={styles.drawerItem}
-          labelStyle={[styles.drawerLabel, { color: theme === 'light' ? '#2d3748' : '#e2e8f0' }]}
+          labelStyle={[
+            styles.drawerLabel,
+            { color: theme === 'light' ? '#2d3748' : '#e2e8f0' },
+          ]}
         />
-       
-
       </View>
 
       {/* Seção de Configurações */}
@@ -136,20 +140,6 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
           CONFIGURAÇÕES
         </Text>
 
-        <DrawerItem
-          label="Configurações"
-          icon={({ size }) => (
-            <Ionicons
-              name="settings-sharp"
-              size={size}
-              color={theme === 'light' ? '#4a90e2' : '#63b3ed'}
-            />
-          )}
-          onPress={() => props.navigation.navigate('Settings')}
-          style={styles.drawerItem}
-          labelStyle={[styles.drawerLabel, { color: theme === 'light' ? '#2d3748' : '#e2e8f0' }]}
-        />
-        
         <DrawerItem
           label="Alternar Tema"
           icon={({ size }) => (
@@ -163,6 +153,37 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
           style={styles.drawerItem}
           labelStyle={[styles.drawerLabel, { color: theme === 'light' ? '#2d3748' : '#e2e8f0' }]}
         />
+
+        <DrawerItem
+          label="Fale Conosco"
+          icon={({ size }) => (
+            <FontAwesome5 name="whatsapp" size={size} color="#25D366" />
+          )}
+          onPress={() => handleSocialMediaPress('https://wa.me/c/558173440347')}
+          style={styles.drawerItem}
+          labelStyle={[styles.drawerLabel, { color: theme === 'light' ? '#2d3748' : '#e2e8f0' }]}
+        />
+
+        <DrawerItem
+          label="Suporte do App"
+          icon={({ size }) => (
+            <FontAwesome5 name="headset" size={size} color="#2563eb" />
+          )}
+          onPress={() => handleSocialMediaPress('https://wa.me/5581993494152?text=Ol%C3%A1%2C%20estou%20entrando%20em%20contato%20com%20voc%C3%AAs%20do%20Suporte%20do%20App%20CR%20Cursos%2C%20pois%20preciso%20de%20uma%20ajuda')}
+          style={styles.drawerItem}
+          labelStyle={[styles.drawerLabel, { color: theme === 'light' ? '#2d3748' : '#e2e8f0' }]}
+        />
+
+        <DrawerItem
+          label="Termos de Uso e Privacidade"
+          icon={({ size }) => (
+            <MaterialIcons name="privacy-tip" size={size} color={theme === 'light' ? '#4a90e2' : '#63b3ed'} />
+          )}
+          onPress={() => props.navigation.navigate('TermosdeUso')}
+          style={styles.drawerItem}
+          labelStyle={[styles.drawerLabel, { color: theme === 'light' ? '#2d3748' : '#e2e8f0' }]}
+        />
+
       </View>
     </DrawerContentScrollView>
   );
