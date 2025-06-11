@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const calcularIdade = require('../utils/aluno/calcularIdade');
 const validarEmail = require('../utils/aluno/validarEmail');
+const { db } = require('../config/firebase');
 const {
   emailExiste,
   criarAluno,
@@ -12,11 +13,11 @@ const {
 
 // Criar novo Aluno
 const createAluno = async (req, res) => {
-  console.log('Dados recebidos no backend:', req.body);
   const {
     full_name,
     email,
     senha,
+    confirmarSenha,
     nome_responsavel,
     email_responsavel,
     telefone_responsavel,
@@ -24,29 +25,27 @@ const createAluno = async (req, res) => {
     data_nascimento
   } = req.body;
 
-  // --- CORREÇÃO: Usando .json() para todas as respostas de erro ---
-  if (!full_name || !email || !senha || !data_nascimento) {
-    return res.status(400).json({ message: 'Campos obrigatórios faltando' });
+  if (!full_name || !email || !senha || !confirmarSenha || !data_nascimento) {
+    return res.status(400).send('Campos obrigatórios faltando');
   }
 
   if (!validarEmail(email)) {
-    return res.status(400).json({ message: 'Email inválido' });
+    return res.status(400).send('Email inválido');
   }
 
-  // --- ADICIONE ESTA VALIDAÇÃO: VERIFICA SE A IDADE É NaN ---
-  const idade = calcularIdade(data_nascimento);
-  if (isNaN(idade)) {
-    return res.status(400).json({ message: 'Data de nascimento inválida. Use o formato DD/MM/AAAA.' });
+  if (senha !== confirmarSenha) {
+    return res.status(400).send('As senhas não coincidem');
   }
-  // --- FIM DA ADIÇÃO ---
+
+  const idade = calcularIdade(data_nascimento);
 
   if (idade < 18 && (!nome_responsavel || !email_responsavel || !telefone_responsavel)) {
-    return res.status(400).json({ message: 'Responsável obrigatório para menores de idade' });
+    return res.status(400).send('Responsável obrigatório para menores de idade');
   }
 
   try {
     if (await emailExiste(email)) {
-      return res.status(400).json({ message: 'Já existe um aluno com esse e-mail' });
+      return res.status(400).send('Já existe um aluno com esse e-mail');
     }
 
     const customId = await criarAluno({
@@ -57,13 +56,13 @@ const createAluno = async (req, res) => {
       nome_responsavel,
       email_responsavel,
       telefone_responsavel,
-      telefone: telefone || null // Garante que 'telefone' é enviado, mesmo que seja null
+      telefone: telefone || null
     });
 
-    res.status(201).json({ id: customId, message: 'Aluno criado com sucesso' }); // Resposta de sucesso já era JSON
+    res.status(201).send({ id: customId, message: 'Aluno criado com sucesso' });
   } catch (error) {
     console.error('Erro ao criar aluno:', error);
-    res.status(500).json({ message: 'Erro interno do servidor ao criar aluno' }); // --- CORREÇÃO AQUI TAMBÉM ---
+    res.status(500).send('Erro interno');
   }
 };
 
@@ -74,7 +73,7 @@ const getAllAlunos = async (req, res) => {
     res.status(200).json(alunos);
   } catch (error) {
     console.error('Erro ao buscar alunos:', error);
-    res.status(500).json({ message: 'Erro ao buscar alunos' }); // --- CORREÇÃO AQUI ---
+    res.status(500).send('Erro ao buscar alunos');
   }
 };
 
@@ -84,11 +83,11 @@ const getAlunoById = async (req, res) => {
 
   try {
     const aluno = await getAlunoPorId(id);
-    if (!aluno) return res.status(404).json({ message: 'Aluno não encontrado' }); // --- CORREÇÃO AQUI ---
+    if (!aluno) return res.status(404).send('Aluno não encontrado');
     res.status(200).json({ id, ...aluno });
   } catch (error) {
     console.error('Erro ao buscar aluno:', error);
-    res.status(500).json({ message: 'Erro ao buscar aluno' }); // --- CORREÇÃO AQUI ---
+    res.status(500).send('Erro ao buscar aluno');
   }
 };
 
@@ -98,28 +97,23 @@ const updateAluno = async (req, res) => {
   const novosDados = req.body;
 
   if (novosDados.email && !validarEmail(novosDados.email)) {
-    return res.status(400).json({ message: 'Email inválido' }); // --- CORREÇÃO AQUI ---
+    return res.status(400).send('Email inválido');
   }
 
   if (novosDados.data_nascimento) {
     const idade = calcularIdade(novosDados.data_nascimento);
-    // --- ADICIONE ESTA VALIDAÇÃO AQUI TAMBÉM: ---
-    if (isNaN(idade)) {
-      return res.status(400).json({ message: 'Data de nascimento inválida para atualização. Use o formato DD/MM/AAAA.' });
-    }
-    // --- FIM DA ADIÇÃO ---
     if (idade < 18 && (!novosDados.nome_responsavel || !novosDados.email_responsavel || !novosDados.telefone_responsavel)) {
-      return res.status(400).json({ message: 'Dados do responsável são obrigatórios para menores de idade' }); // --- CORREÇÃO AQUI ---
+      return res.status(400).send('Dados do responsável são obrigatórios para menores de idade');
     }
   }
 
   try {
     const sucesso = await atualizarAluno(id, novosDados);
-    if (!sucesso) return res.status(404).json({ message: 'Aluno não encontrado' }); // --- CORREÇÃO AQUI ---
-    res.status(200).json({ message: 'Aluno atualizado com sucesso' }); // --- CORREÇÃO AQUI ---
+    if (!sucesso) return res.status(404).send('Aluno não encontrado');
+    res.status(200).send('Aluno atualizado com sucesso');
   } catch (error) {
     console.error('Erro ao atualizar aluno:', error);
-    res.status(500).json({ message: 'Erro ao atualizar aluno' }); // --- CORREÇÃO AQUI ---
+    res.status(500).send('Erro ao atualizar aluno');
   }
 };
 
@@ -129,11 +123,11 @@ const deleteAluno = async (req, res) => {
 
   try {
     const sucesso = await deletarAluno(id);
-    if (!sucesso) return res.status(404).json({ message: 'Aluno não encontrado' }); // --- CORREÇÃO AQUI ---
-    res.status(200).json({ message: 'Aluno removido com sucesso' }); // --- CORREÇÃO AQUI ---
+    if (!sucesso) return res.status(404).send('Aluno não encontrado');
+    res.status(200).send('Aluno removido com sucesso');
   } catch (error) {
     console.error('Erro ao deletar aluno:', error);
-    res.status(500).json({ message: 'Erro ao deletar aluno' }); // --- CORREÇÃO AQUI ---
+    res.status(500).send('Erro ao deletar aluno');
   }
 };
 

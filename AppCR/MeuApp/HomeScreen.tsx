@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, Linking } from 'react-native';
 import { useTheme } from './contexts/ThemeContext';
 import { getGlobalStyles } from './styles/globalStyles';
@@ -9,71 +9,23 @@ export default function HomeScreen({ navigation }: any) {
   const { theme } = useTheme();
   const globalStyles = getGlobalStyles(theme);
 
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [userPhotoUrl, setUserPhotoUrl] = useState<string | null>(null);
-
-  // Exemplo de fetch da foto do usuário no Firebase
-  useEffect(() => {
-    // Substitua pelo seu método real de buscar o usuário logado e sua foto
-    // Exemplo com Firebase Auth + Firestore:
-    /*
-    import { auth, firestore } from './firebaseConfig';
-    const userId = auth.currentUser?.uid;
-    if (userId) {
-      firestore.collection('usuarios').doc(userId).get().then(doc => {
-        if (doc.exists) {
-          setUserPhotoUrl(doc.data().photoUrl);
-        }
-      });
-    }
-    */
-    // Simulação:
-    setTimeout(() => {
-      setUserPhotoUrl('https://randomuser.me/api/portraits/men/32.jpg'); // Exemplo de URL
-    }, 500);
-  }, []);
+  const [isExpanded, setIsExpanded] = useState(false); // Estado para controlar a visibilidade do grid "Aulas"
 
   return (
     <View style={globalStyles.container}>
       {/* Topo com boas-vindas */}
-      <View style={[globalStyles.header, styles.header, { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }]}>
+      <View style={[globalStyles.header, styles.header]}>
         {/* Parte esquerda: Nome e curso */}
-        <View style={{ flex: 1 }}>
-          <Text style={globalStyles.headerTitle}>Olá, Matheus Feliciano</Text>
+        <View>
+          <Text style={globalStyles.headerTitle}>Olá, Matheus</Text>
+          <Text style={globalStyles.headerSubtitle}>Ciência da computação</Text>
         </View>
 
-        {/* Parte direita: Foto do usuário com sino acoplado acima */}
-        <View style={{ marginLeft: 24 }}>
-          <View style={{ alignItems: 'center' }}>
-            <TouchableOpacity style={{
-              position: 'absolute',
-              top: -12,
-              right: -8,
-              zIndex: 2,
-              backgroundColor: '#fff',
-              borderRadius: 16,
-              padding: 2,
-              elevation: 2, // sombra Android
-              shadowColor: '#000', // sombra iOS
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: 0.15,
-              shadowRadius: 2,
-            }}>
-              <MaterialIcons name="notifications-none" size={22} color="#2563eb" />
-            </TouchableOpacity>
-            {userPhotoUrl ? (
-              <Image
-                source={{ uri: userPhotoUrl }}
-                style={styles.avatar}
-              />
-            ) : (
-              <Image
-                source={require('./assets/aluno.png')}
-                style={styles.avatar}
-              />
-            )}
-          </View>
-        </View>
+        {/* Parte direita: Foto do usuário */}
+        <Image
+          source={require('./assets/aluno.png')} // Caminho atualizado para a imagem local
+          style={styles.avatar}
+        />
       </View>
 
       {/* Seção de "Meu curso" */}

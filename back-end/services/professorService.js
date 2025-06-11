@@ -1,36 +1,16 @@
-// services/professorService.js
-
 const { db } = require('../config/firebase');
 const bcrypt = require('bcryptjs');
 const gerarIdProfessor = require('../utils/professor/gerarIdProfessor');
-const firebaseAdmin = require('firebase-admin'); // Importar o firebase-admin para ServerValue.TIMESTAMP
-
-// Função auxiliar para verificar se o email já existe para um professor
-const emailExisteProfessor = async (email, excludeId = null) => {
-  let query = db.ref('professores').orderByChild('email').equalTo(email);
-  const snapshot = await query.once('value');
-
-  if (!snapshot.exists()) {
-    return false; // Email não existe
-  }
-
-  // Se o email existe, precisamos verificar se pertence ao mesmo professor (em caso de update)
-  const professorData = snapshot.val();
-  const professorId = Object.keys(professorData)[0]; // Pega o ID do professor encontrado
-
-  if (excludeId && professorId === excludeId) {
-    return false; // Email existe, mas pertence ao professor que está sendo atualizado
-  }
-
-  return true; // Email já existe e pertence a outro professor ou a um novo professor
-};
 
 const createProfessorService = async (professorData) => {
-  const { full_name, email, senha, telefone, data_nascimento, idade } = professorData; // Recebe 'idade'
+  const { full_name, email, senha, confirmarSenha, telefone, data_nascimento } = professorData;
 
-  // Verificação de e-mail duplicado ANTES de tentar criar
-  if (await emailExisteProfessor(email)) {
-    throw new Error('Já existe um professor com esse e-mail.');
+  if (!full_name || !email || !senha || !confirmarSenha) {
+    throw new Error('Campos obrigatórios faltando');
+  }
+
+  if (senha !== confirmarSenha) {
+    throw new Error('As senhas não coincidem');
   }
 
   const hashedSenha = await bcrypt.hash(senha, 10);
@@ -41,9 +21,8 @@ const createProfessorService = async (professorData) => {
     email,
     senha: hashedSenha,
     telefone: telefone || null,
-    data_nascimento: data_nascimento || null, // Garante que é null se não fornecido
-    idade: idade, // Salva a idade calculada
-    created_at: firebaseAdmin.database.ServerValue.TIMESTAMP // Usar timestamp do servidor
+    data_nascimento: data_nascimento || null,
+    created_at: new Date().toISOString()
   });
 
   return customId;
@@ -54,7 +33,7 @@ const getAllProfessoresService = async () => {
   const data = snapshot.val() || {};
 
   return Object.entries(data).map(([id, value]) => {
-    const { senha, ...resto } = value; // Evita retornar a senha
+    const { senha, ...resto } = value;
     return { id, ...resto };
   });
 };
@@ -65,48 +44,20 @@ const getProfessorByIdService = async (id) => {
     return null;
   }
 
-  const { senha, ...resto } = snapshot.val(); // Evita retornar a senha
+  const { senha, ...resto } = snapshot.val();
   return { id, ...resto };
 };
 
 const updateProfessorService = async (id, dados) => {
-  const professorRef = db.ref(`professores/${id}`);
-  const snapshot = await professorRef.once('value');
-
-  if (!snapshot.exists()) {
-    return false; // Professor não encontrado
+  if (dados.senha) {
+    dados.senha = await bcrypt.hash(dados.senha, 10);
   }
 
-  // Se o email estiver sendo atualizado, verificar duplicidade (excluindo o próprio professor)
-  if (dados.email && dados.email !== snapshot.val().email) {
-    if (await emailExisteProfessor(dados.email, id)) {
-      throw new Error('Já existe um professor com esse e-mail.');
-    }
-  }
-
-  const dadosParaAtualizar = { ...dados };
-
-  if (dadosParaAtualizar.senha) {
-    dadosParaAtualizar.senha = await bcrypt.hash(dadosParaAtualizar.senha, 10);
-  }
-
-  // Adiciona o timestamp de atualização
-  dadosParaAtualizar.updated_at = firebaseAdmin.database.ServerValue.TIMESTAMP;
-
-  await professorRef.update(dadosParaAtualizar);
-  return true;
+  await db.ref(`professores/${id}`).update(dados);
 };
 
 const deleteProfessorService = async (id) => {
-  const professorRef = db.ref(`professores/${id}`);
-  const snapshot = await professorRef.once('value');
-
-  if (!snapshot.exists()) {
-    return false; // Professor não encontrado para deletar
-  }
-
-  await professorRef.remove();
-  return true;
+  await db.ref(`professores/${id}`).remove();
 };
 
 module.exports = {
