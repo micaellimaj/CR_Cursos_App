@@ -1,22 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
+  SafeAreaView,
   View,
   Text,
-  ScrollView,
   TouchableOpacity,
-  TextInput,
+  ScrollView,
   Modal,
+  TextInput,
   Alert,
   ActivityIndicator,
-  StyleSheet,
-  SafeAreaView,
 } from "react-native";
-import { Feather, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
-import { useTheme } from "../contexts/ThemeContext";
+import { Feather, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
+import { useTheme } from '../contexts/ThemeContext';
+import stylesCadastro from "../styles/stylesCadastro";// Seu arquivo de estilos
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios'; // Importe o axios para manter a consistência com seu LoginScreen
+import { API_URL } from '@env'; // Importa API_URL do seu ambiente
 
 // Estrutura dos dados do usuário
 type Usuario = {
-  id: string; // matrícula
+  id: string; // matrícula ou ID único no banco de dados
   fullName: string;
   birthDate: string;
   phone: string;
@@ -29,122 +32,199 @@ type Usuario = {
 
 export default function Cadastro() {
   const { theme } = useTheme();
-  const isLightTheme = theme === "light";
+  const isLightTheme = theme === "light"; 
 
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalEdit, setModalEdit] = useState(false);
   const [editUser, setEditUser] = useState<Usuario | null>(null);
-  const [modalCreate, setModalCreate] = useState(false);
-  const [newUser, setNewUser] = useState<Usuario>({
-    id: "",
-    fullName: "",
-    birthDate: "",
-    phone: "",
-    email: "",
-    userType: "student",
-    responsibleFullName: "",
-    responsibleEmail: "",
-    responsiblePhone: "",
-  });
   const [modalInfo, setModalInfo] = useState(false);
+  const [authToken, setAuthToken] = useState<string | null>(null);
 
-  // Simulação de fetch dos dados (substitua pelo fetch real do Firebase)
-  useEffect(() => {
+  // Função para buscar o token de autenticação
+  const getToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      setAuthToken(token);
+      return token;
+    } catch (error) {
+      console.error("Erro ao obter token do AsyncStorage:", error);
+      return null;
+    }
+  };
+
+  // Função para buscar todos os alunos e professores
+  const fetchUsers = useCallback(async () => {
     setLoading(true);
-    // Exemplo de fetch (troque pelo seu endpoint Firebase)
-    // fetch('URL_DA_API')
-    //   .then(res => res.json())
-    //   .then(data => setUsuarios(data))
-    //   .finally(() => setLoading(false));
-    setTimeout(() => {
-      setUsuarios([
-        {
-          id: "2025001",
-          fullName: "João da Silva",
-          birthDate: "01/01/2005",
-          phone: "(11) 99999-9999",
-          email: "joao@email.com",
-          userType: "student",
-          responsibleFullName: "Maria Silva",
-          responsibleEmail: "maria@email.com",
-          responsiblePhone: "(11) 98888-8888",
-        },
-        {
-          id: "2025002",
-          fullName: "Ana Souza",
-          birthDate: "10/05/1990",
-          phone: "(21) 98888-7777",
-          email: "ana@email.com",
-          userType: "teacher",
-        },
-      ]);
+    const token = authToken || await getToken(); // Tenta usar o token do estado ou busca
+    if (!token) {
+      Alert.alert("Erro de Autenticação", "Não foi possível obter o token de autenticação. Por favor, faça login novamente.");
       setLoading(false);
-    }, 1200);
-  }, []);
+      // Opcional: Navegar para a tela de login
+      // navigation.navigate('Login');
+      return;
+    }
 
-  // CRUD Handlers (ajuste para integração real)
-  const handleDelete = (id: string) => {
+    try {
+      const headers = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`, // Inclua o token de autenticação
+      };
+
+      // Busca Alunos
+      const alunosResponse = await axios.get(`${API_URL}/api/alunos`, { headers });
+      const alunosData: Usuario[] = alunosResponse.data;
+
+      // Busca Professores
+      const professoresResponse = await axios.get(`${API_URL}/api/professores`, { headers });
+      const professoresData: Usuario[] = professoresResponse.data;
+
+      // Combina e atualiza o estado
+      setUsuarios([...alunosData, ...professoresData]);
+    } catch (error: any) {
+      console.error("Erro ao buscar usuários:", error.response?.data || error.message);
+      Alert.alert("Erro", `Não foi possível carregar a lista de usuários: ${error.response?.data?.message || error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  }, [authToken]); // fetchUsers depende de authToken
+
+  useEffect(() => {
+    // Primeiro, tenta buscar o token ao montar
+    getToken().then((token) => {
+      if (token) {
+        setAuthToken(token); // Atualiza o estado do token
+        fetchUsers(); // Chama fetchUsers assim que o token estiver disponível
+      } else {
+        // Lógica para lidar com a falta de token (ex: redirecionar para login)
+        setLoading(false);
+      }
+    });
+  }, [fetchUsers]); // fetchUsers como dependência para que useEffect reaja a mudanças nela
+
+  // Handler para deletar usuário (aluno ou professor)
+  const handleDelete = (user: Usuario) => {
     Alert.alert("Excluir", "Tem certeza que deseja excluir este cadastro?", [
       { text: "Cancelar", style: "cancel" },
       {
         text: "Excluir",
         style: "destructive",
-        onPress: () => {
-          setUsuarios((prev) => prev.filter((u) => u.id !== id));
-          // Chame a API de delete aqui
+        onPress: async () => {
+          const endpoint = user.userType === "student" ? "alunos" : "professores";
+          try {
+            const response = await axios.delete(`${API_URL}/api/${endpoint}/${user.id}`, {
+              headers: {
+                "Authorization": `Bearer ${authToken}`,
+              },
+            });
+            
+            // Verifica se a exclusão foi bem-sucedida (status 200, 204, etc.)
+            if (response.status === 200 || response.status === 204) {
+              setUsuarios((prev) => prev.filter((u) => u.id !== user.id));
+              Alert.alert("Sucesso", "Usuário excluído com sucesso!");
+            } else {
+              // Se o backend retornar um status diferente de sucesso, mas não um erro HTTP diretamente
+              throw new Error(`Exclusão falhou com status: ${response.status}`);
+            }
+          } catch (error: any) {
+            console.error(`Erro ao excluir ${endpoint}:`, error.response?.data || error.message);
+            Alert.alert("Erro", `Não foi possível excluir o usuário: ${error.response?.data?.message || error.message}`);
+          }
         },
       },
     ]);
   };
 
+  // Handler para iniciar a edição
   const handleEdit = (user: Usuario) => {
     setEditUser(user);
     setModalEdit(true);
   };
 
-  const handleSaveEdit = () => {
+  // Handler para salvar edições
+  const handleSaveEdit = async () => {
     if (!editUser) return;
-    setUsuarios((prev) =>
-      prev.map((u) => (u.id === editUser.id ? editUser : u))
-    );
-    setModalEdit(false);
-    // Chame a API de update aqui
-  };
 
-  const handleCreate = () => {
-    if (!newUser.fullName || !newUser.email || !newUser.id) {
-      Alert.alert("Erro", "Preencha todos os campos obrigatórios.");
-      return;
+    const endpoint = editUser.userType === "student" ? "alunos" : "professores";
+    try {
+      const response = await axios.put(`${API_URL}/api/${endpoint}/${editUser.id}`, editUser, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${authToken}`,
+        },
+      });
+
+      const updatedUser: Usuario = response.data;
+      setUsuarios((prev) =>
+        prev.map((u) => (u.id === updatedUser.id ? updatedUser : u))
+      );
+      setModalEdit(false);
+      Alert.alert("Sucesso", "Usuário atualizado com sucesso!");
+    } catch (error: any) {
+      console.error("Erro ao salvar edição:", error.response?.data || error.message);
+      Alert.alert("Erro", `Não foi possível atualizar o usuário: ${error.response?.data?.message || error.message}`);
     }
-    setUsuarios((prev) => [...prev, newUser]);
-    setModalCreate(false);
-    setNewUser({
-      id: "",
-      fullName: "",
-      birthDate: "",
-      phone: "",
-      email: "",
-      userType: "student",
-      responsibleFullName: "",
-      responsibleEmail: "",
-      responsiblePhone: "",
-    });
-    // Chame a API de create aqui
   };
 
-  const handleChangeUserType = (user: Usuario) => {
-    setUsuarios((prev) =>
-      prev.map((u) =>
-        u.id === user.id
-          ? {
-              ...u,
-              userType: u.userType === "student" ? "teacher" : "student",
+  // Handler para mudar o tipo de usuário (aluno/professor)
+  // Requer a exclusão do registro atual e a criação de um novo registro no tipo desejado no backend
+  const handleChangeUserType = async (user: Usuario) => {
+    Alert.alert(
+      "Atenção",
+      "Alterar o tipo de usuário (Aluno/Professor) irá deletar o registro atual e criar um novo no tipo desejado. Deseja continuar?",
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Continuar",
+          onPress: async () => {
+            const currentEndpoint = user.userType === "student" ? "alunos" : "professores";
+            const newType = user.userType === "student" ? "teacher" : "student";
+            const newEndpoint = newType === "student" ? "alunos" : "professores";
+
+            try {
+              // 1. Deletar do tipo atual
+              const deleteResponse = await axios.delete(`${API_URL}/api/${currentEndpoint}/${user.id}`, {
+                headers: { "Authorization": `Bearer ${authToken}` },
+              });
+              if (deleteResponse.status !== 200 && deleteResponse.status !== 204) {
+                 throw new Error(`Erro ao deletar do tipo atual: ${deleteResponse.status}`);
+              }
+
+              // 2. Criar no novo tipo
+              const newUserPayload = { ...user, userType: newType };
+              // Remova o ID para o POST, pois o backend deve gerar um novo ID na criação
+              delete (newUserPayload as any).id; 
+
+              const createResponse = await axios.post(`${API_URL}/api/${newEndpoint}`, newUserPayload, {
+                headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${authToken}`,
+                },
+              });
+              const createdUser: Usuario = createResponse.data;
+
+              // Atualiza o estado: remove o antigo e adiciona o novo
+              setUsuarios((prev) => [
+                ...prev.filter((u) => u.id !== user.id),
+                createdUser,
+              ]);
+              Alert.alert("Sucesso", `Tipo de usuário alterado para ${newType === "student" ? "Aluno" : "Professor"}!`);
+            } catch (error: any) {
+              console.error("Erro ao mudar tipo de usuário:", error.response?.data || error.message);
+              Alert.alert("Erro", `Não foi possível alterar o tipo de usuário: ${error.response?.data?.message || error.message}.`);
             }
-          : u
-      )
+          },
+        },
+      ]
     );
-    // Chame a API de update aqui
+  };
+
+
+  const handleNewRegistrationPress = () => {
+    // Ação para navegar para a tela de registro de usuário.
+    // Ex: navigation.navigate('RegisterScreen');
+    Alert.alert("Navegação", "Navegar para a tela de registro de usuário.");
+    console.log("Navegar para RegisterScreen");
   };
 
   return (
@@ -165,7 +245,7 @@ export default function Cadastro() {
         </Text>
         <TouchableOpacity
           style={stylesCadastro.addButton}
-          onPress={() => setModalCreate(true)}
+          onPress={handleNewRegistrationPress}
         >
           <Feather name="user-plus" size={20} color="#fff" />
           <Text style={stylesCadastro.addButtonText}>Novo Cadastro</Text>
@@ -185,90 +265,97 @@ export default function Cadastro() {
             {loading ? (
               <ActivityIndicator color={isLightTheme ? "#2563eb" : "#60a5fa"} />
             ) : (
-              usuarios.map((user) => (
-                <View
-                  key={user.id}
-                  style={[
-                    stylesCadastro.tableRow,
-                    !isLightTheme && stylesCadastro.tableRowDark,
-                  ]}
-                >
-                  <Text
-                    style={[
-                      stylesCadastro.td,
-                      !isLightTheme && stylesCadastro.tdDark,
-                      { minWidth: 60 },
-                    ]}
-                  >
-                    {user.id}
-                  </Text>
-                  <Text
-                    style={[
-                      stylesCadastro.td,
-                      !isLightTheme && stylesCadastro.tdDark,
-                      { minWidth: 140 },
-                    ]}
-                  >
-                    {user.fullName}
-                  </Text>
+              usuarios.length === 0 ? (
+                <Text style={{ color: isLightTheme ? "#666" : "#aaa", padding: 20, textAlign: 'center' }}>Nenhum usuário encontrado.</Text>
+              ) : (
+                usuarios.map((user) => (
                   <View
+                    key={user.id}
                     style={[
-                      stylesCadastro.td,
-                      { minWidth: 80, flexDirection: "row", alignItems: "center" },
+                      stylesCadastro.tableRow,
+                      !isLightTheme && stylesCadastro.tableRowDark,
                     ]}
                   >
-                    <FontAwesome5
-                      name={user.userType === "student" ? "user-graduate" : "chalkboard-teacher"}
-                      size={16}
-                      color={user.userType === "student" ? "#2563eb" : "#16a34a"}
-                      style={{ marginRight: 4 }}
-                    />
                     <Text
-                      style={{
-                        color: isLightTheme ? "#2563eb" : "#60a5fa",
-                      }}
+                      style={[
+                        stylesCadastro.td,
+                        !isLightTheme && stylesCadastro.tdDark,
+                        { minWidth: 60 },
+                      ]}
                     >
-                      {user.userType === "student" ? "Aluno" : "Professor"}
+                      {user.id}
                     </Text>
-                  </View>
-                  <View
-                    style={[
-                      stylesCadastro.td,
-                      { minWidth: 80, flexDirection: "row" },
-                    ]}
-                  >
-                    <TouchableOpacity
-                      style={stylesCadastro.iconBtn}
-                      onPress={() => setEditUser(user) || setModalInfo(true)}
+                    <Text
+                      style={[
+                        stylesCadastro.td,
+                        !isLightTheme && stylesCadastro.tdDark,
+                        { minWidth: 140 },
+                      ]}
                     >
-                      <Feather name="info" size={18} color="#2563eb" />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={stylesCadastro.iconBtn}
-                      onPress={() => handleEdit(user)}
+                      {user.fullName}
+                    </Text>
+                    <View
+                      style={[
+                        stylesCadastro.td,
+                        { minWidth: 80, flexDirection: "row", alignItems: "center" },
+                      ]}
                     >
-                      <Feather name="edit" size={18} color="#2563eb" />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={stylesCadastro.iconBtn}
-                      onPress={() => handleDelete(user.id)}
-                    >
-                      <Feather name="trash-2" size={18} color="#ef4444" />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={stylesCadastro.iconBtn}
-                      onPress={() => handleChangeUserType(user)}
-                    >
-                      <MaterialIcons
-                        name="swap-horiz"
-                        size={20}
-                        color="#16a34a"
-                        style={{ marginLeft: 2 }}
+                      <FontAwesome5
+                        name={user.userType === "student" ? "user-graduate" : "chalkboard-teacher"}
+                        size={16}
+                        color={user.userType === "student" ? "#2563eb" : "#16a34a"}
+                        style={{ marginRight: 4 }}
                       />
-                    </TouchableOpacity>
+                      <Text
+                        style={{
+                          color: isLightTheme ? "#2563eb" : "#60a5fa",
+                        }}
+                      >
+                        {user.userType === "student" ? "Aluno" : "Professor"}
+                      </Text>
+                    </View>
+                    <View
+                      style={[
+                        stylesCadastro.td,
+                        { minWidth: 80, flexDirection: "row" },
+                      ]}
+                    >
+                      <TouchableOpacity
+                        style={stylesCadastro.iconBtn}
+                        onPress={() => {
+                          setEditUser(user);
+                          setModalInfo(true);
+                        }}
+                      >
+                        <Feather name="info" size={18} color="#2563eb" />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={stylesCadastro.iconBtn}
+                        onPress={() => handleEdit(user)}
+                      >
+                        <Feather name="edit" size={18} color="#2563eb" />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={stylesCadastro.iconBtn}
+                        onPress={() => handleDelete(user)}
+                      >
+                        <Feather name="trash-2" size={18} color="#ef4444" />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={stylesCadastro.iconBtn}
+                        onPress={() => handleChangeUserType(user)}
+                      >
+                        <MaterialIcons
+                          name="swap-horiz"
+                          size={20}
+                          color="#16a34a"
+                          style={{ marginLeft: 2 }}
+                        />
+                      </TouchableOpacity>
+                    </View>
                   </View>
-                </View>
-              ))
+                ))
+              )
             )}
           </View>
         </ScrollView>
@@ -457,331 +544,7 @@ export default function Cadastro() {
           </View>
         </View>
       </Modal>
-
-      {/* Modal Criar */}
-      <Modal visible={modalCreate} transparent animationType="slide">
-        <View style={stylesCadastro.modalOverlay}>
-          <View
-            style={[
-              stylesCadastro.modalContent,
-              !isLightTheme && stylesCadastro.modalContentDark,
-            ]}
-          >
-            <Text style={stylesCadastro.modalTitle}>Novo Usuário</Text>
-            <TextInput
-              style={[
-                stylesCadastro.input,
-                !isLightTheme && stylesCadastro.inputDark,
-              ]}
-              placeholder="Matrícula (ID)"
-              placeholderTextColor={isLightTheme ? "#65676b" : "#94a3b8"}
-              value={newUser.id}
-              onChangeText={(t) => setNewUser((prev) => ({ ...prev, id: t }))}
-            />
-            <TextInput
-              style={[
-                stylesCadastro.input,
-                !isLightTheme && stylesCadastro.inputDark,
-              ]}
-              placeholder="Nome Completo"
-              placeholderTextColor={isLightTheme ? "#65676b" : "#94a3b8"}
-              value={newUser.fullName}
-              onChangeText={(t) => setNewUser((prev) => ({ ...prev, fullName: t }))}
-            />
-            <TextInput
-              style={[
-                stylesCadastro.input,
-                !isLightTheme && stylesCadastro.inputDark,
-              ]}
-              placeholder="Nascimento"
-              placeholderTextColor={isLightTheme ? "#65676b" : "#94a3b8"}
-              value={newUser.birthDate}
-              onChangeText={(t) => setNewUser((prev) => ({ ...prev, birthDate: t }))}
-            />
-            <TextInput
-              style={[
-                stylesCadastro.input,
-                !isLightTheme && stylesCadastro.inputDark,
-              ]}
-              placeholder="Telefone"
-              placeholderTextColor={isLightTheme ? "#65676b" : "#94a3b8"}
-              value={newUser.phone}
-              onChangeText={(t) => setNewUser((prev) => ({ ...prev, phone: t }))}
-            />
-            <TextInput
-              style={[
-                stylesCadastro.input,
-                !isLightTheme && stylesCadastro.inputDark,
-              ]}
-              placeholder="Email"
-              placeholderTextColor={isLightTheme ? "#65676b" : "#94a3b8"}
-              value={newUser.email}
-              onChangeText={(t) => setNewUser((prev) => ({ ...prev, email: t }))}
-            />
-            <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
-              <Text style={{ color: isLightTheme ? "#2563eb" : "#60a5fa", marginRight: 8 }}>
-                Tipo:
-              </Text>
-              <TouchableOpacity
-                style={[
-                  stylesCadastro.radioBtn,
-                  newUser.userType === "student" && stylesCadastro.radioBtnSelected,
-                ]}
-                onPress={() => setNewUser((prev) => ({ ...prev, userType: "student" }))}
-              >
-                <Text
-                  style={[
-                    stylesCadastro.radioLabel,
-                    newUser.userType === "student" && stylesCadastro.radioLabelSelected,
-                  ]}
-                >
-                  Aluno
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  stylesCadastro.radioBtn,
-                  newUser.userType === "teacher" && stylesCadastro.radioBtnSelected,
-                ]}
-                onPress={() => setNewUser((prev) => ({ ...prev, userType: "teacher" }))}
-              >
-                <Text
-                  style={[
-                    stylesCadastro.radioLabel,
-                    newUser.userType === "teacher" && stylesCadastro.radioLabelSelected,
-                  ]}
-                >
-                  Professor
-                </Text>
-              </TouchableOpacity>
-            </View>
-            {newUser.userType === "student" && (
-              <>
-                <Text style={{ color: isLightTheme ? "#2563eb" : "#60a5fa", fontWeight: "bold", marginTop: 12, marginBottom: 8 }}>
-                  Dados do Responsável
-                </Text>
-                <TextInput
-                  style={[
-                    stylesCadastro.input,
-                    !isLightTheme && stylesCadastro.inputDark,
-                  ]}
-                  placeholder="Nome do Responsável"
-                  placeholderTextColor={isLightTheme ? "#65676b" : "#94a3b8"}
-                  value={newUser.responsibleFullName}
-                  onChangeText={(t) =>
-                    setNewUser((prev) => ({ ...prev, responsibleFullName: t }))
-                  }
-                />
-                <TextInput
-                  style={[
-                    stylesCadastro.input,
-                    !isLightTheme && stylesCadastro.inputDark,
-                  ]}
-                  placeholder="Email do Responsável"
-                  placeholderTextColor={isLightTheme ? "#65676b" : "#94a3b8"}
-                  value={newUser.responsibleEmail}
-                  onChangeText={(t) =>
-                    setNewUser((prev) => ({ ...prev, responsibleEmail: t }))
-                  }
-                />
-                <TextInput
-                  style={[
-                    stylesCadastro.input,
-                    !isLightTheme && stylesCadastro.inputDark,
-                  ]}
-                  placeholder="Telefone do Responsável"
-                  placeholderTextColor={isLightTheme ? "#65676b" : "#94a3b8"}
-                  value={newUser.responsiblePhone}
-                  onChangeText={(t) =>
-                    setNewUser((prev) => ({ ...prev, responsiblePhone: t }))
-                  }
-                />
-              </>
-            )}
-            <TouchableOpacity
-              style={stylesCadastro.saveBtn}
-              onPress={handleCreate}
-            >
-              <Text style={stylesCadastro.saveBtnText}>Salvar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[stylesCadastro.cancelBtn, { backgroundColor: "#ef4444" }]}
-              onPress={() => setModalCreate(false)}
-            >
-              <Text style={stylesCadastro.cancelBtnText}>Cancelar</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
     </SafeAreaView>
   );
 }
 
-const stylesCadastro = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 24,
-    paddingHorizontal: 0,
-  },
-  content: {
-    flex: 1,
-    padding: 8, // padding menor para responsividade
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: "bold",
-    marginBottom: 10,
-    textAlign: "center",
-    letterSpacing: 0.5,
-  },
-  addButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#2563eb",
-    alignSelf: "flex-end",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-    marginBottom: 8,
-  },
-  addButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
-    marginLeft: 8,
-    fontSize: 15,
-  },
-  tableHeader: {
-    flexDirection: "row",
-    backgroundColor: "#2563eb",
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 4,
-    marginBottom: 2,
-    minWidth: 700, // garante responsividade horizontal
-  },
-  th: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 13,
-    textAlign: "left",
-    marginRight: 8,
-  },
-  tableRow: {
-    flexDirection: "row",
-    backgroundColor: "#f5f6f7",
-    borderBottomWidth: 1,
-    borderBottomColor: "#e5e7eb",
-    paddingVertical: 8,
-    paddingHorizontal: 4,
-    alignItems: "center",
-    minWidth: 700, // garante responsividade horizontal
-  },
-  td: {
-    color: "#222",
-    fontSize: 13,
-    marginRight: 8,
-    flexShrink: 1,
-    maxWidth: 180,
-  },
-  iconBtn: {
-    marginRight: 8,
-    padding: 4,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.4)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContent: {
-    width: "95%",
-    maxWidth: 400,
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 20,
-    alignItems: "stretch",
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#2563eb",
-    marginBottom: 10,
-    textAlign: "center",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#dddfe2",
-    borderRadius: 8,
-    padding: 10,
-    marginBottom: 10,
-    fontSize: 15,
-    backgroundColor: "#f5f6f7",
-    color: "#222",
-  },
-  saveBtn: {
-    backgroundColor: "#42b72a",
-    padding: 10,
-    borderRadius: 6,
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  saveBtnText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 15,
-  },
-  cancelBtn: {
-    backgroundColor: "#aaa",
-    padding: 10,
-    borderRadius: 6,
-    alignItems: "center",
-  },
-  cancelBtnText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 15,
-  },
-  radioBtn: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#2563eb",
-    marginRight: 8,
-  },
-  radioBtnSelected: {
-    backgroundColor: "#2563eb",
-  },
-  radioLabel: {
-    color: "#2563eb",
-    fontWeight: "bold",
-  },
-  radioLabelSelected: {
-    color: "#fff",
-  },
-  infoText: {
-    color: "#222",
-    fontSize: 14,
-    marginBottom: 2,
-  },
-  infoTextDark: {
-    color: "#e2e8f0",
-  },
-  // Adicione estilos para dark mode:
-  tableRowDark: {
-    backgroundColor: "#1e293b",
-    borderBottomColor: "#334155",
-  },
-  tdDark: {
-    color: "#e2e8f0",
-  },
-  modalContentDark: {
-    backgroundColor: "#1e293b",
-  },
-  inputDark: {
-    backgroundColor: "#334155",
-    color: "#e2e8f0",
-    borderColor: "#475569",
-  },
-});
