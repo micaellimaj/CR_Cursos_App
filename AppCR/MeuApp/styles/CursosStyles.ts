@@ -15,26 +15,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8, // Espaçamento lateral para os cards
   },
   card: {
+    width: 220,
     backgroundColor: "#fff",
     borderRadius: 12,
-    margin: 8, // um pouco mais de espaço entre os cards
-    flexBasis: "48%", // ocupa um pouco mais da linha
-    flexGrow: 1,
-    minWidth: 150, // aumenta largura mínima
-    maxWidth: 200, // aumenta largura máxima
-    alignSelf: "stretch",
-    elevation: 3,
+    margin: 16,
+    elevation: 4,
     shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 3,
-    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
   },
   cardDark: {
     backgroundColor: "#2d3748",
   },
   imagem: {
     width: "100%",
-    height: 110, // aumenta altura da imagem
+    height: 140,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
   },
@@ -53,17 +49,17 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   cardBody: {
-    padding: 12, // padding um pouco maior
+    padding: 12,
   },
   titulo: {
-    fontSize: 16, // fonte um pouco maior
+    fontSize: 18,
     fontWeight: "bold",
     color: "#2563eb",
   },
   subtitulo: {
-    fontSize: 13, // fonte um pouco maior
+    fontSize: 14,
     color: "#666",
-    marginVertical: 2,
+    marginVertical: 4,
   },
   tagsContainer: {
     flexDirection: "row",
@@ -137,7 +133,7 @@ const styles = StyleSheet.create({
     fontSize: 16, // Aumentado o tamanho do texto
     color: "#333",
     textAlign: "left",
-  },
+      },
   modalBotao: {
     backgroundColor: "#2563eb",
     padding: 10,

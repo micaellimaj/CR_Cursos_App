@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-require('dotenv').config();
 
 // Rota de imagem //
 const imagemRoutes = require('./routes/imagemRoutes');
@@ -22,21 +21,22 @@ app.get('/', (req, res) => {
 });
 
 // Rotas da API
-app.use('/api/alunos', alunoRoutes);              // Alunos em: http://localhost:5000/api
-app.use('/api/professores', professorRoutes);  // Professores em: http://localhost:5000/professores / 
-app.use('/api', authRoutes);                 // Login (alunos/professore) em: http://localhost:5000/login
+app.use('/api', alunoRoutes);              // Alunos em: http://localhost:5000/api
+app.use('/api', professorRoutes);  // Professores em: http://localhost:5000/professores / 
+app.use('/', authRoutes);                 // Login (alunos/professore) em: http://localhost:5000/login
 
 // Para servir os arquivos da pasta 'uploads'
 app.use('/uploads', express.static('uploads'));
 
 // Importa e usa as rotas de upload
-const uploadRoutes = require('./routes/uploadRoutes');
+const uploadRoutes = require('../back-end/routes/uploadRoutes');
 app.use('/api/upload', uploadRoutes);
 
 
 
+// Inicializando servidor
 const PORT = process.env.PORT || 5000;
-// ⛳️ Escutando em 0.0.0.0 permite que o Render acesse sua aplicação
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, () => {
   console.log(`Servidor rodando na porta: http://localhost:${PORT}`);
 });
+

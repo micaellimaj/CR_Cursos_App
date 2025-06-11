@@ -20,12 +20,11 @@ export default function TelaConteudos() {
 
   // Estado para armazenar os temas e arquivos
   const [temas, setTemas] = useState<Tema[]>([
-    { id: 1, titulo: "Tema 1", nome: "Sistemas Operacionais", status: "Não Estudado", arquivo: null },
-    { id: 2, titulo: "Tema 2", nome: "Pacote Office: Word", status: "Não Estudado", arquivo: null },
-    { id: 3, titulo: "Tema 3", nome: "Pacote Office: Excel", status: "Não Estudado", arquivo: null },
-    { id: 4, titulo: "Tema 4", nome: "Pacote Office: PowerPoint", status: "Não Estudado", arquivo: null },
-    { id: 5, titulo: "Tema 5", nome: "Edição de Video", status: "Não Estudado", arquivo: null },
-    { id: 6, titulo: "Tema 6", nome: "Montagem & Manutenção", status: "Não Estudado", arquivo: null },
+    { id: 1, titulo: "Tema 1", nome: "Introdução", status: "Não Estudado", arquivo: null },
+    { id: 2, titulo: "Tema 2", nome: "Sintaxe e Componentes do React Native", status: "Não Estudado", arquivo: null },
+    { id: 3, titulo: "Tema 3", nome: "Interface Gráfica Com React Native", status: "Não Estudado", arquivo: null },
+    { id: 4, titulo: "Tema 4", nome: "Persistência de Dados Com React Native", status: "Não Estudado", arquivo: null },
+    { id: 5, titulo: "Tema 5", nome: "Conexão Remota Com React Native", status: "Não Estudado", arquivo: null },
   ]);
 
   const [editingId, setEditingId] = useState<number | null>(null); // ID do tema em edição
@@ -57,7 +56,7 @@ export default function TelaConteudos() {
     }
   };
 
-  const handleDownload = (arquivo: any, id: number) => {
+  const handleDownload = (arquivo: any) => {
     if (!arquivo) {
       Alert.alert("Erro", "Nenhum arquivo disponível para download.");
       return;
@@ -66,13 +65,6 @@ export default function TelaConteudos() {
     // Aqui você pode implementar a lógica de download do arquivo usando Firebase Storage
     console.log("Baixando arquivo:", arquivo);
     Alert.alert("Download", "O arquivo está sendo baixado...");
-
-    // Marca como 'Estudado' ao baixar
-    setTemas((prevTemas) =>
-      prevTemas.map((tema) =>
-        tema.id === id ? { ...tema, status: "Estudado" } : tema
-      )
-    );
   };
 
   const toggleStatus = (id: number) => {
@@ -91,8 +83,7 @@ export default function TelaConteudos() {
         styles.container,
         isDarkTheme && styles.containerDark,
       ]}
-      contentContainerStyle={styles.contentContainer}
-      showsVerticalScrollIndicator={false} // <-- Adicionado aqui
+      contentContainerStyle={styles.contentContainer} // Ajusta o espaçamento interno
     >
       <View style={styles.headerSection}>
         <Text
@@ -157,7 +148,7 @@ export default function TelaConteudos() {
                 {tema.status}
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleDownload(tema.arquivo, tema.id)}>
+            <TouchableOpacity onPress={() => handleDownload(tema.arquivo)}>
               <Ionicons name="download" size={24} color={isDarkTheme ? "#63b3ed" : "#2563eb"} />
             </TouchableOpacity>
           </View>

@@ -43,12 +43,18 @@ export default function Cadastro() {
 
   // Função para buscar o token de autenticação
   const getToken = async () => {
-    try {
-      const token = await AsyncStorage.getItem('userToken');
+  try {
+    const token = await AsyncStorage.getItem('userToken');
+    console.log("LOG: Token recuperado do AsyncStorage:", token ? "Token presente" : "Token ausente ou nulo"); // Adicione este log
+    if (token) {
+          // Opcional: decodificar o JWT para verificar o payload no frontend (apenas para depuração!)
+          // const decoded = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+          // console.log("LOG: Payload do Token (depuração):", decoded);
+      }
       setAuthToken(token);
       return token;
     } catch (error) {
-      console.error("Erro ao obter token do AsyncStorage:", error);
+      console.error("LOG: Erro ao obter token do AsyncStorage:", error);
       return null;
     }
   };
@@ -70,24 +76,34 @@ export default function Cadastro() {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`, // Inclua o token de autenticação
       };
+      console.log("LOG: FetchUsers - Enviando requisição GET para /alunos com headers:", headers);
 
       // Busca Alunos
       const alunosResponse = await axios.get(`${API_URL}/api/alunos`, { headers });
       const alunosData: Usuario[] = alunosResponse.data;
+      console.log("LOG: Resposta de /alunos:", alunosData.length, "alunos encontrados.");
 
       // Busca Professores
+      console.log("LOG: FetchUsers - Enviando requisição GET para /professores com headers:", headers);
       const professoresResponse = await axios.get(`${API_URL}/api/professores`, { headers });
       const professoresData: Usuario[] = professoresResponse.data;
+      console.log("LOG: Resposta de /professores:", professoresData.length, "professores encontrados.");
 
       // Combina e atualiza o estado
       setUsuarios([...alunosData, ...professoresData]);
     } catch (error: any) {
-      console.error("Erro ao buscar usuários:", error.response?.data || error.message);
-      Alert.alert("Erro", `Não foi possível carregar a lista de usuários: ${error.response?.data?.message || error.message}`);
+      // Log detalhado do erro da API
+      if (axios.isAxiosError(error) && error.response) {
+        console.error("LOG: Erro ao buscar usuários (detalhes da resposta da API):", error.response.status, error.response.data);
+        Alert.alert("Erro", `Não foi possível carregar a lista de usuários: ${error.response.data?.message || error.message}`);
+      } else {
+        console.error("LOG: Erro ao buscar usuários (geral):", error.message);
+        Alert.alert("Erro", `Não foi possível carregar a lista de usuários: ${error.message}`);
+      }
     } finally {
       setLoading(false);
     }
-  }, [authToken]); // fetchUsers depende de authToken
+  }, [authToken]);
 
   useEffect(() => {
     // Primeiro, tenta buscar o token ao montar
@@ -112,23 +128,21 @@ export default function Cadastro() {
         onPress: async () => {
           const endpoint = user.userType === "student" ? "alunos" : "professores";
           try {
+            console.log(`LOG: handleDelete - Tentando excluir usuário ${user.id} (${user.userType}) em ${API_URL}/api/${endpoint}/${user.id} com token:`, authToken ? "presente" : "ausente");
             const response = await axios.delete(`${API_URL}/api/${endpoint}/${user.id}`, {
               headers: {
                 "Authorization": `Bearer ${authToken}`,
               },
             });
-            
-            // Verifica se a exclusão foi bem-sucedida (status 200, 204, etc.)
-            if (response.status === 200 || response.status === 204) {
-              setUsuarios((prev) => prev.filter((u) => u.id !== user.id));
-              Alert.alert("Sucesso", "Usuário excluído com sucesso!");
-            } else {
-              // Se o backend retornar um status diferente de sucesso, mas não um erro HTTP diretamente
-              throw new Error(`Exclusão falhou com status: ${response.status}`);
-            }
+            // ... (restante do handleDelete) ...
           } catch (error: any) {
-            console.error(`Erro ao excluir ${endpoint}:`, error.response?.data || error.message);
-            Alert.alert("Erro", `Não foi possível excluir o usuário: ${error.response?.data?.message || error.message}`);
+            if (axios.isAxiosError(error) && error.response) {
+                console.error("LOG: Erro ao excluir usuário (detalhes da resposta da API):", error.response.status, error.response.data);
+                Alert.alert("Erro", `Não foi possível excluir o usuário: ${error.response.data?.message || error.message}`);
+            } else {
+                console.error("LOG: Erro ao excluir usuário (geral):", error.message);
+                Alert.alert("Erro", `Não foi possível excluir o usuário: ${error.message}`);
+            }
           }
         },
       },
@@ -144,25 +158,24 @@ export default function Cadastro() {
   // Handler para salvar edições
   const handleSaveEdit = async () => {
     if (!editUser) return;
-
     const endpoint = editUser.userType === "student" ? "alunos" : "professores";
     try {
+      console.log(`LOG: handleSaveEdit - Tentando atualizar usuário ${editUser.id} (${editUser.userType}) em ${API_URL}/api/${endpoint}/${editUser.id} com token:`, authToken ? "presente" : "ausente");
       const response = await axios.put(`${API_URL}/api/${endpoint}/${editUser.id}`, editUser, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${authToken}`,
         },
       });
-
-      const updatedUser: Usuario = response.data;
-      setUsuarios((prev) =>
-        prev.map((u) => (u.id === updatedUser.id ? updatedUser : u))
-      );
-      setModalEdit(false);
-      Alert.alert("Sucesso", "Usuário atualizado com sucesso!");
+      // ... (restante do handleSaveEdit) ...
     } catch (error: any) {
-      console.error("Erro ao salvar edição:", error.response?.data || error.message);
-      Alert.alert("Erro", `Não foi possível atualizar o usuário: ${error.response?.data?.message || error.message}`);
+        if (axios.isAxiosError(error) && error.response) {
+            console.error("LOG: Erro ao salvar edição (detalhes da resposta da API):", error.response.status, error.response.data);
+            Alert.alert("Erro", `Não foi possível atualizar o usuário: ${error.response.data?.message || error.message}`);
+        } else {
+            console.error("LOG: Erro ao salvar edição (geral):", error.message);
+            Alert.alert("Erro", `Não foi possível atualizar o usuário: ${error.message}`);
+        }
     }
   };
 
@@ -183,6 +196,7 @@ export default function Cadastro() {
 
             try {
               // 1. Deletar do tipo atual
+              console.log(`LOG: handleChangeUserType - Tentando deletar usuário ${user.id} (${user.userType}) em ${API_URL}/api/${currentEndpoint}/${user.id} com token:`, authToken ? "presente" : "ausente");
               const deleteResponse = await axios.delete(`${API_URL}/api/${currentEndpoint}/${user.id}`, {
                 headers: { "Authorization": `Bearer ${authToken}` },
               });
@@ -194,7 +208,7 @@ export default function Cadastro() {
               const newUserPayload = { ...user, userType: newType };
               // Remova o ID para o POST, pois o backend deve gerar um novo ID na criação
               delete (newUserPayload as any).id; 
-
+              console.log(`LOG: handleChangeUserType - Tentando criar novo usuário em ${API_URL}/api/${newEndpoint} com token:`, authToken ? "presente" : "ausente");
               const createResponse = await axios.post(`${API_URL}/api/${newEndpoint}`, newUserPayload, {
                 headers: {
                   "Content-Type": "application/json",

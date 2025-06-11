@@ -1,18 +1,18 @@
 # Imagem base
-FROM node:18-slim
+FROM node:18
 
 # Diretório de trabalho no container
 WORKDIR /app
 
-# Copia os arquivos de dependência
+# Copia os arquivos
 COPY package*.json ./
 RUN npm install
 
 # Copia o restante do código
 COPY . .
 
-# Garante que o diretório de uploads exista
-RUN mkdir -p /app/uploads
+# Cria pasta de uploads se não existir
+RUN mkdir -p uploads
 
 # Expõe a porta da aplicação
 EXPOSE 5000
