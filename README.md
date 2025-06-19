@@ -1,6 +1,6 @@
 # <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMm4wbzVvMWRpNjZzaDhsb2Fic2hkcjM1MmU4YmQweHJiNTBtaWxhaSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/8f3nS1Gajtv70qNicE/giphy.gif" alt="class" width="50" height="50" /> CR Cursos - App Mobile
 
-![projeto/visualizacao](readme\CR_CURSOS_APP.gif)
+![projeto/visualizacao](readme/CR_CURSOS_APP.gif)
 
 ## <img src= "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMWtodDlnZng5dDk4MXo5ZHNtbHV3ejFnMzI2MmZlMGtmNXc5ZnNxaSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/U3DTrGnuwfDpkNsr3d/giphy.gif" alt="class" width="50" height="50" /> Introdução:
 A plataforma CR Cursos está sendo desenvolvida em parceria com a escola profissionalizante CR Cursos, localizada na cidade de Toritama - PE, junto aos alunos da Unifavip Wyden, como parte das atividades da disciplina Programação para Dispositivos Móveis em Android, sob orientação do professor Wolney. O projeto é resultado da aplicação prática dos conhecimentos adquiridos em sala de aula, com o objetivo de gerar impacto real para a comunidade escolar.
