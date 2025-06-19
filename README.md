@@ -43,6 +43,14 @@ A plataforma é dividida em três perfis de usuários:
 ##  <img src= "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXQxdGV6dXQzM3hrbGx2NjhtdGpjZXR5a2M1N3E2emphZWRidWFxdiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Q8DYzZxZweZpLS4y6s/giphy.gif" alt="class" width="50" height="50" /> Etapas do Projeto:
 
 ### Front-End:
+- Uso do React Native + Expo.
+- Navegação implementada com **Drawer Navigation**.
+- Componentes reutilizáveis em `components/`.
+- Context API para gerenciamento de temas e estados globais (`ThemeContext.tsx`).
+- Separação clara entre telas (`screens/`) e estilos (`styles/`).
+- Páginas organizadas por fluxo de usuário: login, cadastro, aulas, perfil, notificações, etc.
+- Uso do **Firebase Realtime Database** para persistência de dados.
+- Integração com **API do back-end** para upload, login e consulta de dados.
 
 ### Back-End:
 * Projeto modularizado com separação clara de responsabilidades: controllers/, routes/, services/, middlewares/, utils/, e config/.
