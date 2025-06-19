@@ -30,16 +30,22 @@ A plataforma tem como obejetivo oferecer uma plataforma mobile para os alunos da
 
 A plataforma é dividida em três perfis de usuários:
 
+---
+
 1. **Aluno**:
 * Acesso aos cursos em que está matriculado.
 * Visualização e download de conteúdos das aulas.
 * Realização e envio de atividades propostas pelos professores.
 * Perfil personalizado.
 
+---
+
 2. **Professor**:
 * Upload de conteúdos educacionais (aulas, PDFs, vídeos, etc).
 * Cadastro e gerenciamento de atividades para os alunos.
 * Perfil personalizado com controle sobre suas turmas.
+
+---
 
 3. **Administrador (ADM)**:
 * Gerenciamento completo da plataforma.
@@ -57,6 +63,8 @@ A plataforma é dividida em três perfis de usuários:
 - Páginas organizadas por fluxo de usuário: login, cadastro, aulas, perfil, notificações, etc.
 - Uso do **Firebase Realtime Database** para persistência de dados.
 - Integração com **API do back-end** para upload, login e consulta de dados.
+
+---
 
 ### Back-End:
 * Projeto modularizado com separação clara de responsabilidades: controllers/, routes/, services/, middlewares/, utils/, e config/.
@@ -79,6 +87,8 @@ A plataforma é dividida em três perfis de usuários:
 * Separação entre usuários do tipo aluno, professor e administrador.
 * Validações customizadas e geração de identificadores únicos para usuários.
 
+--- 
+
 ### Banco de dados:
 
 1. **Firebase Realtime Database**
@@ -95,6 +105,95 @@ A plataforma é dividida em três perfis de usuários:
 ## <img src= "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExNTBqMGo1OXJzNGxjcnNuc3p1bGVubGF6bmg3N202c24zODM3Y3ZweSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/8m4gPv1UFz1jmiCtKd/giphy.gif" alt="class" width="50" height="50" /> Visualização do Projeto:
 
 ![projeto/visualizacao](readme/CR_CURSOS_APP.gif)
+
+## <img src= "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExb204djhvc3BlYWZrcTAwdnU4MHJjMTg5ZHNvZHRjMXQ2OXJ1bWhydiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/mWJXoTfV7mFNiXFuFm/giphy.gif" alt="class" width="50" height="50" /> Estrutura do Banco de Dados e API
+
+O projeto utiliza o **Firebase Realtime Database** para persistência dos dados e **Express.js** como framework para API REST. Abaixo estão as principais entidades com seus campos e rotas REST organizadas por recurso.
+
+---
+
+###  Alunos (`/alunos`)
+
+#### Campos no banco:
+
+| Campo               | Tipo     | Descrição                                      |
+|---------------------|----------|-----------------------------------------------|
+| `full_name`         | String   | Nome completo                                  |
+| `email`             | String   | E-mail do aluno                                |
+| `senha`             | String   | Senha criptografada com bcrypt                 |
+| `data_nascimento`   | String   | Data de nascimento                             |
+| `idade`             | Number   | Idade calculada automaticamente                |
+| `telefone`          | String   | Telefone do aluno                              |
+| `nome_responsavel`  | String   | Nome do responsável (se menor de idade)        |
+| `email_responsavel` | String   | E-mail do responsável (se menor de idade)      |
+| `telefone_responsavel` | String | Telefone do responsável (se menor de idade)    |
+| `created_at`        | String   | Data de criação do cadastro (ISO)              |
+
+####  Endpoints:
+
+| Método | Rota                  | Descrição                            |
+|--------|-----------------------|--------------------------------------|
+| `POST` | `/alunos`             | Cria um novo aluno                   |
+| `GET`  | `/alunos`             | Retorna todos os alunos              |
+| `GET`  | `/alunos/:id`         | Retorna um aluno específico          |
+| `PUT`  | `/alunos/:id`         | Atualiza os dados de um aluno        |
+| `DELETE` | `/alunos/:id`       | Remove um aluno                      |
+
+---
+
+###  Professores (`/professores`)
+
+####  Campos no banco:
+
+| Campo             | Tipo     | Descrição                        |
+|-------------------|----------|-----------------------------------|
+| `full_name`       | String   | Nome completo                    |
+| `email`           | String   | E-mail do professor              |
+| `senha`           | String   | Senha criptografada com bcrypt   |
+| `data_nascimento` | String   | Data de nascimento               |
+| `idade`           | Number   | Idade calculada automaticamente  |
+| `telefone`        | String   | Telefone                         |
+| `created_at`      | String   | Data de criação do cadastro      |
+
+####  Endpoints:
+
+| Método | Rota                      | Descrição                             |
+|--------|---------------------------|---------------------------------------|
+| `POST` | `/professores`            | Cria um novo professor                |
+| `GET`  | `/professores`            | Retorna todos os professores          |
+| `GET`  | `/professores/:id`        | Retorna um professor específico       |
+| `PUT`  | `/professores/:id`        | Atualiza os dados de um professor     |
+| `DELETE` | `/professores/:id`      | Remove um professor                   |
+
+---
+
+###  Administradores (`/administradores`)
+
+####  Campos no banco:
+
+| Campo       | Tipo   | Descrição                           |
+|-------------|--------|--------------------------------------|
+| `full_name` | String | Nome completo do administrador       |
+| `email`     | String | E-mail                               |
+| `senha`     | String | Senha criptografada com bcrypt       |
+
+
+---
+
+###  Arquivos (`/upload`)
+
+####  Os arquivos são armazenados no sistema de arquivos local do servidor com operações realizadas via Multer.
+
+####  Endpoints:
+
+| Método    | Rota                       | Descrição                              |
+|-----------|----------------------------|----------------------------------------|
+| `POST`    | `/upload`                  | Envia um novo arquivo                  |
+| `GET`     | `/upload`                  | Lista todos os arquivos                |
+| `GET`     | `/upload/:fileName`        | Faz o download de um arquivo específico|
+| `PUT`     | `/upload/:fileName`        | Atualiza um arquivo existente          |
+| `DELETE`  | `/upload/:fileName`        | Deleta um arquivo do sistema           |
+
 
 ##  <img src= "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExYnI1NHB4YjRzeWU0enBpOWJ2bjV2enk2eDA3am50bGJxb21ic3F2ciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/8Fo162g5cK3tQVj909/giphy.gif" alt="class" width="50" height="50" /> Estrutura do Projeto:
 ```
