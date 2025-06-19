@@ -1,12 +1,16 @@
 # <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMm4wbzVvMWRpNjZzaDhsb2Fic2hkcjM1MmU4YmQweHJiNTBtaWxhaSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/8f3nS1Gajtv70qNicE/giphy.gif" alt="class" width="50" height="50" /> CR Cursos - App Mobile
 
-![projeto/visualizacao](readme/CR_CURSOS_APP.gif)
+![projeto/visualizacao](readme/BannerCR.png)
 
 ## <img src= "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMWtodDlnZng5dDk4MXo5ZHNtbHV3ejFnMzI2MmZlMGtmNXc5ZnNxaSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/U3DTrGnuwfDpkNsr3d/giphy.gif" alt="class" width="50" height="50" /> Introdução:
 A plataforma CR Cursos está sendo desenvolvida em parceria com a escola profissionalizante CR Cursos, localizada na cidade de Toritama - PE, junto aos alunos da Unifavip Wyden, como parte das atividades da disciplina Programação para Dispositivos Móveis em Android, sob orientação do professor Wolney. O projeto é resultado da aplicação prática dos conhecimentos adquiridos em sala de aula, com o objetivo de gerar impacto real para a comunidade escolar.
 
 ## <img src= "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ21oOW9vYzFwYmprc3ltb2tpdGl0cXhkbHplMGR2MGZqdm0wdGlneSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/VbDDnwHgbsmXdCY2TG/giphy.gif" alt="class" width="50" height="50" /> Objetivo:
 A plataforma tem como obejetivo oferecer uma plataforma mobile para os alunos da instituição "CR Curso" para que possam acompanhar o curso em que estão matriculados e uma conexão entre os alunos ou professores, pois através da plataforma os professores podem enviar os conteudos de suas aulas para a plataforma e atividades para os alunos , e os alunos podem consumir o conteudo das aulas e fazer as atividades, e tanto os alunos como os professores tem sua area de usuario, com personalização de seu conteudo, autenticação de usuário e também a um terceiro user chamado ADM que fica responsável por gerenciar os demais usuários do sistema e também é o resposável por cadastrar o progessor na plataforma.
+
+## <img src= "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExem0zOWYyeTZ3bHo2M2ViZjhtbXZpZGdrZzE5aHViYnVlbGNvZmFyOSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/ImKDUp5nKeMxaUiNan/giphy.gif" alt="class" width="50" height="50" /> Arquitetura do Projeto:
+
+![projeto/arquitetura](readme/arquiteturanodejs.gif)
 
 ##  <img src= "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExajh0OXc4bzlzNTlqOWdvOHk5MWwyb2IwZmcwOWgyOHp6a3F2M3B6eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/J6td6BTmG1PeGinoqB/giphy.gif" alt="class" width="50" height="50" /> Tecnologias:
 
@@ -87,6 +91,10 @@ A plataforma é dividida em três perfis de usuários:
 * Composição feita via docker-compose.yml para orquestração de containers.
 * Imagem definida no Dockerfile, permitindo que o back-end seja facilmente containerizado e replicável.
 * Arquivos são enviados através do uploadController.js, processados por uploadService.js e armazenados localmente em uploads/.
+
+## <img src= "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExNTBqMGo1OXJzNGxjcnNuc3p1bGVubGF6bmg3N202c24zODM3Y3ZweSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/8m4gPv1UFz1jmiCtKd/giphy.gif" alt="class" width="50" height="50" /> Visualização do Projeto:
+
+![projeto/visualizacao](readme/CR_CURSOS_APP.gif)
 
 ##  <img src= "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExYnI1NHB4YjRzeWU0enBpOWJ2bjV2enk2eDA3am50bGJxb21ic3F2ciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/8Fo162g5cK3tQVj909/giphy.gif" alt="class" width="50" height="50" /> Estrutura do Projeto:
 ```
