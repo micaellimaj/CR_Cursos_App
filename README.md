@@ -152,6 +152,77 @@ CR_Cursos_App/
 
 ```
 
+## <img src= "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExYjh2eTNxeDN5b2I5d3U1OHU4M2EyenMwejByNmdqd3E0NWY4cWZ3ZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/X74GovIqGMZYxXblCL/giphy.gif" alt="class" width="50" height="50" /> Como Executar o Projeto:
+
+Antes de tudo, certifique-se de ter os seguintes requisitos instalados:
+* Node.js (recomendado v18+)
+* Expo CLI
+* Docker Desktop (opcional, para testes com upload)
+* Git
+* Editor de código, como o VSCode
+
+1. Instalação:
+
+* Clone o repositório:
+
+```
+git clone https://github.com/seu-usuario/cr_cursos_fullstack.git
+cd cr_cursos_fullstack
+```
+2. Instale as dependências na raiz:
+```
+npm install
+```
+Esse comando instalará também o concurrently, que será usado para rodar os dois ambientes ao mesmo tempo.
+
+3. Rodar Front-End e Back-End ao mesmo tempo
+Esse é o modo mais comum durante o desenvolvimento.
+
+```
+npm run dev
+```
+Isso executa:
+* npm run dev:back → inicia o servidor Express com nodemon
+* npm run dev:front → abre o app React Native com o Expo
+
+4. Rodar apenas o Back-End (API Node.js + Express)
+```
+cd back-end
+npm install       # se ainda não tiver feito
+npm run dev       # roda com nodemon (recomendado para desenvolvimento)
+```
+* Servidor será iniciado em: http://localhost:3000 (ou porta definida no .env)
+*As rotas da API estarão acessíveis conforme definidas nos arquivos de routes/
+
+5. Rodar apenas o Front-End (App React Native com Expo)
+```
+cd AppCR/MeuApp
+npm install       # se ainda não tiver feito
+npx expo start    # abre o Expo DevTools
+```
+Você pode:
+* escanear o QR Code com o app do Expo no seu celular ou rodar em emuladores Android/iOS com:
+  * npx expo start --android
+  * npx expo start --ios (macOS com Xcode)
+
+6. Executar com Docker (opcional, para testes de upload local)
+* Certifique-se de que o Docker Desktop está instalado e ativo.
+* No diretório raiz, rode:
+```
+docker-compose up --build
+```
+* Isso irá subir o container do back-end e montar corretamente a pasta de uploads locais.
+* Verifique os volumes e as portas configuradas no docker-compose.yml.
+
+7. Arquivos de Configuração Importantes
+.env: contém variáveis sensíveis como PORT, chaves do Firebase, etc. Esse arquivo não está versionado, então você deve criar manualmente um .env na pasta back-end/, exemplo:
+
+```
+PORT=3000
+FIREBASE_DATABASE_URL=https://seu-app.firebaseio.com
+FIREBASE_PROJECT_ID=cr-cursos
+firebaseServiceAccountKey.json: necessário para autenticação com Firebase Admin SDK. 
+```
 ##  <img src= "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExemx1ZTJ5bG9nenp1NnhzN2RibWtiNWN5NmZ1bTdrdHI2ZWh2dmV0MSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/HKBzxh3pdv3Fe/giphy.gif" alt="class" width="50" height="50" /> Conclusão:
 
 Com esta plataforma, a CR Cursos de Toritama amplia suas possibilidades de ensino, alcançando alunos de maneira mais dinâmica, moderna e acessível. A iniciativa representa um avanço importante na digitalização do ensino profissionalizante na região do Agreste Pernambucano.
