@@ -54,7 +54,7 @@ A plataforma é dividida em três perfis de usuários:
 
 ##  <img src= "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXQxdGV6dXQzM3hrbGx2NjhtdGpjZXR5a2M1N3E2emphZWRidWFxdiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Q8DYzZxZweZpLS4y6s/giphy.gif" alt="class" width="50" height="50" /> Etapas do Projeto:
 
-### Front-End:
+### <img src= "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExc3ZyMHB1aHJ5bTNkN3c4dDl1MHB4azJyaHNldnM4b202ZDE3MjY5cyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/26vIfZEpQJtbSC9u8/giphy.gif" alt="class" width="25" height="25" /> Front-End:
 - Uso do React Native + Expo.
 - Navegação implementada com **Drawer Navigation**.
 - Componentes reutilizáveis em `components/`.
@@ -66,7 +66,7 @@ A plataforma é dividida em três perfis de usuários:
 
 ---
 
-### Back-End:
+### <img src= "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExc3ZyMHB1aHJ5bTNkN3c4dDl1MHB4azJyaHNldnM4b202ZDE3MjY5cyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/26vIfZEpQJtbSC9u8/giphy.gif" alt="class" width="25" height="25" /> Back-End:
 * Projeto modularizado com separação clara de responsabilidades: controllers/, routes/, services/, middlewares/, utils/, e config/.
 * Utiliza Node.js com o framework Express.js para construção da API REST.
 * Arquivo principal do servidor: server.js, responsável por configurar middlewares, rotas e iniciar o servidor.
@@ -89,7 +89,7 @@ A plataforma é dividida em três perfis de usuários:
 
 --- 
 
-### Banco de dados:
+### <img src= "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExc3ZyMHB1aHJ5bTNkN3c4dDl1MHB4azJyaHNldnM4b202ZDE3MjY5cyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/26vIfZEpQJtbSC9u8/giphy.gif" alt="class" width="25" height="25" /> Banco de dados:
 
 1. **Firebase Realtime Database**
 * Utilizado como banco NoSQL em tempo real para persistência dos dados dos alunos, professores e administradores.
@@ -112,7 +112,7 @@ O projeto utiliza o **Firebase Realtime Database** para persistência dos dados 
 
 ---
 
-###  Alunos (`/alunos`)
+### <img src= "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzgydXV6ZGF1ODFjMXRqZWlrbHliNzJzbjExeDNkZm4zdWxjOWJzbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3ov9jNkYm8QqxakeCQ/giphy.gif" alt="class" width="25" height="25" /> Alunos (`/alunos`)
 
 #### Campos no banco:
 
@@ -141,7 +141,7 @@ O projeto utiliza o **Firebase Realtime Database** para persistência dos dados 
 
 ---
 
-###  Professores (`/professores`)
+### <img src= "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzgydXV6ZGF1ODFjMXRqZWlrbHliNzJzbjExeDNkZm4zdWxjOWJzbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3ov9jNkYm8QqxakeCQ/giphy.gif" alt="class" width="25" height="25" /> Professores (`/professores`)
 
 ####  Campos no banco:
 
@@ -167,7 +167,7 @@ O projeto utiliza o **Firebase Realtime Database** para persistência dos dados 
 
 ---
 
-###  Administradores (`/administradores`)
+### <img src= "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzgydXV6ZGF1ODFjMXRqZWlrbHliNzJzbjExeDNkZm4zdWxjOWJzbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3ov9jNkYm8QqxakeCQ/giphy.gif" alt="class" width="25" height="25" /> Administradores (`/administradores`)
 
 ####  Campos no banco:
 
@@ -180,7 +180,7 @@ O projeto utiliza o **Firebase Realtime Database** para persistência dos dados 
 
 ---
 
-###  Arquivos (`/upload`)
+### <img src= "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzgydXV6ZGF1ODFjMXRqZWlrbHliNzJzbjExeDNkZm4zdWxjOWJzbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3ov9jNkYm8QqxakeCQ/giphy.gif" alt="class" width="25" height="25" /> Arquivos (`/upload`)
 
 ####  Os arquivos são armazenados no sistema de arquivos local do servidor com operações realizadas via Multer.
 
