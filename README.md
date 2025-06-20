@@ -32,7 +32,7 @@ A plataforma é dividida em três perfis de usuários:
 
 ---
 
-1. **Aluno**:
+### <img src= "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExcWVtYWRsam5ndGxmYmMyeTViMnN1aDBnMWx6dGV1Z3FkeDYwamtsYiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3ov9k5mOfD9ixPhrgI/giphy.gif" alt="class" width="25" height="25" /> **Aluno**:
 * Acesso aos cursos em que está matriculado.
 * Visualização e download de conteúdos das aulas.
 * Realização e envio de atividades propostas pelos professores.
@@ -40,14 +40,14 @@ A plataforma é dividida em três perfis de usuários:
 
 ---
 
-2. **Professor**:
+### <img src= "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExcWVtYWRsam5ndGxmYmMyeTViMnN1aDBnMWx6dGV1Z3FkeDYwamtsYiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3ov9k5mOfD9ixPhrgI/giphy.gif" alt="class" width="25" height="25" /> **Professor**:
 * Upload de conteúdos educacionais (aulas, PDFs, vídeos, etc).
 * Cadastro e gerenciamento de atividades para os alunos.
 * Perfil personalizado com controle sobre suas turmas.
 
 ---
 
-3. **Administrador (ADM)**:
+### <img src= "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExcWVtYWRsam5ndGxmYmMyeTViMnN1aDBnMWx6dGV1Z3FkeDYwamtsYiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3ov9k5mOfD9ixPhrgI/giphy.gif" alt="class" width="25" height="25" /> **Administrador (ADM)**:
 * Gerenciamento completo da plataforma.
 * Cadastro e controle de usuários (alunos e professores).
 * Supervisão geral da organização dos cursos e turmas.
@@ -261,6 +261,8 @@ CR_Cursos_App/
 
 ## <img src= "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExYjh2eTNxeDN5b2I5d3U1OHU4M2EyenMwejByNmdqd3E0NWY4cWZ3ZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/X74GovIqGMZYxXblCL/giphy.gif" alt="class" width="50" height="50" /> Como Executar o Projeto:
 
+### <img src= "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExODJ1Z3RoYmsxdmFiMjg3cWl1ajNoaW9zMWw3NzFqZjIzN3R0Y240eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3ov9jLnGfDMaLPyDQc/giphy.gif" alt="class" width="25" height="25" /> Instalação:
+
 Antes de tudo, certifique-se de ter os seguintes requisitos instalados:
 * Node.js (recomendado v18+)
 * Expo CLI
@@ -268,7 +270,7 @@ Antes de tudo, certifique-se de ter os seguintes requisitos instalados:
 * Git
 * Editor de código, como o VSCode
 
-1. Instalação:
+---
 
 * Clone o repositório:
 
@@ -276,13 +278,13 @@ Antes de tudo, certifique-se de ter os seguintes requisitos instalados:
 git clone https://github.com/seu-usuario/cr_cursos_fullstack.git
 cd cr_cursos_fullstack
 ```
-2. Instale as dependências na raiz:
+* Instale as dependências na raiz:
 ```
 npm install
 ```
 Esse comando instalará também o concurrently, que será usado para rodar os dois ambientes ao mesmo tempo.
 
-3. Rodar Front-End e Back-End ao mesmo tempo
+### <img src= "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExODJ1Z3RoYmsxdmFiMjg3cWl1ajNoaW9zMWw3NzFqZjIzN3R0Y240eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3ov9jLnGfDMaLPyDQc/giphy.gif" alt="class" width="25" height="25" /> Rodar Front-End e Back-End ao mesmo tempo
 Esse é o modo mais comum durante o desenvolvimento.
 
 ```
@@ -292,27 +294,27 @@ Isso executa:
 * npm run dev:back → inicia o servidor Express com nodemon
 * npm run dev:front → abre o app React Native com o Expo
 
-4. Rodar apenas o Back-End (API Node.js + Express)
+### <img src= "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExODJ1Z3RoYmsxdmFiMjg3cWl1ajNoaW9zMWw3NzFqZjIzN3R0Y240eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3ov9jLnGfDMaLPyDQc/giphy.gif" alt="class" width="25" height="25" /> Rodar apenas o Back-End (API Node.js + Express)
 ```
 cd back-end
 npm install       # se ainda não tiver feito
 npm run dev       # roda com nodemon (recomendado para desenvolvimento)
 ```
 * Servidor será iniciado em: http://localhost:3000 (ou porta definida no .env)
-*As rotas da API estarão acessíveis conforme definidas nos arquivos de routes/
+* As rotas da API estarão acessíveis conforme definidas nos arquivos de routes/
 
-5. Rodar apenas o Front-End (App React Native com Expo)
+### <img src= "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExODJ1Z3RoYmsxdmFiMjg3cWl1ajNoaW9zMWw3NzFqZjIzN3R0Y240eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3ov9jLnGfDMaLPyDQc/giphy.gif" alt="class" width="25" height="25" /> Rodar apenas o Front-End (App React Native com Expo)
 ```
 cd AppCR/MeuApp
 npm install       # se ainda não tiver feito
 npx expo start    # abre o Expo DevTools
 ```
 Você pode:
-* escanear o QR Code com o app do Expo no seu celular ou rodar em emuladores Android/iOS com:
+  * escanear o QR Code com o app do Expo no seu celular ou rodar em emuladores Android/iOS com:
   * npx expo start --android
   * npx expo start --ios (macOS com Xcode)
 
-6. Executar com Docker (opcional, para testes de upload local)
+### <img src= "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExODJ1Z3RoYmsxdmFiMjg3cWl1ajNoaW9zMWw3NzFqZjIzN3R0Y240eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3ov9jLnGfDMaLPyDQc/giphy.gif" alt="class" width="25" height="25" /> Executar com Docker (opcional, para testes de upload local)
 * Certifique-se de que o Docker Desktop está instalado e ativo.
 * No diretório raiz, rode:
 ```
@@ -321,7 +323,7 @@ docker-compose up --build
 * Isso irá subir o container do back-end e montar corretamente a pasta de uploads locais.
 * Verifique os volumes e as portas configuradas no docker-compose.yml.
 
-7. Arquivos de Configuração Importantes
+### <img src= "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExODJ1Z3RoYmsxdmFiMjg3cWl1ajNoaW9zMWw3NzFqZjIzN3R0Y240eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3ov9jLnGfDMaLPyDQc/giphy.gif" alt="class" width="25" height="25" /> Arquivos de Configuração Importantes
 .env: contém variáveis sensíveis como PORT, chaves do Firebase, etc. Esse arquivo não está versionado, então você deve criar manualmente um .env na pasta back-end/, exemplo:
 
 ```
