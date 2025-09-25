@@ -43,7 +43,6 @@ const uploadImagemAluno = async (req, res) => {
   }
 };
 
-// Exportar como objeto
 module.exports = {
   uploadImagemAluno,
 };

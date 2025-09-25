@@ -1,6 +1,5 @@
 const { loginUsuario } = require('../services/authService');
 
-// LOGIN
 const login = async (req, res) => {
   const { email, senha } = req.body;
 
@@ -17,7 +16,6 @@ const login = async (req, res) => {
   }
 };
 
-// LOGOUT (simples)
 const logout = async (req, res) => {
   return res.status(200).json({ message: 'Logout realizado com sucesso' });
 };

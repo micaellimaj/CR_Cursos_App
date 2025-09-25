@@ -1,38 +1,10 @@
-// services/professorService.js
-
 const { db } = require('../config/firebase');
 const bcrypt = require('bcryptjs');
 const gerarIdProfessor = require('../utils/professor/gerarIdProfessor');
-const firebaseAdmin = require('firebase-admin'); // Importar o firebase-admin para ServerValue.TIMESTAMP
-
-// Função auxiliar para verificar se o email já existe para um professor
-const emailExisteProfessor = async (email, excludeId = null) => {
-  let query = db.ref('professores').orderByChild('email').equalTo(email);
-  const snapshot = await query.once('value');
-
-  if (!snapshot.exists()) {
-    return false; // Email não existe
-  }
-
-  // Se o email existe, precisamos verificar se pertence ao mesmo professor (em caso de update)
-  const professorData = snapshot.val();
-  const professorId = Object.keys(professorData)[0]; // Pega o ID do professor encontrado
-
-  if (excludeId && professorId === excludeId) {
-    return false; // Email existe, mas pertence ao professor que está sendo atualizado
-  }
-
-  return true; // Email já existe e pertence a outro professor ou a um novo professor
-};
+const firebaseAdmin = require('firebase-admin');
 
 const createProfessorService = async (professorData) => {
-  const { full_name, email, senha, telefone, data_nascimento, idade } = professorData; // Recebe 'idade'
-
-  // Verificação de e-mail duplicado ANTES de tentar criar
-  if (await emailExisteProfessor(email)) {
-    throw new Error('Já existe um professor com esse e-mail.');
-  }
-
+  const { full_name, email, senha, telefone, data_nascimento, idade } = professorData;
   const hashedSenha = await bcrypt.hash(senha, 10);
   const customId = gerarIdProfessor();
 
@@ -41,9 +13,9 @@ const createProfessorService = async (professorData) => {
     email,
     senha: hashedSenha,
     telefone: telefone || null,
-    data_nascimento: data_nascimento || null, // Garante que é null se não fornecido
-    idade: idade, // Salva a idade calculada
-    created_at: firebaseAdmin.database.ServerValue.TIMESTAMP // Usar timestamp do servidor
+    data_nascimento: data_nascimento || null,
+    idade,
+    created_at: firebaseAdmin.database.ServerValue.TIMESTAMP
   });
 
   return customId;
@@ -54,7 +26,7 @@ const getAllProfessoresService = async () => {
   const data = snapshot.val() || {};
 
   return Object.entries(data).map(([id, value]) => {
-    const { senha, ...resto } = value; // Evita retornar a senha
+    const { senha, ...resto } = value;
     return { id, ...resto };
   });
 };
@@ -64,8 +36,7 @@ const getProfessorByIdService = async (id) => {
   if (!snapshot.exists()) {
     return null;
   }
-
-  const { senha, ...resto } = snapshot.val(); // Evita retornar a senha
+  const { senha, ...resto } = snapshot.val();
   return { id, ...resto };
 };
 
@@ -74,14 +45,7 @@ const updateProfessorService = async (id, dados) => {
   const snapshot = await professorRef.once('value');
 
   if (!snapshot.exists()) {
-    return false; // Professor não encontrado
-  }
-
-  // Se o email estiver sendo atualizado, verificar duplicidade (excluindo o próprio professor)
-  if (dados.email && dados.email !== snapshot.val().email) {
-    if (await emailExisteProfessor(dados.email, id)) {
-      throw new Error('Já existe um professor com esse e-mail.');
-    }
+    return false;
   }
 
   const dadosParaAtualizar = { ...dados };
@@ -90,7 +54,6 @@ const updateProfessorService = async (id, dados) => {
     dadosParaAtualizar.senha = await bcrypt.hash(dadosParaAtualizar.senha, 10);
   }
 
-  // Adiciona o timestamp de atualização
   dadosParaAtualizar.updated_at = firebaseAdmin.database.ServerValue.TIMESTAMP;
 
   await professorRef.update(dadosParaAtualizar);
@@ -102,11 +65,17 @@ const deleteProfessorService = async (id) => {
   const snapshot = await professorRef.once('value');
 
   if (!snapshot.exists()) {
-    return false; // Professor não encontrado para deletar
+    return false;
   }
 
   await professorRef.remove();
   return true;
+};
+
+
+const findProfessorByEmail = async (email) => {
+  const snapshot = await db.ref('professores').orderByChild('email').equalTo(email).once('value');
+  return snapshot.exists() ? snapshot.val() : null;
 };
 
 module.exports = {
@@ -114,5 +83,6 @@ module.exports = {
   getAllProfessoresService,
   getProfessorByIdService,
   updateProfessorService,
-  deleteProfessorService
+  deleteProfessorService,
+  findProfessorByEmail
 };

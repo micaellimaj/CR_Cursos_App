@@ -13,7 +13,7 @@ function saveFile(file) {
   const filePath = path.join(uploadDir, fileName);
   fs.writeFileSync(filePath, file.buffer);
 
-  return { fileName, path: filePath, url: `/uploads/${fileName}` };
+  return { fileName, path: filePath, url: `/uploads/${fileName}`,size: file.size, mimetype: file.mimetype  };
 }
 
 function getAllFiles() {

@@ -95,7 +95,7 @@ export default function ProfileScreen() {
       }
 
       try {
-        const response = await axios.get(`${API_URL}/api/alunos/${id}`, {
+        const response = await axios.get(`${API_URL}/alunos/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -153,7 +153,7 @@ export default function ProfileScreen() {
 
     try {
       const response = await axios.put(
-        `${API_URL}/api/alunos/${id}`,
+        `${API_URL}/alunos/${id}`,
         updatePayload,
         {
           headers: {

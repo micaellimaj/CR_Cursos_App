@@ -79,13 +79,13 @@ export default function Cadastro() {
       console.log("LOG: FetchUsers - Enviando requisição GET para /alunos com headers:", headers);
 
       // Busca Alunos
-      const alunosResponse = await axios.get(`${API_URL}/api/alunos`, { headers });
+      const alunosResponse = await axios.get(`${API_URL}/alunos`, { headers });
       const alunosData: Usuario[] = alunosResponse.data;
       console.log("LOG: Resposta de /alunos:", alunosData.length, "alunos encontrados.");
 
       // Busca Professores
       console.log("LOG: FetchUsers - Enviando requisição GET para /professores com headers:", headers);
-      const professoresResponse = await axios.get(`${API_URL}/api/professores`, { headers });
+      const professoresResponse = await axios.get(`${API_URL}/professores`, { headers });
       const professoresData: Usuario[] = professoresResponse.data;
       console.log("LOG: Resposta de /professores:", professoresData.length, "professores encontrados.");
 
@@ -128,7 +128,7 @@ export default function Cadastro() {
         onPress: async () => {
           const endpoint = user.userType === "student" ? "alunos" : "professores";
           try {
-            console.log(`LOG: handleDelete - Tentando excluir usuário ${user.id} (${user.userType}) em ${API_URL}/api/${endpoint}/${user.id} com token:`, authToken ? "presente" : "ausente");
+            console.log(`LOG: handleDelete - Tentando excluir usuário ${user.id} (${user.userType}) em ${API_URL}/${endpoint}/${user.id} com token:`, authToken ? "presente" : "ausente");
             const response = await axios.delete(`${API_URL}/api/${endpoint}/${user.id}`, {
               headers: {
                 "Authorization": `Bearer ${authToken}`,
@@ -160,8 +160,8 @@ export default function Cadastro() {
     if (!editUser) return;
     const endpoint = editUser.userType === "student" ? "alunos" : "professores";
     try {
-      console.log(`LOG: handleSaveEdit - Tentando atualizar usuário ${editUser.id} (${editUser.userType}) em ${API_URL}/api/${endpoint}/${editUser.id} com token:`, authToken ? "presente" : "ausente");
-      const response = await axios.put(`${API_URL}/api/${endpoint}/${editUser.id}`, editUser, {
+      console.log(`LOG: handleSaveEdit - Tentando atualizar usuário ${editUser.id} (${editUser.userType}) em ${API_URL}/${endpoint}/${editUser.id} com token:`, authToken ? "presente" : "ausente");
+      const response = await axios.put(`${API_URL}/${endpoint}/${editUser.id}`, editUser, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${authToken}`,
@@ -197,7 +197,7 @@ export default function Cadastro() {
             try {
               // 1. Deletar do tipo atual
               console.log(`LOG: handleChangeUserType - Tentando deletar usuário ${user.id} (${user.userType}) em ${API_URL}/api/${currentEndpoint}/${user.id} com token:`, authToken ? "presente" : "ausente");
-              const deleteResponse = await axios.delete(`${API_URL}/api/${currentEndpoint}/${user.id}`, {
+              const deleteResponse = await axios.delete(`${API_URL}/${currentEndpoint}/${user.id}`, {
                 headers: { "Authorization": `Bearer ${authToken}` },
               });
               if (deleteResponse.status !== 200 && deleteResponse.status !== 204) {
@@ -208,7 +208,7 @@ export default function Cadastro() {
               const newUserPayload = { ...user, userType: newType };
               // Remova o ID para o POST, pois o backend deve gerar um novo ID na criação
               delete (newUserPayload as any).id; 
-              console.log(`LOG: handleChangeUserType - Tentando criar novo usuário em ${API_URL}/api/${newEndpoint} com token:`, authToken ? "presente" : "ausente");
+              console.log(`LOG: handleChangeUserType - Tentando criar novo usuário em ${API_URL}/${newEndpoint} com token:`, authToken ? "presente" : "ausente");
               const createResponse = await axios.post(`${API_URL}/api/${newEndpoint}`, newUserPayload, {
                 headers: {
                   "Content-Type": "application/json",

@@ -93,7 +93,7 @@ export default function ProfileprofessorScreen() {
 
       try {
         // Rota específica para professores
-        const response = await axios.get<ProfessorData>(`${API_URL}/api/professores/${id}`, {
+        const response = await axios.get<ProfessorData>(`${API_URL}/professores/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -150,7 +150,7 @@ export default function ProfileprofessorScreen() {
     try {
       // Rota específica para professores
       const response = await axios.put(
-        `${API_URL}/api/professores/${id}`,
+        `${API_URL}/professores/${id}`,
         updatePayload,
         {
           headers: {

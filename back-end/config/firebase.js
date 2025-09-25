@@ -1,10 +1,8 @@
 require('dotenv').config();
 const admin = require('firebase-admin');
 
-// Faz o parse da string JSON
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 
-// Corrige a private_key manualmente (se ainda estiver com \\n como texto)
 serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
 
 admin.initializeApp({

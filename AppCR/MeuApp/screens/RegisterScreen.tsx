@@ -194,7 +194,7 @@ export default function RegisterScreen({ navigation }: any) {
     let errorMessageBody = '';
 
     if (userType === 'student') {
-      endpoint = `${API_URL}/api/alunos`;
+      endpoint = `${API_URL}/alunos`;
       successMessageTitle = 'Sucesso';
       successMessageBody = 'Aluno cadastrado com sucesso!';
       errorMessageTitle = 'Erro no cadastro do aluno';
@@ -228,7 +228,7 @@ export default function RegisterScreen({ navigation }: any) {
       }
 
     } else if (userType === 'teacher') {
-      endpoint = `${API_URL}/api/professores`;
+      endpoint = `${API_URL}/professores`;
       successMessageTitle = 'Sucesso';
       successMessageBody = 'Professor cadastrado com sucesso!';
       errorMessageTitle = 'Erro no cadastro do professor';
