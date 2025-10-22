@@ -4,12 +4,13 @@ const getProfessorByIdUseCase = require('../use-cases/professor/getProfessorById
 const updateProfessorUseCase = require('../use-cases/professor/updateProfessor');
 const deleteProfessorUseCase = require('../use-cases/professor/deleteProfessor');
 
+
 async function createProfessor(req, res) {
   try {
-    const id = await createProfessorUseCase(req.body);
-    res.status(201).json({ id, message: 'Professor criado com sucesso.' });
+    const result = await createProfessorUseCase(req.body); 
+    res.status(201).json(result);  
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(error.status || 400).json({ message: error.message });
   }
 }
 

@@ -3,6 +3,7 @@ const calcularIdade = require('../../utils/aluno/calcularIdade');
 const validarEmail = require('../../utils/aluno/validarEmail');
 const gerarIdPersonalizado = require('../../utils/aluno/gerarIdPersonalizado');
 const { emailExiste, criarAluno } = require('../../services/alunoService');
+const turmaService = require('../../services/turmaService');
 
 module.exports = async (dados) => {
   const {
@@ -13,10 +14,11 @@ module.exports = async (dados) => {
     email_responsavel,
     telefone_responsavel,
     telefone,
-    data_nascimento
+    data_nascimento,
+    turma_id,
   } = dados;
 
-  if (!full_name || !email || !senha || !data_nascimento) {
+  if (!full_name || !email || !senha || !data_nascimento || !turma_id) {
     throw { status: 400, message: 'Campos obrigatórios faltando' };
   }
 
@@ -37,6 +39,11 @@ module.exports = async (dados) => {
     throw { status: 400, message: 'Já existe um aluno com esse e-mail' };
   }
 
+  const turmaExiste = await turmaService.getTurmaPorId(turma_id);
+  if (!turmaExiste) {
+    throw { status: 404, message: `Turma com ID ${turma_id} não encontrada.` };
+  }
+
   const hashedSenha = await bcrypt.hash(senha, 10);
   const customId = gerarIdPersonalizado();
 
@@ -46,6 +53,7 @@ module.exports = async (dados) => {
     senha: hashedSenha,
     data_nascimento,
     idade,
+    turma_id,
     nome_responsavel: idade < 18 ? nome_responsavel : null,
     email_responsavel: idade < 18 ? email_responsavel : null,
     telefone_responsavel: idade < 18 ? telefone_responsavel : null,
@@ -54,5 +62,12 @@ module.exports = async (dados) => {
 
   const id = await criarAluno(customId, alunoData);
 
-  return { id, message: 'Aluno criado com sucesso' };
+  await turmaService.adicionarAluno(turma_id, id);
+
+  return { 
+    id,
+    message: 'Aluno criado com sucesso',
+    turma_id: turma_id,
+    curso: turmaExiste.nome 
+  };
 };

@@ -13,6 +13,28 @@ async function criarAluno(id, dados) {
   return id;
 }
 
+/**
+ * Adiciona ou atualiza o turma_id de um aluno existente.
+ * @param {string} alunoId
+ * @param {string} turmaId
+ * @returns {boolean}
+ */
+async function adicionarTurmaAoAluno(alunoId, turmaId) {
+    const alunoRef = db.ref(`alunos/${alunoId}`);
+    const snapshot = await alunoRef.once('value');
+
+    if (!snapshot.exists()) {
+        return false;
+    }
+
+    await alunoRef.update({
+        turma_id: turmaId,
+        updated_at: new Date().toISOString()
+    });
+
+    return true;
+}
+
 async function getTodosAlunos() {
   const snapshot = await db.ref('alunos').once('value');
   const alunos = snapshot.val() || {};
@@ -50,5 +72,6 @@ module.exports = {
   getTodosAlunos,
   getAlunoPorId,
   atualizarAluno,
-  deletarAluno
+  deletarAluno,
+  adicionarTurmaAoAluno
 };

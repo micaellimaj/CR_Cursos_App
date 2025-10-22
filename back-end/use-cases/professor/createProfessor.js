@@ -1,9 +1,10 @@
 const { createProfessorService, findProfessorByEmail } = require('../../services/professorService');
 const validarEmail = require('../../utils/aluno/validarEmail');
 const calcularIdade = require('../../utils/aluno/calcularIdade');
+const turmaService = require('../../services/turmaService');
 
 async function createProfessorUseCase(dados) {
-  const { full_name, email, senha, telefone, data_nascimento } = dados;
+  const { full_name, email, senha, telefone, data_nascimento, turma_id_principal } = dados;
 
   if (!full_name || !email || !senha || !data_nascimento) {
     throw new Error('Campos obrigatórios faltando: nome completo, email, senha, data de nascimento.');
@@ -21,10 +22,18 @@ async function createProfessorUseCase(dados) {
     throw new Error('Professor deve ser maior de idade.');
   }
 
-  // Aqui sim: verifica duplicidade
+
   const professorExistente = await findProfessorByEmail(email);
   if (professorExistente) {
     throw new Error('Já existe um professor com esse e-mail.');
+  }
+
+  let turmaExiste = null;
+  if (turma_id_principal) {
+      turmaExiste = await turmaService.getTurmaPorId(turma_id_principal);
+      if (!turmaExiste) {
+          throw { status: 404, message: `Turma principal com ID ${turma_id_principal} não encontrada.` };
+      }
   }
 
   const id = await createProfessorService({
@@ -33,10 +42,19 @@ async function createProfessorUseCase(dados) {
     senha,
     telefone: telefone || null,
     data_nascimento,
-    idade
+    idade,
+    turma_id_principal: turma_id_principal || null
   });
 
-  return id;
+  if (turmaExiste) {
+      await turmaService.adicionarProfessor(turma_id_principal, id);
+  }
+
+  return { 
+      id, 
+      message: 'Professor criado com sucesso',
+      turma_associada: turmaExiste ? turmaExiste.nome : 'Nenhuma'
+  };
 }
 
 module.exports = createProfessorUseCase;

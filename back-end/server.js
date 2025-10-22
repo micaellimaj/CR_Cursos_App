@@ -4,13 +4,14 @@ const app = express();
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swagger/swagger')
 require('dotenv').config();
-
 const imagemRoutes = require('./routes/imagemRoutes');
 app.use('/api/imagem', imagemRoutes);
-
 const alunoRoutes = require('./routes/alunoRoutes');
 const professorRoutes = require('./routes/professorRoutes');
 const authRoutes = require('./routes/authRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
+const cursoRoutes = require('./routes/cursoRoutes');
+const turmaRoutes = require('./routes/turmaRoutes');
 
 app.use(express.json());
 app.use(cors());
@@ -24,10 +25,9 @@ app.use('/alunos', alunoRoutes);
 app.use('/professores', professorRoutes); 
 app.use('/auth', authRoutes);                 
 app.use('/uploads', express.static('uploads'));
-
-const uploadRoutes = require('./routes/uploadRoutes');
 app.use('/upload', uploadRoutes);
-
+app.use('/curso', cursoRoutes);
+app.use('/turma', turmaRoutes);
 
 
 const PORT = process.env.PORT || 5000;

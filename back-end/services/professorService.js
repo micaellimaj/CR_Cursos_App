@@ -7,6 +7,7 @@ const createProfessorService = async (professorData) => {
   const { full_name, email, senha, telefone, data_nascimento, idade } = professorData;
   const hashedSenha = await bcrypt.hash(senha, 10);
   const customId = gerarIdProfessor();
+  const turmasIniciais = turma_id_principal ? { [turma_id_principal]: true } : {};
 
   await db.ref(`professores/${customId}`).set({
     full_name,
@@ -15,11 +16,38 @@ const createProfessorService = async (professorData) => {
     telefone: telefone || null,
     data_nascimento: data_nascimento || null,
     idade,
+    turmas: turmasIniciais,
     created_at: firebaseAdmin.database.ServerValue.TIMESTAMP
   });
 
   return customId;
 };
+
+/**
+ * Adiciona uma associação de turma a um professor existente.
+ * @param {string} professorId
+ * @param {string} turmaId
+ * @returns {boolean}
+ */
+async function adicionarTurmaAoProfessor(professorId, turmaId) {
+    const professorRef = db.ref(`professores/${professorId}`);
+    const snapshot = await professorRef.once('value');
+
+    if (!snapshot.exists()) {
+        return false;
+    }
+
+    await professorRef.child('turmas').update({
+        [turmaId]: true
+    });
+    
+    await professorRef.update({
+        updated_at: firebaseAdmin.database.ServerValue.TIMESTAMP
+    });
+
+    return true;
+}
+
 
 const getAllProfessoresService = async () => {
   const snapshot = await db.ref('professores').once('value');
@@ -84,5 +112,6 @@ module.exports = {
   getProfessorByIdService,
   updateProfessorService,
   deleteProfessorService,
-  findProfessorByEmail
+  findProfessorByEmail,
+  adicionarTurmaAoProfessor
 };
