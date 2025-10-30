@@ -100,6 +100,22 @@ async function deletarTurma(id) {
     return true;
 }
 
+/**
+ * Lista todas as turmas associadas a um curso específico.
+ * @param {string} cursoId
+ * @returns {Array<object>}
+ */
+async function getTurmasPorCursoId(cursoId) {
+    const snapshot = await db.ref(ENTIDADE) 
+                             .orderByChild('curso_id')
+                             .equalTo(cursoId)
+                             .once('value');
+                             
+    const turmas = snapshot.val() || {};
+    
+    return Object.entries(turmas).map(([id, data]) => ({ id, ...data }));
+}
+
 module.exports = {
     criarTurma,
     getTurmaPorId,
@@ -107,5 +123,6 @@ module.exports = {
     adicionarAluno,
     adicionarProfessor,
     atualizarTurma, 
-    deletarTurma
+    deletarTurma,
+    getTurmasPorCursoId
 };

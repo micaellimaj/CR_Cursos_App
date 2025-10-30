@@ -59,9 +59,47 @@ async function findById(id) {
     return { id, ...snapshot.val() };
 }
 
+/**
+ * Atualiza os dados de um curso.
+ * @param {string} id
+ * @param {object} novosDados
+ * @returns {boolean}
+ */
+async function update(id, novosDados) {
+    const cursoRef = db.ref(`${ENTIDADE}/${id}`);
+    const dadosExistentesSnap = await cursoRef.once('value');
+    
+    if (!dadosExistentesSnap.exists()) return false;
+
+    await cursoRef.update({
+        ...novosDados,
+        updated_at: new Date().toISOString()
+    });
+
+    return true;
+}
+
+/**
+ * Deleta um curso pelo ID.
+ * @param {string} id
+ * @returns {boolean}
+ */
+async function remove(id) {
+    const cursoRef = db.ref(`${ENTIDADE}/${id}`);
+    const snapshot = await cursoRef.once('value');
+    
+    if (!snapshot.exists()) return false;
+    
+    await cursoRef.remove();
+    return true;
+}
+
+
 module.exports = {
     findByNome,
     create,
     findAll,
     findById,
+    update,
+    remove
 };
