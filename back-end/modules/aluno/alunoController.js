@@ -1,8 +1,8 @@
-const createAlunoUC = require('../use-cases/aluno/createAluno');
-const getAllAlunosUC = require('../use-cases/aluno/getAllAlunos');
-const getAlunoByIdUC = require('../use-cases/aluno/getAlunoById');
-const updateAlunoUC = require('../use-cases/aluno/updateAluno');
-const deleteAlunoUC = require('../use-cases/aluno/deleteAluno');
+const createAlunoUC = require('./use-cases/createAluno');
+const getAllAlunosUC = require('./use-cases/getAllAlunos');
+const getAlunoByIdUC = require('./use-cases/agetAlunoById');
+const updateAlunoUC = require('./use-cases/updateAluno');
+const deleteAlunoUC = require('./use-cases/deleteAluno');
 
 const createAluno = async (req, res) => {
   try {

@@ -1,4 +1,4 @@
-const { getAlunoPorId } = require('../../services/alunoService');
+const { getAlunoPorId } = require('../alunoService');
 
 module.exports = async (id) => {
   const aluno = await getAlunoPorId(id);

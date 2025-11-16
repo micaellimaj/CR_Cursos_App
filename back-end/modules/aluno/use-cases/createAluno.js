@@ -1,9 +1,9 @@
 const bcrypt = require('bcryptjs');
-const calcularIdade = require('../../utils/aluno/calcularIdade');
-const validarEmail = require('../../utils/aluno/validarEmail');
-const gerarIdPersonalizado = require('../../utils/aluno/gerarIdPersonalizado');
-const { emailExiste, criarAluno } = require('../../services/alunoService');
-const turmaService = require('../../services/turmaService');
+const calcularIdade = require('../utils/calcularIdade');
+const validarEmail = require('../utils/validarEmail');
+const gerarIdPersonalizado = require('../utils/gerarIdPersonalizado');
+const { emailExiste, criarAluno } = require('../alunoService');
+const turmaService = require('../../turma/turmaService');
 
 module.exports = async (dados) => {
   const {

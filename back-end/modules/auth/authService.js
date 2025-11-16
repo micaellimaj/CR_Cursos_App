@@ -1,4 +1,4 @@
-const { loginUsuarioUseCase } = require('../use-cases/auth/loginUsuario');
+const { loginUsuarioUseCase } = require('./use-cases/loginUsuario');
 
 async function loginUsuario(email, senha) {
   return await loginUsuarioUseCase(email, senha);

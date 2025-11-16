@@ -1,4 +1,4 @@
-const { deletarAluno } = require('../../services/alunoService');
+const { deletarAluno } = require('../alunoService');
 
 module.exports = async (id) => {
   const sucesso = await deletarAluno(id);

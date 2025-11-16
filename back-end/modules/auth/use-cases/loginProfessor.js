@@ -1,5 +1,5 @@
-const { db } = require('../../config/firebase');
-const { verificarSenha } = require('../../utils/authUtils');
+const { db } = require('../../../shared/config/firebase');
+const { verificarSenha } = require('../authUtils');
 
 async function loginProfessor(email, senha) {
   const snap = await db.ref('professores').orderByChild('email').equalTo(email).once('value');

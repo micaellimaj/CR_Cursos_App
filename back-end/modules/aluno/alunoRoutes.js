@@ -7,11 +7,11 @@ const {
     getAlunoById,
     updateAluno,
     deleteAluno
-} = require('../controllers/alunoController');
+} = require('./alunoController');
 
-const authMiddleware = require('../middlewares/authMiddleware');
-const verificarAdmin = require('../middlewares/verificarAdmin');
-const verificarProprioUsuario = require('../middlewares/verificarProprioUsuario');
+const authMiddleware = require('../../shared/middlewares/authMiddleware');
+const verificarAdmin = require('../../shared/middlewares/verificarAdmin');
+const verificarProprioUsuario = require('../../shared/middlewares/verificarProprioUsuario');
 
 /**
  * @swagger

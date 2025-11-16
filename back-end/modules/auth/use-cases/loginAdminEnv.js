@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs');
-const { db } = require('../../config/firebase');
+const { db } = require('../../../shared/config/firebase');
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
 const ADMIN_SENHA = process.env.ADMIN_SENHA;

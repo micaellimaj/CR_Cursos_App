@@ -1,4 +1,4 @@
-const { db } = require('../config/firebase');
+const { db } = require('../../shared/config/firebase');
 
 async function emailExiste(email) {
   const snapshot = await db.ref('alunos').orderByChild('email').equalTo(email).once('value');

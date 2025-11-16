@@ -1,6 +1,6 @@
-const calcularIdade = require('../../utils/aluno/calcularIdade');
-const validarEmail = require('../../utils/aluno/validarEmail');
-const { atualizarAluno } = require('../../services/alunoService');
+const calcularIdade = require('../utils/calcularIdade');
+const validarEmail = require('../utils/validarEmail');
+const { atualizarAluno } = require('../alunoService');
 
 module.exports = async (id, novosDados) => {
   if (novosDados.email && !validarEmail(novosDados.email)) {
