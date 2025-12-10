@@ -2,16 +2,16 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const swaggerUi = require('swagger-ui-express');
-const swaggerSpec = require('./swagger/swagger')
+const swaggerSpec = require('./shared/swagger/swagger')
 require('dotenv').config();
-const imagemRoutes = require('./routes/imagemRoutes');
+const imagemRoutes = require('./modules/imagem/imagemRoutes');
 app.use('/api/imagem', imagemRoutes);
-const alunoRoutes = require('./routes/alunoRoutes');
-const professorRoutes = require('./routes/professorRoutes');
-const authRoutes = require('./routes/authRoutes');
-const uploadRoutes = require('./routes/uploadRoutes');
-const cursoRoutes = require('./routes/cursoRoutes');
-const turmaRoutes = require('./routes/turmaRoutes');
+const alunoRoutes = require('./modules/aluno/alunoRoutes');
+const professorRoutes = require('./modules/professor/professorRoutes');
+const authRoutes = require('./modules/auth/authRoutes');
+const uploadRoutes = require('./modules/upload/uploadRoutes');
+const cursoRoutes = require('./modules/curso/cursoRoutes');
+const turmaRoutes = require('./modules/turma/turmaRoutes');
 
 app.use(express.json());
 app.use(cors());

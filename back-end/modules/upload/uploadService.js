@@ -1,6 +1,6 @@
 const path = require("path");
 const fs = require("fs");
-const { generateFileName } = require("../utils/uploadUtils");
+const { generateFileName } = require("./utils/uploadUtils");
 
 const uploadDir = path.join(__dirname, "../uploads");
 

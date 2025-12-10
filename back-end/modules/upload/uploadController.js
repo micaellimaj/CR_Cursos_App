@@ -1,8 +1,8 @@
-const uploadFile = require("../use-cases/upload/uploadFile");
-const listFiles = require("../use-cases/upload/listFiles");
-const getFile = require("../use-cases/upload/getFile");
-const updateFile = require("../use-cases/upload/updateFile");
-const deleteFile = require("../use-cases/upload/deleteFile");
+const uploadFile = require("./use-cases/updateFile");
+const listFiles = require("./use-cases/listFiles");
+const getFile = require("./use-cases/getFile");
+const updateFile = require("./use-cases/updateFile");
+const deleteFile = require("./use-cases/deleteFile");
 
 module.exports = {
   uploadFile,

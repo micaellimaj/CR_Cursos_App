@@ -1,5 +1,5 @@
-const turmaService = require('../../services/turmaService');
-const { getProfessorByIdService, adicionarTurmaAoProfessor } = require('../../services/professorService'); 
+const turmaService = require('../turmaService');
+const { getProfessorByIdService, adicionarTurmaAoProfessor } = require('../../professor/professorService');
 
 /**
  * Associa um professor a uma turma existente.

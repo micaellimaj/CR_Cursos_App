@@ -1,4 +1,4 @@
-const { admin, db, bucket } = require("../config/firebase");
+const { admin, db, bucket } = require("../../shared/config/firebase");
 const { v4: uuidv4 } = require("uuid");
 const path = require("path");
 const fs = require("fs");

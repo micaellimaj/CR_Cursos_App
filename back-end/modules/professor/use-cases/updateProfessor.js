@@ -1,6 +1,6 @@
-const { updateProfessorService } = require('../../services/professorService');
-const validarEmail = require('../../utils/aluno/validarEmail');
-const calcularIdade = require('../../utils/aluno/calcularIdade');
+const { updateProfessorService } = require('../professorService');
+const validarEmail = require('../../aluno/utils/validarEmail');
+const calcularIdade = require('../../aluno/utils/calcularIdade');
 
 async function updateProfessorUseCase(id, novosDados) {
   if (novosDados.email && !validarEmail(novosDados.email)) {

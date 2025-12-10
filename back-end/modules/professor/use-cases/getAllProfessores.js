@@ -1,4 +1,4 @@
-const { getAllProfessoresService } = require('../../services/professorService');
+const { getAllProfessoresService } = require('../professorService');
 
 async function getAllProfessoresUseCase() {
   return await getAllProfessoresService();

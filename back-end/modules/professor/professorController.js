@@ -1,8 +1,8 @@
-const createProfessorUseCase = require('../use-cases/professor/createProfessor');
-const getAllProfessoresUseCase = require('../use-cases/professor/getAllProfessores');
-const getProfessorByIdUseCase = require('../use-cases/professor/getProfessorById');
-const updateProfessorUseCase = require('../use-cases/professor/updateProfessor');
-const deleteProfessorUseCase = require('../use-cases/professor/deleteProfessor');
+const createProfessorUseCase = require('../professor/use-cases/createProfessor');
+const getAllProfessoresUseCase = require('../professor/use-cases/getAllProfessores');
+const getProfessorByIdUseCase = require('../professor/use-cases/getProfessorById');
+const updateProfessorUseCase = require('../professor/use-cases/updateProfessor');
+const deleteProfessorUseCase = require('../professor/use-cases/deleteProfessor');
 
 
 async function createProfessor(req, res) {

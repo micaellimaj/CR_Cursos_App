@@ -1,4 +1,4 @@
-const turmaService = require('../../services/turmaService');
+const turmaService = require('../../turma/turmaService');
 
 const getTurmaById = async (id) => {
     if (!id) {

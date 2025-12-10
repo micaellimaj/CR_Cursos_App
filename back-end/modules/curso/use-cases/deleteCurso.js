@@ -1,5 +1,5 @@
-const cursoService = require('../../services/cursoService');
-const turmaService = require('../../services/turmaService');
+const cursoService = require('../cursoService');
+const turmaService = require('../../turma/turmaService');
 
 const deleteCurso = async (id) => {
     if (!id) {

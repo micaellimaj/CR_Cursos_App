@@ -9,10 +9,10 @@ const {
     getTurmaById, 
     updateTurma, 
     deleteTurma, 
-} = require('../controllers/turmaController');
+} = require('./turmaController');
 
-const authMiddleware = require('../middlewares/authMiddleware');
-const verificarAdmin = require('../middlewares/verificarAdmin');
+const authMiddleware = require('../../shared/middlewares/authMiddleware');
+const verificarAdmin = require('../../shared/middlewares/verificarAdmin');
 
 /**
  * @swagger

@@ -1,4 +1,4 @@
-const uploadService = require("../../services/uploadService");
+const uploadService = require("../uploadService");
 
 module.exports = (req, res) => {
   try {

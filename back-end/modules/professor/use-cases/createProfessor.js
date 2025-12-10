@@ -1,7 +1,7 @@
-const { createProfessorService, findProfessorByEmail } = require('../../services/professorService');
-const validarEmail = require('../../utils/aluno/validarEmail');
-const calcularIdade = require('../../utils/aluno/calcularIdade');
-const turmaService = require('../../services/turmaService');
+const { createProfessorService, findProfessorByEmail } = require('../professorService');
+const validarEmail = require('../../aluno/utils/validarEmail');
+const calcularIdade = require('../../aluno/utils/calcularIdade');
+const turmaService = require('../../turma/turmaService');
 
 async function createProfessorUseCase(dados) {
   const { full_name, email, senha, telefone, data_nascimento, turma_id_principal } = dados;

@@ -4,13 +4,13 @@ const path = require('path');
 const swaggerDefinition = {
   openapi: '3.0.0',
   info: {
-    title: 'Minha API - CR Cursos Mobile', 
+    title: 'Minha API - CR Cursos Mobile',
     version: '1.0.0',
     description: 'Documentação da API do projeto AppCR',
   },
   servers: [
     {
-      url: 'http://localhost:5000', 
+      url: 'http://localhost:5000',
       description: 'Servidor de Desenvolvimento',
     },
   ],
@@ -29,8 +29,14 @@ const swaggerDefinition = {
 const options = {
   swaggerDefinition,
   apis: [
-    path.join(__dirname, '../routes/*.js'), 
-    path.join(__dirname, '../controllers/*.js'),
+    // Todas as rotas de todos os módulos
+    path.join(__dirname, '../../modules/**/*.js'),
+
+    // Caso você ainda tenha middlewares com documentação
+    path.join(__dirname, '../../middlewares/**/*.js'),
+
+    // Configs adicionais caso existam
+    path.join(__dirname, '../../shared/**/*.js'),
   ],
 };
 

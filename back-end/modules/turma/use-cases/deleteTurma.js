@@ -1,4 +1,4 @@
-const turmaService = require('../../services/turmaService');
+const turmaService = require('../turmaService');
 
 
 const deleteTurma = async (id) => {

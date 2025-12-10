@@ -1,4 +1,4 @@
-const turmaService = require('../../services/turmaService');
+const turmaService = require('../turmaService');
 
 const getAllTurmas = async () => {
     const turmas = await turmaService.getTodasTurmas();

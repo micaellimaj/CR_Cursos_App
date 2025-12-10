@@ -1,4 +1,4 @@
-const { getProfessorByIdService } = require('../../services/professorService');
+const { getProfessorByIdService } = require('../professorService');
 
 async function getProfessorByIdUseCase(id) {
   const professor = await getProfessorByIdService(id);

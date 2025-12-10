@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const cursoController = require('../controllers/cursoController');
-const authMiddleware = require('../middlewares/authMiddleware');
-const verificarAdmin = require('../middlewares/verificarAdmin');
+const cursoController = require('./cursoController');
+const authMiddleware = require('../../shared/middlewares/authMiddleware');
+const verificarAdmin = require('../../shared/middlewares/verificarAdmin');
 
 /**
  * @swagger

@@ -1,4 +1,4 @@
-const { db } = require('../config/firebase'); 
+const { db } = require('../../shared/config/firebase'); 
 const ENTIDADE = 'cursos';
 
 

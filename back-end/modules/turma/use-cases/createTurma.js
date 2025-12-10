@@ -1,6 +1,6 @@
-const turmaService = require('../../services/turmaService');
-const cursoService = require('../../services/cursoService');
-const professorService = require('../../services/professorService'); 
+const turmaService = require('../turmaService');
+const cursoService = require('../../curso/cursoService');
+const professorService = require('../../professor/professorService'); 
 
 const createTurma = async (dados) => {
     const { curso_id, nome, data_inicio, data_fim, professor_principal_id } = dados;

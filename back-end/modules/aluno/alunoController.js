@@ -1,6 +1,6 @@
 const createAlunoUC = require('./use-cases/createAluno');
 const getAllAlunosUC = require('./use-cases/getAllAlunos');
-const getAlunoByIdUC = require('./use-cases/agetAlunoById');
+const getAlunoByIdUC = require('./use-cases/getAlunoById');
 const updateAlunoUC = require('./use-cases/updateAluno');
 const deleteAlunoUC = require('./use-cases/deleteAluno');
 

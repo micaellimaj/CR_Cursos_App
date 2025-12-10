@@ -3,7 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const uploadController = require('../controllers/uploadController');
+const uploadController = require('./uploadController');
 const router = express.Router();
 
 const uploadDir = path.join(__dirname, '..', 'uploads');

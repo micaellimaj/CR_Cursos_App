@@ -1,4 +1,4 @@
-const cursoService = require('../../services/cursoService');
+const cursoService = require('../cursoService');
 
 const createCurso = async ({ nome, descricao }) => {
 

@@ -1,9 +1,9 @@
-const createCursoUC = require('../use-cases/curso/createCurso');
-const getAllCursosUC = require('../use-cases/curso/getAllCursos');
-const getCursoByIdUC = require('../use-cases/curso/getCursoById');       
-const updateCursoUC = require('../use-cases/curso/updateCurso');          
-const deleteCursoUC = require('../use-cases/curso/deleteCurso');          
-const getTurmasDoCursoUC = require('../use-cases/curso/getTurmasDoCurso');
+const createCursoUC = require('../curso/use-cases/createCurso');
+const getAllCursosUC = require('../curso/use-cases/getAllCursos');
+const getCursoByIdUC = require('../curso/use-cases/getCursoById');       
+const updateCursoUC = require('../curso/use-cases/updateCurso');          
+const deleteCursoUC = require('../curso/use-cases/deleteCurso');          
+const getTurmasDoCursoUC = require('../curso/use-cases/getTurmasDoCurso');
 
 const cursoController = {
     cadastrarCurso: async (req, res) => {

@@ -1,4 +1,4 @@
-const { deleteProfessorService } = require('../../services/professorService');
+const { deleteProfessorService } = require('../professorService');
 
 async function deleteProfessorUseCase(id) {
   const deleted = await deleteProfessorService(id);

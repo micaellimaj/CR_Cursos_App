@@ -1,5 +1,5 @@
-const turmaService = require('../../services/turmaService');
-const alunoService = require('../../services/alunoService');
+const turmaService = require('../turmaService');
+const alunoService = require('../../aluno/alunoService');
 
 /**
  * Matricular um aluno em uma turma.

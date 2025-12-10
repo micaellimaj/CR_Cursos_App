@@ -1,11 +1,11 @@
-const createTurmaUC = require('../use-cases/turma/createTurma');
-const matricularAlunoUC = require('../use-cases/turma/matricularAluno');
-const associarProfessorUC = require('../use-cases/turma/associarProfessor');
-const getAlunosDaTurmaUC = require('../use-cases/turma/getAlunosDaTurma');
-const getAllTurmasUC = require('../use-cases/turma/getAllTurmas'); 
-const getTurmaByIdUC = require('../use-cases/turma/getTurmaById'); 
-const updateTurmaUC = require('../use-cases/turma/updateTurma');
-const deleteTurmaUC = require('../use-cases/turma/deleteTurma');
+const createTurmaUC = require('./use-cases/createTurma');
+const matricularAlunoUC = require('./use-cases/matricularAluno');
+const associarProfessorUC = require('./use-cases/associarProfessor');
+const getAlunosDaTurmaUC = require('./use-cases/getAlunosDaTurma');
+const getAllTurmasUC = require('./use-cases/getAllTurmas'); 
+const getTurmaByIdUC = require('./use-cases/getTurmaById'); 
+const updateTurmaUC = require('./use-cases/updateTurma');
+const deleteTurmaUC = require('./use-cases/deleteTurma');
 
 const createTurma = async (req, res) => {
     try {

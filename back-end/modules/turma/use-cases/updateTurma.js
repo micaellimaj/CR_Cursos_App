@@ -1,5 +1,5 @@
-const turmaService = require('../../services/turmaService');
-const cursoService = require('../../services/cursoService');
+const turmaService = require('../turmaService');
+const cursoService = require('../../curso/cursoService');
 
 const updateTurma = async (id, novosDados) => {
     if (!id) {
