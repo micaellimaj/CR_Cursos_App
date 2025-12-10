@@ -12,6 +12,8 @@ const authRoutes = require('./modules/auth/authRoutes');
 const uploadRoutes = require('./modules/upload/uploadRoutes');
 const cursoRoutes = require('./modules/curso/cursoRoutes');
 const turmaRoutes = require('./modules/turma/turmaRoutes');
+const disciplinaRoutes = require('./modules/disciplina/disciplinaRoutes');
+const notaRoutes = require('./modules/notas/notaRoutes');
 
 app.use(express.json());
 app.use(cors());
@@ -28,6 +30,9 @@ app.use('/uploads', express.static('uploads'));
 app.use('/upload', uploadRoutes);
 app.use('/curso', cursoRoutes);
 app.use('/turma', turmaRoutes);
+app.use('/disciplina', disciplinaRoutes);
+app.use('/nota', notaRoutes);
+
 
 
 const PORT = process.env.PORT || 5000;
