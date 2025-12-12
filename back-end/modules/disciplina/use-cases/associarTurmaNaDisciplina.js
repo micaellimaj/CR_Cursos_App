@@ -58,3 +58,5 @@ async function associarTurmaNaDisciplina({ disciplinaId, turmaId, professorId })
     },
   };
 }
+
+module.exports = { associarTurmaNaDisciplina };
