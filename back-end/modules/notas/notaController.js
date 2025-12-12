@@ -1,5 +1,6 @@
 // notas/notaController.js
 
+
 module.exports = function NotaController({ notaService }) {
   return {
     criar: async (req, res) => {
