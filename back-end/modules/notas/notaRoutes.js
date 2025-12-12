@@ -86,23 +86,7 @@ module.exports = function notaRoutes({ notaController }) {
    */
   router.delete("/:id", notaController.deletar);
 
-  /**
-   * @swagger
-   * /notas/{id}:
-   *   get:
-   *     summary: Buscar nota por ID
-   *     tags: [Notas]
-   *     parameters:
-   *       - in: path
-   *         name: id
-   *         schema:
-   *           type: string
-   *         required: true
-   *     responses:
-   *       200:
-   *         description: Nota encontrada
-   */
-  router.get("/:id", notaController.buscarPorId);
+
 
   /**
    * @swagger
@@ -175,6 +159,24 @@ module.exports = function notaRoutes({ notaController }) {
    *         description: Lista de notas da turma
    */
   router.get("/turma/:turma_id", notaController.listarPorTurma);
+
+    /**
+   * @swagger
+   * /notas/{id}:
+   *   get:
+   *     summary: Buscar nota por ID
+   *     tags: [Notas]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         schema:
+   *           type: string
+   *         required: true
+   *     responses:
+   *       200:
+   *         description: Nota encontrada
+   */
+  router.get("/:id", notaController.buscarPorId);
 
   return router;
 };

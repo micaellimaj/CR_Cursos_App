@@ -1,61 +1,67 @@
 // notas/notaService.js
 
-export default class NotaService {
-  constructor({
-    createNota,
-    deleteNota,
-    getNotaById,
-    getNotasPorAluno,
-    getNotasPorDisciplina,
-    getNotasPorProfessor,
-    getNotasPorTurma,
-    updateNota,
-    validarPermissaoProfessor
-  }) {
-    this.createNota = createNota;
-    this.deleteNota = deleteNota;
-    this.getNotaById = getNotaById;
-    this.getNotasPorAluno = getNotasPorAluno;
-    this.getNotasPorDisciplina = getNotasPorDisciplina;
-    this.getNotasPorProfessor = getNotasPorProfessor;
-    this.getNotasPorTurma = getNotasPorTurma;
-    this.updateNota = updateNota;
-    this.validarPermissaoProfessor = validarPermissaoProfessor;
-  }
+const { createNota } = require("./use-cases/createNota");
+const { updateNota } = require("./use-cases/updateNota");
+const { deleteNota } = require("./use-cases/deleteNota");
+const { getNotaById } = require("./use-cases/getNotaById");
+const { getNotasPorAluno } = require("./use-cases/getNotasPorAluno");
+const { getNotasPorDisciplina } = require("./use-cases/getNotasPorDisciplina");
+const { getNotasPorProfessor } = require("./use-cases/getNotasPorProfessor");
+const { getNotasPorTurma } = require("./use-cases/getNotasPorTurma");
+const { validarPermissaoProfessor } = require("./use-cases/validarPermissaoProfessor");
 
-  async criar(data) {
-    return await this.createNota(data);
-  }
+// ---------------------------
+// Funções seguindo o padrão
+// ---------------------------
 
-  async remover(id) {
-    return await this.deleteNota(id);
-  }
-
-  async buscarPorId(id) {
-    return await this.getNotaById(id);
-  }
-
-  async listarPorAluno(aluno_id) {
-    return await this.getNotasPorAluno(aluno_id);
-  }
-
-  async listarPorDisciplina(disciplina_id) {
-    return await this.getNotasPorDisciplina(disciplina_id);
-  }
-
-  async listarPorProfessor(professor_id) {
-    return await this.getNotasPorProfessor(professor_id);
-  }
-
-  async listarPorTurma(turma_id) {
-    return await this.getNotasPorTurma(turma_id);
-  }
-
-  async atualizar(id, data) {
-    return await this.updateNota(id, data);
-  }
-
-  async validarPermissao(professor_id, turma_id) {
-    return await this.validarPermissaoProfessor(professor_id, turma_id);
-  }
+async function criarNota(data) {
+  return createNota(data);
 }
+
+async function atualizarNota(id, data) {
+  return updateNota(id, data);
+}
+
+async function removerNota(id) {
+  return deleteNota(id);
+}
+
+async function buscarNotaPorId(id) {
+  return getNotaById(id);
+}
+
+async function listarNotasPorAluno(aluno_id) {
+  return getNotasPorAluno(aluno_id);
+}
+
+async function listarNotasPorDisciplina(disciplina_id) {
+  return getNotasPorDisciplina(disciplina_id);
+}
+
+async function listarNotasPorProfessor(professor_id) {
+  return getNotasPorProfessor(professor_id);
+}
+
+async function listarNotasPorTurma(turma_id) {
+  return getNotasPorTurma(turma_id);
+}
+
+async function validarPermissao(professor_id, turma_id) {
+  return validarPermissaoProfessor(professor_id, turma_id);
+}
+
+// ---------------------------
+// Exportando no padrão disciplinaService
+// ---------------------------
+
+module.exports = {
+  criarNota,
+  atualizarNota,
+  removerNota,
+  buscarNotaPorId,
+  listarNotasPorAluno,
+  listarNotasPorDisciplina,
+  listarNotasPorProfessor,
+  listarNotasPorTurma,
+  validarPermissao,
+};
