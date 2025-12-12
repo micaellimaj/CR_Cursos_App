@@ -58,10 +58,12 @@ async function associarTurmaController(req, res) {
   try {
     const result = await disciplinaService.associarTurma(req.body);
     return res.status(result.success ? 200 : 400).json(result);
-  } catch {
+  } catch (error) {
+    console.error("Erro associarTurma:", error); // <-- ADICIONE ISTO
     return res.status(500).json({ success: false, message: "Erro interno do servidor." });
   }
 }
+
 
 module.exports = {
   criarDisciplinaController,
