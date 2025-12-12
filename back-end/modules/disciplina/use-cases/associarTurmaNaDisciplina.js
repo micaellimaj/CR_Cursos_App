@@ -22,8 +22,13 @@ async function associarTurmaNaDisciplina({ disciplinaId, turmaId, professorId })
   const disciplina = discSnap.val();
   const turma = turmaSnap.val();
 
-  // Verificar se o professor é o responsável
-  if (disciplina.professorId !== professorId || turma.professorId !== professorId) {
+  // 🔥 Correção importante
+  const professorAutorizado =
+    disciplina.professorId === professorId ||
+    turma.professor_principal_id === professorId ||
+    (turma.professores && turma.professores[professorId] === true);
+
+  if (!professorAutorizado) {
     return {
       success: false,
       message: "Professor não autorizado a associar esta turma à disciplina.",
@@ -53,5 +58,3 @@ async function associarTurmaNaDisciplina({ disciplinaId, turmaId, professorId })
     },
   };
 }
-
-module.exports = { associarTurmaNaDisciplina };
