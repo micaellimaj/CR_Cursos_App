@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { login, logout } = require('./authController');
+const { login, logout, forgotPassword, changePassword } = require('./authController');
 const authMiddleware = require('../../shared/middlewares/authMiddleware');
 
 /**
@@ -89,5 +89,20 @@ router.post('/login', login);
  *         description: Erro interno do servidor.
  */
 router.post('/logout', authMiddleware, logout);
+
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password", changePassword);
+
+router.get("/reset-password", (req, res) => {
+  const { token } = req.query;
+
+  if (!token) {
+    return res.status(400).send("Token inválido");
+  }
+
+  res.render("auth/reset-password", { token });
+});
+
+
 
 module.exports = router;

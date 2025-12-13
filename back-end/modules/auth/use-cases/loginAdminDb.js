@@ -1,5 +1,5 @@
 const { db } = require('../../../shared/config/firebase');
-const { verificarSenha } = require('../authUtils');
+const { verificarSenha } = require('../utils/authUtils');
 
 async function loginAdminDb(email, senha) {
   const snap = await db.ref('administradores').orderByChild('email').equalTo(email).once('value');

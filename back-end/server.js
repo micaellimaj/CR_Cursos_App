@@ -14,6 +14,7 @@ const cursoRoutes = require('./modules/curso/cursoRoutes');
 const turmaRoutes = require('./modules/turma/turmaRoutes');
 const disciplinaRoutes = require('./modules/disciplina/disciplinaRoutes');
 const notaRoutes = require('./modules/notas/notaRoutes');
+const path = require("path");
 
 app.use(express.json());
 app.use(cors());
@@ -32,7 +33,11 @@ app.use('/curso', cursoRoutes);
 app.use('/turma', turmaRoutes);
 app.use('/disciplina', disciplinaRoutes);
 app.use('/nota', notaRoutes);
-
+// arquivos estáticos
+app.use("/js", express.static(path.join(__dirname, "public/js")));
+// views
+app.set("views", path.join(__dirname, "shared/views"));
+app.set("view engine", "hbs");
 
 
 const PORT = process.env.PORT || 5000;

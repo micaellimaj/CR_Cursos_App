@@ -1,4 +1,4 @@
-const { gerarToken } = require('../authUtils');
+const { gerarToken } = require('../utils/authUtils');
 const { loginAluno } = require('./loginAluno');
 const { loginProfessor } = require('./loginProfessor');
 const { loginAdminDb } = require('./loginAdminDb');
