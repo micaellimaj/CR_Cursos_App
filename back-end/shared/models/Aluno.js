@@ -1,7 +1,7 @@
 class Aluno {
   constructor({ id, full_name, email, senha, resetPasswordToken, resetPasswordExpires }) {
     this.id = id;
-    this.nome = full_name;
+    this.full_name = full_name;
     this.email = email;
     this.senha = senha;
 

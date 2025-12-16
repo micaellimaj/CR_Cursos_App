@@ -1,37 +1,26 @@
-const db = require("../config/firebase").db;
+const { db } = require("../config/firebase");
 const Aluno = require("../models/Aluno");
 const Professor = require("../models/Professor");
 const Admin = require("../models/Admin");
 
+const sources = [
+  { path: "alunos", Model: Aluno },
+  { path: "professores", Model: Professor },
+  { path: "administradores", Model: Admin }
+];
+
 async function findUserByEmail(email) {
-  const sources = [
-    { path: "alunos", Model: Aluno },
-    { path: "professores", Model: Professor },
-    { path: "administradores", Model: Admin }
-  ];
-
   for (const { path, Model } of sources) {
-    const snap = await db.ref(path)
-      .orderByChild("email")
-      .equalTo(email)
-      .once("value");
-
+    const snap = await db.ref(path).orderByChild("email").equalTo(email).once("value");
     if (snap.exists()) {
       const [id, data] = Object.entries(snap.val())[0];
       return new Model({ id, ...data });
     }
   }
-
   return null;
 }
 
 async function findUserByResetToken(token) {
-  const sources = [
-    { path: "alunos", Model: Aluno },
-    { path: "professores", Model: Professor },
-    { path: "administradores", Model: Admin }
-  ];
-
   for (const { path, Model } of sources) {
     const snap = await db.ref(path)
       .orderByChild("resetPasswordToken")
@@ -43,7 +32,6 @@ async function findUserByResetToken(token) {
       return new Model({ id, ...data });
     }
   }
-
   return null;
 }
 
