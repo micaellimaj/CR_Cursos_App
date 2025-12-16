@@ -48,14 +48,14 @@ async function findUserByResetToken(token) {
 }
 
 async function saveResetToken(user, token) {
-  await db.ref(`${user.tipo}/${user.id}`).update({
+  await db.ref(`${user.collection}/${user.id}`).update({
     resetPasswordToken: token,
     resetPasswordExpires: Date.now() + 1000 * 60 * 30
   });
 }
 
 async function updatePassword(user, hashedPassword) {
-  await db.ref(`${user.tipo}/${user.id}`).update({
+  await db.ref(`${user.collection}/${user.id}`).update({
     senha: hashedPassword,
     resetPasswordToken: null,
     resetPasswordExpires: null,
