@@ -1,6 +1,9 @@
 const { loginUsuario } = require("./authService");
 const { requestPasswordReset } = require("./use-cases/requestPasswordReset");
 const { resetPassword } = require("./use-cases/resetPassword");
+const crypto = require('crypto');
+const { sendEmail } = require('../.././shared/services/emailService');
+
 
 const login = async (req, res) => {
   const { email, senha } = req.body;
@@ -20,18 +23,60 @@ const login = async (req, res) => {
 
 
 const forgotPassword = async (req, res) => {
-  const { email } = req.body;
-
   try {
-    await requestPasswordReset(email);
+    const { email } = req.body;
+    
+    const user = await admin.firestore()
+      .collection('alunos')
+      .where('email', '==', email)
+      .get();
+    
+    if (user.empty) {
+      return res.status(200).json({ 
+        message: "Se o e-mail existir, enviaremos instruções." 
+      });
+    }
+    
+    const userData = user.docs[0].data();
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetPasswordExpires = Date.now() + 3600000; // 1 hora
+    
+    await admin.firestore()
+      .collection('alunos')
+      .doc(user.docs[0].id)
+      .update({
+        resetPasswordToken,
+        resetPasswordExpires
+      });
+    
+    console.log('🔍 Token gerado, tentando enviar email...');
+    
+    try {
+      await sendEmail({
+        to: email,
+        subject: 'Recuperação de Senha - CR Cursos',
+        template: 'forgot-password',
+        context: {
+          name: userData.nome || 'Aluno',
+          resetLink: `${process.env.API_URL}/reset-password?token=${resetToken}`
+        }
+      });
+      
+      console.log('✅ Email enviado com sucesso');
+    } catch (emailError) {
+      console.error('❌ Erro ao enviar email:', emailError);
+      // Não retorne erro para o cliente por segurança
+      // Mas logue o erro para debugging
+    }
+    
+    res.status(200).json({ 
+      message: "Se o e-mail existir, enviaremos instruções." 
+    });
+    
   } catch (error) {
-    console.error("Erro ao solicitar reset:", error);
-    // NÃO retorna erro para o usuário
+    console.error('❌ Erro geral:', error);
+    res.status(500).json({ error: "Erro interno do servidor" });
   }
-
-  return res.status(200).json({
-    message: "Se o e-mail existir, enviaremos instruções."
-  });
 };
 
 
