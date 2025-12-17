@@ -37,4 +37,28 @@ async function sendEmail({ to, subject, template, context }) {
   }
 }
 
-module.exports = { sendEmail };
+// ✅ NOVA FUNÇÃO: Confirmação de mudança de senha
+const sendPasswordChangeConfirmation = async (email, userName) => {
+  try {
+    await sendEmail({
+      to: email,
+      subject: 'Senha Alterada com Sucesso - CR Cursos',
+      template: 'password-changed',
+      context: {
+        name: userName || 'Aluno',
+        supportEmail: 'suporte@crcursos.com.br',
+        currentYear: new Date().getFullYear(),
+        currentDate: new Date().toLocaleDateString('pt-BR'),
+        userIP: 'IP não disponível' // Você pode passar o IP se tiver
+      }
+    });
+    
+    console.log('✅ Email de confirmação de senha enviado para:', email);
+  } catch (error) {
+    console.error('❌ Erro ao enviar confirmação de senha:', error);
+    // Não lançar erro para não falhar o processo principal
+  }
+};
+
+
+module.exports = { sendEmail, sendPasswordChangeConfirmation };

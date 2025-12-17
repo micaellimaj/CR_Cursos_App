@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { login, logout, forgotPassword, changePassword } = require('./authController');
+const { login, logout, forgotPassword, changePassword, showResetPasswordPage } = require('./authController');
 const authMiddleware = require('../../shared/middlewares/authMiddleware');
 
 /**
@@ -92,16 +92,8 @@ router.post('/logout', authMiddleware, logout);
 
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", changePassword);
+router.get("/reset-password", showResetPasswordPage);
 
-router.get("/reset-password", (req, res) => {
-  const { token } = req.query;
-
-  if (!token) {
-    return res.status(400).send("Token inválido");
-  }
-
-  res.render("auth/reset-password", { token });
-});
 
 
 

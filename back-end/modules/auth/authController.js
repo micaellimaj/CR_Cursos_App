@@ -3,7 +3,7 @@ const { requestPasswordReset } = require("./use-cases/requestPasswordReset");
 const { resetPassword } = require("./use-cases/resetPassword");
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
-const { sendEmail } = require('../.././shared/services/emailService');
+const { sendEmail,  sendPasswordChangeConfirmation } = require('../.././shared/services/emailService');
 const { admin } = require('../.././shared/config/firebase'); 
 
 
@@ -105,60 +105,64 @@ const forgotPassword = async (req, res) => {
 // GET - Mostrar página de reset de senha (usando template)
 const showResetPasswordPage = async (req, res) => {
   try {
-    const { token, userId } = req.query;
+    const { token } = req.query;
     
-    if (!token || !userId) {
-      return res.status(400).render('reset-password', {
-        error: 'Token e userId são obrigatórios',
-        token: '',
-        userId: '',
-        nome: ''
+    // Validar token
+    if (!token) {
+      return res.status(400).render('auth/error', {
+        error: 'Token de redefinição não fornecido',
+        message: 'Por favor, solicite um novo link de redefinição de senha.'
       });
     }
-
-    // Verificar se o token é válido no Firebase Realtime Database
-    const userRef = admin.database().ref(`alunos/${userId}`);
-    const snapshot = await userRef.once('value');
-    const userData = snapshot.val();
-
-    if (!userData || !userData.resetPasswordToken) {
-      return res.status(400).render('reset-password', {
-        error: 'Token inválido ou expirado',
-        token: '',
-        userId: '',
-        nome: ''
+    
+    // Buscar usuário pelo token no Firebase
+    const usersRef = admin.database().ref('alunos');
+    const snapshot = await usersRef
+      .orderByChild('resetPasswordToken')
+      .equalTo(token)
+      .once('value');
+    
+    if (!snapshot.exists()) {
+      return res.status(400).render('auth/error', {
+        error: 'Token inválido',
+        message: 'Este link de redefinição não é válido ou já foi usado.'
       });
     }
-
+    
+    const userData = Object.values(snapshot.val())[0];
+    const userId = Object.keys(snapshot.val())[0];
+    
     // Verificar se o token não expirou
     if (Date.now() > userData.resetPasswordExpires) {
-      return res.status(400).render('reset-password', {
-        error: 'Token expirado. Solicite nova recuperação de senha.',
-        token: '',
-        userId: '',
-        nome: ''
+      // Limpar token expirado
+      await admin.database().ref(`alunos/${userId}`).update({
+        resetPasswordToken: null,
+        resetPasswordExpires: null
+      });
+      
+      return res.status(400).render('auth/error', {
+        error: 'Token expirado',
+        message: 'Este link de redefinição expirou. Por favor, solicite um novo.'
       });
     }
-
-    // Renderizar o template com os dados do usuário
-    res.render('reset-password', {
+    
+    // Renderizar página de reset com os dados do usuário
+    res.render('auth/reset-password', {
       token: token,
       userId: userId,
-      nome: userData.nome || 'Aluno',
-      error: null,
-      success: null
+      nome: userData.nome || '',
+      email: userData.email || ''
     });
     
   } catch (error) {
     console.error('❌ Erro ao mostrar página de reset:', error);
-    res.status(500).render('reset-password', {
-      error: 'Erro ao processar solicitação',
-      token: '',
-      userId: '',
-      nome: ''
+    res.status(500).render('auth/error', {
+      error: 'Erro interno',
+      message: 'Ocorreu um erro ao processar sua solicitação.'
     });
   }
 };
+
 
 // POST - Processar o reset de senha (controller)
 const processResetPassword = async (req, res) => {
@@ -226,7 +230,7 @@ const processResetPassword = async (req, res) => {
       resetPasswordExpires: null
     });
 
-    // Enviar email de confirmação
+    // ✅ Enviar email de confirmação via SendGrid
     await sendPasswordChangeConfirmation(userData.email, userData.nome);
 
     // Renderizar página de sucesso
