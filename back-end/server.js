@@ -15,9 +15,30 @@ const turmaRoutes = require('./modules/turma/turmaRoutes');
 const disciplinaRoutes = require('./modules/disciplina/disciplinaRoutes');
 const notaRoutes = require('./modules/notas/notaRoutes');
 const path = require("path");
+const hbs = require('hbs');
 
+// Middleware para parsing de formulários
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
+
+// Configurar view engine para usar Handlebars
+app.set('view engine', 'hbs');
+
+// Configurar pasta de templates (em vez da pasta views padrão)
+app.set('views', path.join(__dirname, 'templates'));
+
+// Error handling middleware para JSON parsing
+app.use((err, req, res, next) => {
+  if (err.type === 'entity.parse.failed') {
+    return res.status(400).json({
+      error: 'JSON inválido',
+      message: 'Use aspas duplas nas propriedades JSON',
+      details: err.message
+    });
+  }
+  next(err);
+});
 
 app.get('/', (req, res) => {
   res.send('API rodando com sucesso! 🚀');
