@@ -1,7 +1,8 @@
 const params = new URLSearchParams(window.location.search);
 const token = params.get("token");
 
-const form = document.getElementById("resetForm");
+// CORREÇÃO: Usar o ID correto do formulário
+const form = document.querySelector("form"); // ou adicionar id="resetForm" no HTML
 const message = document.getElementById("message");
 
 if (!token) {
@@ -12,21 +13,22 @@ if (!token) {
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const password = document.getElementById("password").value;
-  const confirm = document.getElementById("confirmPassword").value;
+  // CORREÇÃO: Usar os names corretos dos inputs
+  const password = document.querySelector("input[name='newPassword']").value;
+  const confirm = document.querySelector("input[name='confirmPassword']").value;
 
   if (password !== confirm) {
     message.innerText = "As senhas não coincidem.";
     return;
   }
 
-  const res = await fetch("/reset-password", {
+  // CORREÇÃO: Usar a URL correta
+  const res = await fetch("/auth/reset-password", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ token, newPassword: password })
   });
 
   const data = await res.json();
-
   message.innerText = data.message || "Erro ao alterar senha.";
 });
