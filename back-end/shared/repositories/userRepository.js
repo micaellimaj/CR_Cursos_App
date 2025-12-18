@@ -1,6 +1,6 @@
 const { db } = require("../config/firebase");
-const Aluno = require("../models/Aluno");
-const Professor = require("../models/Professor");
+const Aluno = require("../.././modules/aluno/models/alunoModel");
+const Professor = require("../../modules/professor/models/professorModel");
 const Admin = require("../models/Admin");
 
 const sources = [

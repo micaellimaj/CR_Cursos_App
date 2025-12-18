@@ -5,7 +5,9 @@ async function emailExiste(email) {
   return snapshot.exists();
 }
 
-async function criarAluno(id, dados) {
+async function criarAluno(id, alunoInstance) {
+  const dados = alunoInstance.toJSON ? alunoInstance.toJSON() : alunoInstance;
+  
   await db.ref(`alunos/${id}`).set({
     ...dados,
     created_at: new Date().toISOString()
@@ -48,11 +50,14 @@ async function getAlunoPorId(id) {
 }
 
 async function atualizarAluno(id, novosDados) {
-  const dadosExistentesSnap = await db.ref(`alunos/${id}`).once('value');
-  if (!dadosExistentesSnap.exists()) return false;
+  const alunoRef = db.ref(`alunos/${id}`);
+  const snapshot = await alunoRef.once('value');
+  if (!snapshot.exists()) return false;
 
-  await db.ref(`alunos/${id}`).update({
-    ...novosDados,
+  const dadosParaAtualizar = novosDados.toJSON ? novosDados.toJSON() : novosDados;
+
+  await alunoRef.update({
+    ...dadosParaAtualizar,
     updated_at: new Date().toISOString()
   });
 

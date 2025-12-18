@@ -1,5 +1,8 @@
+const Aluno = require('../models/alunoModel');
 const { getTodosAlunos } = require('../alunoService');
 
 module.exports = async () => {
-  return await getTodosAlunos();
+  const listaAlunos = await getTodosAlunos();
+  
+  return listaAlunos.map(dados => new Aluno(dados));
 };
