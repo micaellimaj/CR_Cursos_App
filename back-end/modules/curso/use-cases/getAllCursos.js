@@ -1,10 +1,7 @@
+const Curso = require('../models/cursoModel');
 const cursoService = require('../cursoService');
 
-const getAllCursos = async () => {
-    
-    const cursos = await cursoService.findAll();
-
-    return cursos;
+module.exports = async () => {
+  const cursos = await cursoService.findAll();
+  return cursos.map(c => new Curso(c).toJSON());
 };
-
-module.exports = getAllCursos;

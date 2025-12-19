@@ -1,24 +1,24 @@
+const Curso = require('../models/cursoModel');
+const { validarDadosCurso } = require('../types/cursoSchema');
 const cursoService = require('../cursoService');
+const gerarIdPersonalizado = require('../../aluno/utils/gerarIdPersonalizado'); 
 
-const createCurso = async ({ nome, descricao }) => {
+module.exports = async (dados) => {
+  validarDadosCurso(dados);
 
-    if (!nome) {
-        const error = new Error('O nome do curso é obrigatório.');
-        error.status = 400; 
-        throw error;
-    }
+  const cursoExistente = await cursoService.findByNome(dados.nome);
+  if (cursoExistente) {
+    throw { status: 400, message: `Já existe um curso com o nome "${dados.nome}".` };
+  }
 
-    const cursoExistente = await cursoService.findByNome(nome);
-    
-    if (cursoExistente) {
-        const error = new Error(`Já existe um curso com o nome "${nome}".`);
-        error.status = 400;
-        throw error;
-    }
+  const customId = gerarIdPersonalizado();
+  const novoCurso = new Curso({ ...dados, id: customId });
 
-    const id = await cursoService.create({ nome, descricao });
+  await cursoService.create(novoCurso.id, novoCurso.toJSON());
 
-    return { id, nome, descricao };
+  return { 
+    id: novoCurso.id, 
+    nome: novoCurso.nome, 
+    message: 'Curso criado com sucesso' 
+  };
 };
-
-module.exports = createCurso;

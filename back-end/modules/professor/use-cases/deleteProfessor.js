@@ -1,11 +1,7 @@
 const { deleteProfessorService } = require('../professorService');
 
-async function deleteProfessorUseCase(id) {
+module.exports = async (id) => {
   const deleted = await deleteProfessorService(id);
-  if (!deleted) {
-    throw new Error('Professor não encontrado.');
-  }
-  return true;
-}
-
-module.exports = deleteProfessorUseCase;
+  if (!deleted) throw { status: 404, message: 'Professor não encontrado.' };
+  return { message: 'Professor removido com sucesso' };
+};

@@ -1,17 +1,16 @@
+const Curso = require('../models/cursoModel');
 const cursoService = require('../cursoService');
 
-const getCursoById = async (id) => {
+module.exports = async (id) => {
     if (!id) {
         throw { status: 400, message: 'O ID do Curso é obrigatório.' };
     }
 
-    const curso = await cursoService.findById(id); 
+    const dados = await cursoService.findById(id); 
 
-    if (!curso) {
+    if (!dados) {
         throw { status: 404, message: `Curso com ID ${id} não encontrado.` };
     }
 
-    return curso;
+    return new Curso({ id, ...dados }).toJSON();
 };
-
-module.exports = getCursoById;

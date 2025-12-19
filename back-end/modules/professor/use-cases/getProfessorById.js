@@ -1,11 +1,10 @@
+const Professor = require('../models/professorModel');
 const { getProfessorByIdService } = require('../professorService');
 
-async function getProfessorByIdUseCase(id) {
-  const professor = await getProfessorByIdService(id);
-  if (!professor) {
-    throw new Error('Professor não encontrado.');
-  }
-  return professor;
-}
+module.exports = async (id) => {
+  const dados = await getProfessorByIdService(id);
+  if (!dados) throw { status: 404, message: 'Professor não encontrado.' };
+  
+  return new Professor({ id, ...dados });
+};
 
-module.exports = getProfessorByIdUseCase;

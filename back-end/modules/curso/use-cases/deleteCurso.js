@@ -1,7 +1,7 @@
 const cursoService = require('../cursoService');
 const turmaService = require('../../turma/turmaService');
 
-const deleteCurso = async (id) => {
+module.exports = async (id) => {
     if (!id) {
         throw { status: 400, message: 'O ID do Curso é obrigatório para a exclusão.' };
     }
@@ -16,7 +16,7 @@ const deleteCurso = async (id) => {
     if (turmasVinculadas && turmasVinculadas.length > 0) {
         throw { 
             status: 400, 
-            message: `Não é possível deletar o curso. Existem ${turmasVinculadas.length} turma(s) ativas vinculadas a ele.` 
+            message: `Não é possível deletar o curso. Existem ${turmasVinculadas.length} turma(s) vinculadas a ele.` 
         };
     }
 
@@ -28,5 +28,3 @@ const deleteCurso = async (id) => {
 
     return { message: 'Curso excluído com sucesso.' };
 };
-
-module.exports = deleteCurso;

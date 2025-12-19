@@ -1,7 +1,7 @@
+const Professor = require('../models/professorModel');
 const { getAllProfessoresService } = require('../professorService');
 
-async function getAllProfessoresUseCase() {
-  return await getAllProfessoresService();
-}
-
-module.exports = getAllProfessoresUseCase;
+module.exports = async () => {
+  const lista = await getAllProfessoresService();
+  return lista.map(p => new Professor(p));
+};

@@ -1,26 +1,24 @@
+const Professor = require('../models/professorModel');
 const { updateProfessorService } = require('../professorService');
 const validarEmail = require('../../aluno/utils/validarEmail');
 const calcularIdade = require('../../aluno/utils/calcularIdade');
 
-async function updateProfessorUseCase(id, novosDados) {
+module.exports = async (id, novosDados) => {
   if (novosDados.email && !validarEmail(novosDados.email)) {
-    throw new Error('Email inválido.');
+    throw { status: 400, message: 'Email inválido.' };
   }
 
   if (novosDados.data_nascimento) {
     const idade = calcularIdade(novosDados.data_nascimento);
-    if (isNaN(idade)) {
-      throw new Error('Data de nascimento inválida para atualização. Use o formato DD/MM/AAAA.');
-    }
+    if (isNaN(idade)) throw { status: 400, message: 'Data de nascimento inválida.' };
     novosDados.idade = idade;
   }
 
-  const updated = await updateProfessorService(id, novosDados);
-  if (!updated) {
-    throw new Error('Professor não encontrado.');
-  }
+  const professorFormatado = new Professor({ ...novosDados });
+  delete professorFormatado.id;
 
-  return true;
-}
+  const updated = await updateProfessorService(id, professorFormatado.toJSON());
+  if (!updated) throw { status: 404, message: 'Professor não encontrado.' };
 
-module.exports = updateProfessorUseCase;
+  return { message: 'Professor atualizado com sucesso' };
+};

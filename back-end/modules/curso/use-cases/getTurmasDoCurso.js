@@ -1,10 +1,11 @@
 const cursoService = require('../cursoService');
 const turmaService = require('../../turma/turmaService');
 
-const getTurmasDoCurso = async (cursoId) => {
+module.exports = async (cursoId) => {
     if (!cursoId) {
         throw { status: 400, message: 'O ID do Curso é obrigatório.' };
     }
+
     const curso = await cursoService.findById(cursoId); 
     if (!curso) {
         throw { status: 404, message: `Curso com ID ${cursoId} não encontrado.` };
@@ -14,5 +15,3 @@ const getTurmasDoCurso = async (cursoId) => {
     
     return turmas;
 };
-
-module.exports = getTurmasDoCurso;

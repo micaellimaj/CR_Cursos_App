@@ -1,11 +1,8 @@
 const { db } = require('../../shared/config/firebase'); 
 const ENTIDADE = 'cursos';
 
-
 /**
  * Verifica se um curso com o nome fornecido já existe no banco.
- * @param {string} nome 
- * @returns {object|null}
  */
 async function findByNome(nome) {
     const snapshot = await db.ref(ENTIDADE)
@@ -21,25 +18,19 @@ async function findByNome(nome) {
 }
 
 /**
- * Cria um novo registro de curso.
- * @param {object} dados
- * @returns {string}
+ * Cria um novo registro de curso usando o ID gerado pelo Use Case.
  */
-async function create(dados) {
-    const novoCursoRef = db.ref(ENTIDADE).push();
-    const novoId = novoCursoRef.key;
-    
-    await novoCursoRef.set({
+async function create(id, dados) {
+    await db.ref(`${ENTIDADE}/${id}`).set({
         ...dados,
         created_at: new Date().toISOString()
     });
     
-    return novoId;
+    return id;
 }
 
 /**
  * Lista todos os cursos.
- * @returns {Array<object>}
  */
 async function findAll() {
     const snapshot = await db.ref(ENTIDADE).once('value');
@@ -48,9 +39,7 @@ async function findAll() {
 }
 
 /**
- * Busca um curso pelo ID (key).
- * @param {string} id 
- * @returns {object|null}
+ * Busca um curso pelo ID.
  */
 async function findById(id) {
     const snapshot = await db.ref(`${ENTIDADE}/${id}`).once('value');
@@ -61,15 +50,12 @@ async function findById(id) {
 
 /**
  * Atualiza os dados de um curso.
- * @param {string} id
- * @param {object} novosDados
- * @returns {boolean}
  */
 async function update(id, novosDados) {
     const cursoRef = db.ref(`${ENTIDADE}/${id}`);
-    const dadosExistentesSnap = await cursoRef.once('value');
+    const snapshot = await cursoRef.once('value');
     
-    if (!dadosExistentesSnap.exists()) return false;
+    if (!snapshot.exists()) return false;
 
     await cursoRef.update({
         ...novosDados,
@@ -80,9 +66,7 @@ async function update(id, novosDados) {
 }
 
 /**
- * Deleta um curso pelo ID.
- * @param {string} id
- * @returns {boolean}
+ * Deleta um curso.
  */
 async function remove(id) {
     const cursoRef = db.ref(`${ENTIDADE}/${id}`);
@@ -93,7 +77,6 @@ async function remove(id) {
     await cursoRef.remove();
     return true;
 }
-
 
 module.exports = {
     findByNome,
