@@ -1,19 +1,8 @@
-const { db } = require("../../../shared/config/firebase");
+const Disciplina = require('../models/disciplinaModel');
+const disciplinaService = require('../disciplinaService');
 
-async function getAllDisciplinas() {
-  const disciplinasRef = db.ref("disciplinas");
-  const snapshot = await disciplinasRef.get();
-
-  if (!snapshot.exists()) {
-    return { success: true, data: [] };
-  }
-
-  const data = Object.values(snapshot.val());
-
-  return {
-    success: true,
-    data,
-  };
-}
-
-module.exports = { getAllDisciplinas };
+module.exports = async () => {
+  const lista = await disciplinaService.findAll();
+  
+  return lista.map(d => new Disciplina(d).toJSON());
+};

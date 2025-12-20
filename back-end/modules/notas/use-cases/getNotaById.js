@@ -1,8 +1,16 @@
-const { db } = require("../../../shared/config/firebase");
+const Nota = require('../models/notaModel');
+const notaService = require('../notaService');
 
-module.exports.getNotaById = async (id) => {
-  const snap = await db.ref(`notas/${id}`).once("value");
-  if (!snap.exists()) return { success: false, message: "Nota não encontrada." };
+module.exports = async (id) => {
+    if (!id) {
+        throw { status: 400, message: "ID da nota não informado." };
+    }
 
-  return { success: true, id, ...snap.val() };
+    const dados = await notaService.findById(id);
+
+    if (!dados) {
+        throw { status: 404, message: "Nota não encontrada." };
+    }
+
+    return new Nota({ id, ...dados }).toJSON();
 };

@@ -1,33 +1,30 @@
-const { db } = require("../../../shared/config/firebase");
-const firebaseAdmin = require("firebase-admin");
-const { validarPermissaoProfessor } = require("./validarPermissaoProfessor");
+const Nota = require('../models/notaModel');
+const { validarDadosNota } = require('../types/notaSchema');
+const notaService = require('../notaService');
+const validarPermissaoProfessor = require('./validarPermissaoProfessor');
+const gerarIdPersonalizado = require('../../aluno/utils/gerarIdPersonalizado');
 
-module.exports.createNota = async (data) => {
-  const {
-    alunoId,
-    disciplinaId,
-    professorId,
-    turmaId,
-    nota,
-    descricao = null
-  } = data;
+module.exports = async (dados) => {
+  validarDadosNota(dados);
 
-  // validação de permissão
-  const perm = await validarPermissaoProfessor(professorId, turmaId, disciplinaId, alunoId);
-  if (!perm.ok) return { success: false, message: perm.message };
+  await validarPermissaoProfessor(
+    dados.professorId, 
+    dados.turmaId, 
+    dados.disciplinaId, 
+    dados.alunoId
+  );
 
-  const notaRef = db.ref("notas").push();
-  const id = notaRef.key;
-
-  await notaRef.set({
-    alunoId,
-    disciplinaId,
-    professorId,
-    turmaId,
-    nota,
-    descricao,
-    created_at: firebaseAdmin.database.ServerValue.TIMESTAMP
+  const customId = `NOT-${gerarIdPersonalizado()}`;
+  const novaNota = new Nota({ 
+    ...dados, 
+    id: customId,
   });
 
-  return { success: true, id };
+  await notaService.create(novaNota.id, novaNota.toJSON());
+
+  return { 
+    id: novaNota.id, 
+    message: "Nota lançada com sucesso!",
+    data: novaNota.toJSON() 
+  };
 };

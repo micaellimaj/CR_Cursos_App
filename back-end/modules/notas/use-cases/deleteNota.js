@@ -1,10 +1,12 @@
-const { db } = require("../../../shared/config/firebase");
+const notaService = require('../notaService');
 
-module.exports.deleteNota = async (id) => {
-  const snap = await db.ref(`notas/${id}`).once("value");
-  if (!snap.exists()) return { success: false, message: "Nota não encontrada." };
+module.exports = async (id) => {
+  if (!id) throw { status: 400, message: "ID da nota não informado." };
 
-  await db.ref(`notas/${id}`).remove();
+  const nota = await notaService.findById(id);
+  if (!nota) throw { status: 404, message: "Nota não encontrada." };
 
-  return { success: true };
+  await notaService.remove(id);
+
+  return { message: "Nota removida com sucesso!" };
 };

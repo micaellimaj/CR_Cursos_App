@@ -1,35 +1,32 @@
+const Turma = require('../models/turmaModel');
+const { validarDadosTurma } = require('../types/turmaSchema');
 const turmaService = require('../turmaService');
 const cursoService = require('../../curso/cursoService');
-const professorService = require('../../professor/professorService'); 
+const gerarIdPersonalizado = require('../../aluno/utils/gerarIdPersonalizado');
 
-const createTurma = async (dados) => {
-    const { curso_id, nome, data_inicio, data_fim, professor_principal_id } = dados;
+module.exports = async (dados) => {
+  validarDadosTurma(dados);
 
-    if (!curso_id || !nome || !data_inicio || !data_fim) {
-        const error = new Error('Os campos curso_id, nome, data_inicio e data_fim são obrigatórios.');
-        error.status = 400;
-        throw error;
-    }
+  const cursoExistente = await cursoService.findById(dados.curso_id);
+  if (!cursoExistente) {
+    throw { status: 404, message: `Curso com ID ${dados.curso_id} não encontrado.` };
+  }
 
-    const cursoExistente = await cursoService.findById(curso_id);
-    if (!cursoExistente) {
-        const error = new Error(`Curso com ID ${curso_id} não encontrado.`);
-        error.status = 404;
-        throw error;
-    }
-    
-    const inicio = new Date(data_inicio);
-    const fim = new Date(data_fim);
-    
-    if (inicio >= fim) {
-        const error = new Error('A data de início deve ser anterior à data de fim da turma.');
-        error.status = 400;
-        throw error;
-    }
+  const inicio = new Date(dados.data_inicio);
+  const fim = new Date(dados.data_fim);
+  if (inicio >= fim) {
+    throw { status: 400, message: 'A data de início deve ser anterior à data de fim.' };
+  }
 
-    const id = await turmaService.criarTurma(dados);
+  const customId = gerarIdPersonalizado();
+  const novaTurma = new Turma({ ...dados, id: customId });
 
-    return { id, ...dados, curso: cursoExistente.nome };
+  await turmaService.criarTurma(novaTurma.id, novaTurma.toJSON());
+
+  return { 
+    id: novaTurma.id, 
+    nome: novaTurma.nome, 
+    curso: cursoExistente.nome,
+    message: 'Turma criada com sucesso' 
+  };
 };
-
-module.exports = createTurma;

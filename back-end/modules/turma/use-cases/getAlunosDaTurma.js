@@ -1,41 +1,25 @@
 const turmaService = require('../turmaService');
 const alunoService = require('../../aluno/alunoService'); 
 
-/**
- * Lista todos os alunos matriculados em uma turma específica.
- * @param {string} turmaId
- * @returns {Array<object>}
- */
-const getAlunosDaTurma = async (turmaId) => {
-    if (!turmaId) {
-        throw { status: 400, message: 'O ID da Turma é obrigatório.' };
-    }
+module.exports = async (turmaId) => {
+    if (!turmaId) throw { status: 400, message: 'O ID da Turma é obrigatório.' };
 
     const turma = await turmaService.getTurmaPorId(turmaId);
-    if (!turma) {
-        throw { status: 404, message: `Turma com ID ${turmaId} não encontrada.` };
-    }
+    if (!turma) throw { status: 404, message: 'Turma não encontrada.' };
     
-    const alunosDaTurma = turma.alunos;
+    const alunosIds = turma.alunos ? Object.keys(turma.alunos) : [];
     
-    if (!alunosDaTurma || Object.keys(alunosDaTurma).length === 0) {
-        return [];
-    }
+    if (alunosIds.length === 0) return [];
 
-    const alunoIds = Object.keys(alunosDaTurma);
-    
-    const promessasAlunos = alunoIds.map(async (alunoId) => {
+    const promessasAlunos = alunosIds.map(async (alunoId) => {
         const aluno = await alunoService.getAlunoPorId(alunoId);
         if (aluno) {
-            const { senha, ...alunoSemSenha } = aluno;
-            return { id: alunoId, ...alunoSemSenha };
+            const { senha, ...alunoLimpo } = aluno;
+            return { id: alunoId, ...alunoLimpo };
         }
         return null;
     });
 
-    const alunosComDetalhes = await Promise.all(promessasAlunos);
-    
-    return alunosComDetalhes.filter(aluno => aluno !== null);
+    const resultados = await Promise.all(promessasAlunos);
+    return resultados.filter(a => a !== null);
 };
-
-module.exports = getAlunosDaTurma;

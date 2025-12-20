@@ -1,11 +1,9 @@
-const { db } = require("../../../shared/config/firebase");
+const Nota = require('../models/notaModel');
+const notaService = require('../notaService');
 
-module.exports.getNotasPorTurma = async (turmaId) => {
-  const snap = await db.ref("notas")
-    .orderByChild("turmaId")
-    .equalTo(turmaId)
-    .once("value");
+module.exports = async (turmaId) => {
+    if (!turmaId) throw { status: 400, message: "ID da turma é obrigatório." };
 
-  const data = snap.val() || {};
-  return Object.entries(data).map(([id, v]) => ({ id, ...v }));
+    const lista = await notaService.findByTurma(turmaId);
+    return lista.map(n => new Nota(n).toJSON());
 };

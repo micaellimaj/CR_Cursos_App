@@ -1,21 +1,14 @@
-const { db } = require("../../../shared/config/firebase");
+const Disciplina = require('../models/disciplinaModel');
+const disciplinaService = require('../disciplinaService');
 
-async function getDisciplinaById(id) {
-  if (!id) {
-    return { success: false, message: "ID não informado." };
+module.exports = async (id) => {
+  if (!id) throw { status: 400, message: "ID não informado." };
+
+  const dados = await disciplinaService.findById(id);
+
+  if (!dados) {
+    throw { status: 404, message: "Disciplina não encontrada." };
   }
 
-  const disciplinaRef = db.ref(`disciplinas/${id}`);
-  const snapshot = await disciplinaRef.get();
-
-  if (!snapshot.exists()) {
-    return { success: false, message: "Disciplina não encontrada." };
-  }
-
-  return {
-    success: true,
-    data: snapshot.val(),
-  };
-}
-
-module.exports = { getDisciplinaById };
+  return new Disciplina({ id, ...dados }).toJSON();
+};

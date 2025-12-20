@@ -1,17 +1,14 @@
-const turmaService = require('../../turma/turmaService');
+const Turma = require('../models/turmaModel');
+const turmaService = require('../turmaService');
 
-const getTurmaById = async (id) => {
-    if (!id) {
-        throw { status: 400, message: 'O ID da Turma é obrigatório.' };
-    }
+module.exports = async (id) => {
+    if (!id) throw { status: 400, message: 'O ID da Turma é obrigatório.' };
 
-    const turma = await turmaService.getTurmaPorId(id);
+    const dados = await turmaService.getTurmaPorId(id);
 
-    if (!turma) {
+    if (!dados) {
         throw { status: 404, message: `Turma com ID ${id} não encontrada.` };
     }
 
-    return turma;
+    return new Turma({ id, ...dados }).toJSON();
 };
-
-module.exports = getTurmaById;

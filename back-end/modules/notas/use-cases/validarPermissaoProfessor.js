@@ -1,38 +1,26 @@
-const { db } = require("../../../shared/config/firebase");
+const turmaService = require('../../turma/turmaService');
+const disciplinaService = require('../../disciplina/disciplinaService');
 
-/**
- * Verifica se o professor pode lançar nota para:
- *  - a turma
- *  - a disciplina
- *  - o aluno (se o aluno está na turma)
- */
-async function validarPermissaoProfessor(professorId, turmaId, disciplinaId, alunoId) {
-  // verificar se o professor pertence à turma
-  const turmaSnap = await db.ref(`turmas/${turmaId}`).once("value");
-  if (!turmaSnap.exists()) return { ok: false, message: "Turma não encontrada." };
+module.exports = async (professorId, turmaId, disciplinaId, alunoId) => {
+    const turma = await turmaService.getTurmaPorId(turmaId);
+    if (!turma) throw { status: 404, message: "Turma não encontrada." };
 
-  const turma = turmaSnap.val();
+    const professorNaTurma = turma.professores && turma.professores[professorId];
+    if (!professorNaTurma) {
+        throw { status: 403, message: "Este professor não tem permissão para esta turma." };
+    }
 
-  if (!turma.professores || !turma.professores[professorId]) {
-    return { ok: false, message: "Professor não pertence à turma informada." };
-  }
+    const disciplina = await disciplinaService.findById(disciplinaId);
+    if (!disciplina) throw { status: 404, message: "Disciplina não encontrada." };
 
-  // verificar se a disciplina existe e está vinculada ao professor
-  const discSnap = await db.ref(`disciplinas/${disciplinaId}`).once("value");
-  if (!discSnap.exists()) return { ok: false, message: "Disciplina não encontrada." };
+    if (disciplina.professorId !== professorId) {
+        throw { status: 403, message: "Este professor não é o responsável por esta disciplina." };
+    }
 
-  const disciplina = discSnap.val();
+    const alunoNaTurma = turma.alunos && turma.alunos[alunoId];
+    if (!alunoNaTurma) {
+        throw { status: 400, message: "O aluno informado não pertence a esta turma." };
+    }
 
-  if (disciplina.professorId !== professorId) {
-    return { ok: false, message: "Professor não é responsável por esta disciplina." };
-  }
-
-  // verificar se aluno pertence à turma
-  if (!turma.alunos || !turma.alunos[alunoId]) {
-    return { ok: false, message: "Aluno não pertence à turma informada." };
-  }
-
-  return { ok: true };
-}
-
-module.exports = { validarPermissaoProfessor };
+    return true;
+};

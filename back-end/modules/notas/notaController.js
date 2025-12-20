@@ -1,79 +1,91 @@
-// notas/notaController.js
+const createNota = require('./use-cases/createNota');
+const updateNota = require('./use-cases/updateNota');
+const deleteNota = require('./use-cases/deleteNota');
+const getNotaById = require('./use-cases/getNotaById');
+const getNotasPorAluno = require('./use-cases/getNotasPorAluno');
+const getNotasPorDisciplina = require('./use-cases/getNotasPorDisciplina');
+const getNotasPorProfessor = require('./use-cases/getNotasPorProfessor');
+const getNotasPorTurma = require('./use-cases/getNotasPorTurma');
 
-
-module.exports = function NotaController({ notaService }) {
-  return {
-    criar: async (req, res) => {
-      try {
-        const nova = await notaService.criar(req.body);
-        return res.status(201).json(nova);
-      } catch (error) {
-        return res.status(400).json({ error: error.message });
-      }
-    },
-
-    atualizar: async (req, res) => {
-      try {
-        const resultado = await notaService.atualizar(req.params.id, req.body);
-        return res.status(200).json(resultado);
-      } catch (error) {
-        return res.status(400).json({ error: error.message });
-      }
-    },
-
-    deletar: async (req, res) => {
-      try {
-        await notaService.remover(req.params.id);
-        return res.status(204).send();
-      } catch (error) {
-        return res.status(400).json({ error: error.message });
-      }
-    },
-
-    buscarPorId: async (req, res) => {
-      try {
-        const nota = await notaService.buscarPorId(req.params.id);
-        return res.status(200).json(nota);
-      } catch (error) {
-        return res.status(404).json({ error: error.message });
-      }
-    },
-
-    listarPorAluno: async (req, res) => {
-      try {
-        const notas = await notaService.listarPorAluno(req.params.aluno_id);
-        return res.status(200).json(notas);
-      } catch (error) {
-        return res.status(400).json({ error: error.message });
-      }
-    },
-
-    listarPorDisciplina: async (req, res) => {
-      try {
-        const notas = await notaService.listarPorDisciplina(req.params.disciplina_id);
-        return res.status(200).json(notas);
-      } catch (error) {
-        return res.status(400).json({ error: error.message });
-      }
-    },
-
-    listarPorProfessor: async (req, res) => {
-      try {
-        const notas = await notaService.listarPorProfessor(req.params.professor_id);
-        return res.status(200).json(notas);
-      } catch (error) {
-        return res.status(400).json({ error: error.message });
-      }
-    },
-
-    listarPorTurma: async (req, res) => {
-      try {
-        const notas = await notaService.listarPorTurma(req.params.turma_id);
-        return res.status(200).json(notas);
-      } catch (error) {
-        return res.status(400).json({ error: error.message });
-      }
-    },
-  };
+const criar = async (req, res) => {
+  try {
+    const result = await createNota(req.body);
+    return res.status(201).json(result);
+  } catch (error) {
+    return res.status(error.status || 500).json({ message: error.message });
+  }
 };
 
+const atualizar = async (req, res) => {
+  try {
+    const result = await updateNota(req.params.id, req.body);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(error.status || 500).json({ message: error.message });
+  }
+};
+
+const deletar = async (req, res) => {
+  try {
+    const result = await deleteNota(req.params.id);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(error.status || 500).json({ message: error.message });
+  }
+};
+
+const buscarPorId = async (req, res) => {
+  try {
+    const result = await getNotaById(req.params.id);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(error.status || 500).json({ message: error.message });
+  }
+};
+
+const listarPorAluno = async (req, res) => {
+  try {
+    const result = await getNotasPorAluno(req.params.aluno_id);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(error.status || 500).json({ message: error.message });
+  }
+};
+
+const listarPorDisciplina = async (req, res) => {
+  try {
+    const result = await getNotasPorDisciplina(req.params.disciplina_id);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(error.status || 500).json({ message: error.message });
+  }
+};
+
+const listarPorProfessor = async (req, res) => {
+  try {
+    const result = await getNotasPorProfessor(req.params.professor_id);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(error.status || 500).json({ message: error.message });
+  }
+};
+
+const listarPorTurma = async (req, res) => {
+  try {
+    const result = await getNotasPorTurma(req.params.turma_id);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(error.status || 500).json({ message: error.message });
+  }
+};
+
+module.exports = {
+  criar,
+  atualizar,
+  deletar,
+  buscarPorId,
+  listarPorAluno,
+  listarPorDisciplina,
+  listarPorProfessor,
+  listarPorTurma
+};

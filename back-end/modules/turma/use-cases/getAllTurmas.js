@@ -1,8 +1,7 @@
+const Turma = require('../models/turmaModel');
 const turmaService = require('../turmaService');
 
-const getAllTurmas = async () => {
+module.exports = async () => {
     const turmas = await turmaService.getTodasTurmas();
-    return turmas;
+    return turmas.map(t => new Turma(t).toJSON());
 };
-
-module.exports = getAllTurmas;

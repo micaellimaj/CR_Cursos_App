@@ -1,26 +1,27 @@
-const { db } = require("../../../shared/config/firebase");
-const { validarPermissaoProfessor } = require("./validarPermissaoProfessor");
+const Nota = require('../models/notaModel');
+const notaService = require('../notaService');
+const validarPermissao = require('./validarPermissaoProfessor');
 
-module.exports.updateNota = async (id, data) => {
-  const notaSnap = await db.ref(`notas/${id}`).once("value");
-  if (!notaSnap.exists()) return { success: false, message: "Nota não encontrada." };
+module.exports = async (id, novosDados) => {
+    if (!id) throw { status: 400, message: "ID da nota é obrigatório." };
 
-  const atual = notaSnap.val();
+    const notaAtual = await notaService.findById(id);
+    if (!notaAtual) throw { status: 404, message: "Nota não encontrada." };
 
-  // validar permissão
-  const perm = await validarPermissaoProfessor(
-    atual.professorId,
-    atual.turmaId,
-    atual.disciplinaId,
-    atual.alunoId
-  );
+    await validarPermissao(
+        notaAtual.professorId,
+        notaAtual.turmaId,
+        notaAtual.disciplinaId,
+        notaAtual.alunoId
+    );
 
-  if (!perm.ok) return { success: false, message: perm.message };
+    const dadosParaUpdate = {
+        valor: novosDados.nota !== undefined ? novosDados.nota : notaAtual.valor,
+        descricao: novosDados.descricao || notaAtual.descricao
+    };
 
-  await db.ref(`notas/${id}`).update({
-    ...data,
-    updated_at: new Date().toISOString()
-  });
+    const sucesso = await notaService.update(id, dadosParaUpdate);
+    if (!sucesso) throw { status: 500, message: "Falha ao atualizar a nota." };
 
-  return { success: true };
+    return { message: "Nota atualizada com sucesso!" };
 };

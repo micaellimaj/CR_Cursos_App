@@ -1,40 +1,43 @@
-const { createDisciplina } = require("./use-cases/createDisciplina");
-const { updateDisciplina } = require("./use-cases/updateDisciplina");
-const { deleteDisciplina } = require("./use-cases/deleteDisciplina");
-const { getDisciplinaById } = require("./use-cases/getDisciplinaById");
-const { getAllDisciplinas } = require("./use-cases/getAllDisciplinas");
-const { associarTurmaNaDisciplina } = require("./use-cases/associarTurmaNaDisciplina");
+const { db } = require('../../shared/config/firebase'); 
+const ENTIDADE = 'disciplinas';
 
-async function criarDisciplina(data) {
-  return createDisciplina(data);
+async function create(id, dados) {
+  await db.ref(`${ENTIDADE}/${id}`).set({
+    ...dados,
+    created_at: new Date().toISOString()
+  });
+  return id;
 }
 
-async function atualizarDisciplina(id, data) {
-  return updateDisciplina(id, data);
+async function findById(id) {
+  const snapshot = await db.ref(`${ENTIDADE}/${id}`).once('value');
+  return snapshot.exists() ? { id, ...snapshot.val() } : null;
 }
 
-async function removerDisciplina(id) {
-  return deleteDisciplina(id);
+async function findAll() {
+  const snapshot = await db.ref(ENTIDADE).once('value');
+  const data = snapshot.val() || {};
+  return Object.entries(data).map(([id, values]) => ({ id, ...values }));
 }
 
-async function buscarDisciplinaPorId(id) {
-  return getDisciplinaById(id);
+async function update(id, novosDados) {
+  const ref = db.ref(`${ENTIDADE}/${id}`);
+  await ref.update({
+    ...novosDados,
+    updated_at: new Date().toISOString()
+  });
+  return true;
 }
 
-async function listarDisciplinas() {
-  return getAllDisciplinas();
-}
-
-async function associarTurma(data) {
-  return associarTurmaNaDisciplina(data);
+async function remove(id) {
+  await db.ref(`${ENTIDADE}/${id}`).remove();
+  return true;
 }
 
 module.exports = {
-  criarDisciplina,
-  atualizarDisciplina,
-  removerDisciplina,
-  buscarDisciplinaPorId,
-  listarDisciplinas,
-  associarTurma,
-  
+  create,
+  findById,
+  findAll,
+  update,
+  remove
 };

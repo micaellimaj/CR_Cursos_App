@@ -1,21 +1,18 @@
-const { db } = require("../../../shared/config/firebase");
+const Disciplina = require('../models/disciplinaModel');
+const disciplinaService = require('../disciplinaService');
 
-async function updateDisciplina(id, data) {
-  if (!id) {
-    return { success: false, message: "ID da disciplina não informado." };
-  }
+module.exports = async (id, dados) => {
+  if (!id) throw { status: 400, message: "ID da disciplina não informado." };
 
-  const disciplinaRef = db.ref(`disciplinas/${id}`);
+  const existe = await disciplinaService.findById(id);
+  if (!existe) throw { status: 404, message: "Disciplina não encontrada." };
 
-  await disciplinaRef.update({
-    ...data,
-    updatedAt: new Date().toISOString(),
-  });
+  const disciplinaAtualizada = new Disciplina({ ...dados });
+  delete disciplinaAtualizada.id;
 
-  return {
-    success: true,
-    message: "Disciplina atualizada com sucesso!",
-  };
-}
+  const sucesso = await disciplinaService.update(id, disciplinaAtualizada.toJSON());
+  
+  if (!sucesso) throw { status: 500, message: "Erro ao atualizar disciplina." };
 
-module.exports = { updateDisciplina };
+  return { message: "Disciplina atualizada com sucesso!" };
+};

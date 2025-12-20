@@ -3,9 +3,7 @@ const express = require("express");
 const router = express.Router();
 
 // importa o service e monta o controller como nos outros módulos
-const notaService = require("./notaService");
-const NotaController = require("./notaController");
-const notaController = NotaController({ notaService });
+const notaController = require("./notaController");
 
 /**
  * @swagger

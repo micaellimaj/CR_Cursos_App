@@ -1,63 +1,64 @@
-// notas/notaService.js
+const { db } = require('../../shared/config/firebase'); 
+const ENTIDADE = 'notas';
 
-const { createNota } = require("./use-cases/createNota");
-const { updateNota } = require("./use-cases/updateNota");
-const { deleteNota } = require("./use-cases/deleteNota");
-const { getNotaById } = require("./use-cases/getNotaById");
-const { getNotasPorAluno } = require("./use-cases/getNotasPorAluno");
-const { getNotasPorDisciplina } = require("./use-cases/getNotasPorDisciplina");
-const { getNotasPorProfessor } = require("./use-cases/getNotasPorProfessor");
-const { getNotasPorTurma } = require("./use-cases/getNotasPorTurma");
-const { validarPermissaoProfessor } = require("./use-cases/validarPermissaoProfessor");
-
-// ------------
-// Funções no padrão disciplinaService
-// ------------
-
-async function criar(data) {
-  return createNota(data);
+async function create(id, dados) {
+  await db.ref(`${ENTIDADE}/${id}`).set({
+    ...dados,
+    created_at: new Date().toISOString()
+  });
+  return id;
 }
 
-async function atualizar(id, data) {
-  return updateNota(id, data);
+async function findById(id) {
+  const snapshot = await db.ref(`${ENTIDADE}/${id}`).once('value');
+  return snapshot.exists() ? { id, ...snapshot.val() } : null;
 }
 
-async function remover(id) {
-  return deleteNota(id);
+async function findByAluno(alunoId) {
+  const snapshot = await db.ref(ENTIDADE).orderByChild('alunoId').equalTo(alunoId).once('value');
+  const data = snapshot.val() || {};
+  return Object.entries(data).map(([id, values]) => ({ id, ...values }));
 }
 
-async function buscarPorId(id) {
-  return getNotaById(id);
+async function findByDisciplina(disciplinaId) {
+  const snapshot = await db.ref(ENTIDADE).orderByChild('disciplinaId').equalTo(disciplinaId).once('value');
+  const data = snapshot.val() || {};
+  return Object.entries(data).map(([id, values]) => ({ id, ...values }));
 }
 
-async function listarPorAluno(aluno_id) {
-  return getNotasPorAluno(aluno_id);
+async function findByProfessor(professorId) {
+  const snapshot = await db.ref(ENTIDADE).orderByChild('professorId').equalTo(professorId).once('value');
+  const data = snapshot.val() || {};
+  return Object.entries(data).map(([id, values]) => ({ id, ...values }));
 }
 
-async function listarPorDisciplina(disciplina_id) {
-  return getNotasPorDisciplina(disciplina_id);
+async function findByTurma(turmaId) {
+  const snapshot = await db.ref(ENTIDADE).orderByChild('turmaId').equalTo(turmaId).once('value');
+  const data = snapshot.val() || {};
+  return Object.entries(data).map(([id, values]) => ({ id, ...values }));
 }
 
-async function listarPorProfessor(professor_id) {
-  return getNotasPorProfessor(professor_id);
+async function update(id, novosDados) {
+  const ref = db.ref(`${ENTIDADE}/${id}`);
+  await ref.update({
+    ...novosDados,
+    updated_at: new Date().toISOString()
+  });
+  return true;
 }
 
-async function listarPorTurma(turma_id) {
-  return getNotasPorTurma(turma_id);
-}
-
-async function validarPermissao(professor_id, turma_id) {
-  return validarPermissaoProfessor(professor_id, turma_id);
+async function remove(id) {
+  await db.ref(`${ENTIDADE}/${id}`).remove();
+  return true;
 }
 
 module.exports = {
-  criar,
-  atualizar,
-  remover,
-  buscarPorId,
-  listarPorAluno,
-  listarPorDisciplina,
-  listarPorProfessor,
-  listarPorTurma,
-  validarPermissao
+  create,
+  findById,
+  findByAluno,
+  findByDisciplina,
+  findByProfessor,
+  findByTurma,
+  update,
+  remove
 };

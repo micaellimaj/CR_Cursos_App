@@ -1,12 +1,17 @@
-const disciplinaService = require("./disciplinaService");
+const createDisciplina = require('./use-cases/createDisciplina');
+const updateDisciplina = require('./use-cases/updateDisciplina');
+const deleteDisciplina = require('./use-cases/deleteDisciplina');
+const getDisciplinaById = require('./use-cases/getDisciplinaById');
+const getAllDisciplinas = require('./use-cases/getAllDisciplinas');
+const associarTurmaNaDisciplina = require('./use-cases/associarTurmaNaDisciplina');
 
 // Criar
 async function criarDisciplinaController(req, res) {
   try {
-    const result = await disciplinaService.criarDisciplina(req.body);
-    return res.status(result.success ? 201 : 400).json(result);
+    const result = await createDisciplina(req.body);
+    return res.status(201).json(result);
   } catch (error) {
-    return res.status(500).json({ success: false, message: "Erro interno do servidor." });
+    return res.status(error.status || 500).json({ message: error.message || "Erro interno." });
   }
 }
 
@@ -14,10 +19,10 @@ async function criarDisciplinaController(req, res) {
 async function atualizarDisciplinaController(req, res) {
   try {
     const { id } = req.params;
-    const result = await disciplinaService.atualizarDisciplina(id, req.body);
-    return res.status(result.success ? 200 : 400).json(result);
-  } catch {
-    return res.status(500).json({ success: false, message: "Erro interno do servidor." });
+    const result = await updateDisciplina(id, req.body);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(error.status || 500).json({ message: error.message || "Erro interno." });
   }
 }
 
@@ -25,10 +30,10 @@ async function atualizarDisciplinaController(req, res) {
 async function removerDisciplinaController(req, res) {
   try {
     const { id } = req.params;
-    const result = await disciplinaService.removerDisciplina(id);
-    return res.status(result.success ? 200 : 404).json(result);
-  } catch {
-    return res.status(500).json({ success: false, message: "Erro interno do servidor." });
+    const result = await deleteDisciplina(id);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(error.status || 500).json({ message: error.message || "Erro interno." });
   }
 }
 
@@ -36,34 +41,32 @@ async function removerDisciplinaController(req, res) {
 async function getDisciplinaByIdController(req, res) {
   try {
     const { id } = req.params;
-    const result = await disciplinaService.buscarDisciplinaPorId(id);
-    return res.status(result.success ? 200 : 404).json(result);
-  } catch {
-    return res.status(500).json({ success: false, message: "Erro interno do servidor." });
+    const result = await getDisciplinaById(id);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(error.status || 500).json({ message: error.message || "Erro interno." });
   }
 }
 
 // Listar
 async function listarDisciplinasController(req, res) {
   try {
-    const result = await disciplinaService.listarDisciplinas();
+    const result = await getAllDisciplinas();
     return res.status(200).json(result);
-  } catch {
-    return res.status(500).json({ success: false, message: "Erro interno do servidor." });
+  } catch (error) {
+    return res.status(error.status || 500).json({ message: error.message || "Erro interno." });
   }
 }
 
 // Associar turma
 async function associarTurmaController(req, res) {
   try {
-    const result = await disciplinaService.associarTurma(req.body);
-    return res.status(result.success ? 200 : 400).json(result);
+    const result = await associarTurmaNaDisciplina(req.body);
+    return res.status(200).json(result);
   } catch (error) {
-    console.error("Erro associarTurma:", error); // <-- ADICIONE ISTO
-    return res.status(500).json({ success: false, message: "Erro interno do servidor." });
+    return res.status(error.status || 500).json({ message: error.message || "Erro interno." });
   }
 }
-
 
 module.exports = {
   criarDisciplinaController,

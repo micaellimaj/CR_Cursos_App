@@ -1,18 +1,13 @@
-const { db } = require("../../../shared/config/firebase");
+const disciplinaService = require('../disciplinaService');
 
-async function deleteDisciplina(id) {
-  if (!id) {
-    return { success: false, message: "ID da disciplina não informado." };
-  }
+module.exports = async (id) => {
+  if (!id) throw { status: 400, message: "ID da disciplina não informado." };
 
-  const disciplinaRef = db.ref(`disciplinas/${id}`);
+  const disciplina = await disciplinaService.findById(id);
+  if (!disciplina) throw { status: 404, message: "Disciplina não encontrada." };
 
-  await disciplinaRef.remove();
+  const sucesso = await disciplinaService.remove(id);
+  if (!sucesso) throw { status: 500, message: "Erro ao remover disciplina." };
 
-  return {
-    success: true,
-    message: "Disciplina removida com sucesso!",
-  };
-}
-
-module.exports = { deleteDisciplina };
+  return { message: "Disciplina removida com sucesso!" };
+};
