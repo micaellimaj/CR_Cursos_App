@@ -14,6 +14,7 @@ const cursoRoutes = require('./modules/curso/cursoRoutes');
 const turmaRoutes = require('./modules/turma/turmaRoutes');
 const disciplinaRoutes = require('./modules/disciplina/disciplinaRoutes');
 const notaRoutes = require('./modules/notas/notaRoutes');
+const frequenciaRoutes = require('./modules/frequencia/frequenciaRoutes');
 const path = require("path");
 const hbs = require('hbs');
 
@@ -54,6 +55,7 @@ app.use('/curso', cursoRoutes);
 app.use('/turma', turmaRoutes);
 app.use('/disciplina', disciplinaRoutes);
 app.use('/nota', notaRoutes);
+app.use('/frequencia', frequenciaRoutes);
 // arquivos estáticos
 app.use("/js", express.static(path.join(__dirname, "public/js")));
 // views
