@@ -17,6 +17,7 @@ const notaRoutes = require('./modules/notas/notaRoutes');
 const frequenciaRoutes = require('./modules/frequencia/frequenciaRoutes');
 const conteudoRoutes = require('./modules/conteudo/conteudoRoutes');
 const atividadeRoutes = require('./modules/atividades/atividadeRoutes');
+const classeRoutes = require('./modules/classe/classeRoutes');
 const path = require("path");
 const hbs = require('hbs');
 
@@ -60,6 +61,7 @@ app.use('/nota', notaRoutes);
 app.use('/frequencia', frequenciaRoutes);
 app.use('/conteudo', conteudoRoutes);
 app.use('/atividade', atividadeRoutes);
+app.use('/classe', classeRoutes);
 // arquivos estáticos
 app.use("/js", express.static(path.join(__dirname, "public/js")));
 // views
