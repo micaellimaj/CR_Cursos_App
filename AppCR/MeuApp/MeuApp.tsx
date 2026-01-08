@@ -12,22 +12,16 @@ export default function MeuApp() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Checa se o usuário está logado (exemplo usando AsyncStorage)
   useEffect(() => {
-    const checkLogin = async () => {
-      try {
-        const token = await AsyncStorage.getItem('userToken');
-        setIsLoggedIn(!!token);
-      } catch (error) {
-        console.error('Erro ao buscar token do usuário:', error);
-      } finally {
-        setIsLoading(false);
-      }
+    const checkLoginStatus = async () => {
+      const token = await AsyncStorage.getItem('userToken');
+      setIsLoggedIn(!!token);
+      setIsLoading(false);
     };
-    checkLogin();
+    checkLoginStatus();
   }, []);
 
-  if (isLoading) return null; // ou um SplashScreen
+  if (isLoading) return null;
 
   return (
     <NavigationContainer>
@@ -39,7 +33,6 @@ export default function MeuApp() {
                 <LoginScreen
                   {...props}
                   onLoginSuccess={async () => {
-                    // Salve o token/autenticação aqui
                     await AsyncStorage.setItem('userToken', 'true');
                     setIsLoggedIn(true);
                   }}
