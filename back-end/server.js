@@ -68,6 +68,11 @@ app.set("view engine", "hbs");
 
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Servidor rodando na porta: http://localhost:${PORT}`);
-});
+
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor rodando na porta: http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;

@@ -28,7 +28,9 @@
         "uuid": "^11.1.0"
     },
     "devDependencies": {
-        "nodemon": "^2.0.22"
+        "jest": "^30.2.0",
+        "nodemon": "^2.0.22",
+        "supertest": "^7.2.2"
     },
     "type": "commonjs"
 }
