@@ -2,7 +2,7 @@ const Turma = require('../models/turmaModel');
 const { validarDadosTurma } = require('../types/turmaSchema');
 const turmaService = require('../turmaService');
 const cursoService = require('../../curso/cursoService');
-const gerarIdPersonalizado = require('../../aluno/utils/gerarIdPersonalizado');
+const gerarIdTurma = require('../utils/gerarIdTurma');
 
 module.exports = async (dados) => {
   validarDadosTurma(dados);
@@ -18,7 +18,7 @@ module.exports = async (dados) => {
     throw { status: 400, message: 'A data de início deve ser anterior à data de fim.' };
   }
 
-  const customId = gerarIdPersonalizado();
+  const customId = gerarIdTurma();
   const novaTurma = new Turma({ ...dados, id: customId });
 
   await turmaService.criarTurma(novaTurma.id, novaTurma.toJSON());
