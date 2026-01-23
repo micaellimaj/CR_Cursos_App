@@ -2,7 +2,7 @@ const Nota = require('../models/notaModel');
 const { validarDadosNota } = require('../types/notaSchema');
 const notaService = require('../notaService');
 const validarPermissaoProfessor = require('./validarPermissaoProfessor');
-const gerarIdPersonalizado = require('../../aluno/utils/gerarIdPersonalizado');
+const gerarIdNota = require('../utils/gerarIdNota');
 
 module.exports = async (dados) => {
   validarDadosNota(dados);
@@ -14,7 +14,7 @@ module.exports = async (dados) => {
     dados.alunoId
   );
 
-  const customId = `NOT-${gerarIdPersonalizado()}`;
+  const customId = gerarIdNota();
   const novaNota = new Nota({ 
     ...dados, 
     id: customId,

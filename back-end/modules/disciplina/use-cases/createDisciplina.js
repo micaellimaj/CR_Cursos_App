@@ -1,15 +1,7 @@
 const Disciplina = require('../models/disciplinaModel');
 const { validarDadosDisciplina } = require('../types/disciplinaSchema');
 const disciplinaService = require('../disciplinaService');
-
-const gerarIdDisciplina = () => {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  let random = "";
-  for (let i = 0; i < 6; i++) {
-    random += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return `DIS-${random}`;
-};
+const gerarIdDisciplina = require('../utils/gerarIdDisciplina');
 
 module.exports = async (dados) => {
   validarDadosDisciplina(dados);
