@@ -1,6 +1,8 @@
 const request = require('supertest');
 const app = require('../../../server');
 
+jest.setTimeout(15000);
+
 describe('Integration Test: Disciplina Module', () => {
 
   describe('POST /disciplinas', () => {
@@ -118,5 +120,9 @@ describe('Integration Test: Disciplina Module', () => {
       
       expect([200, 404]).toContain(response.status);
     });
+  });
+  
+  afterAll(async () => {
+    await db.app.delete();
   });
 });

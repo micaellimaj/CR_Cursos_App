@@ -1,6 +1,8 @@
 const request = require('supertest');
 const app = require('../../../server');
 
+jest.setTimeout(15000);
+
 describe('Integration Test: Curso Module', () => {
 
   describe('POST /cursos', () => {
@@ -68,6 +70,9 @@ describe('Integration Test: Curso Module', () => {
       const response = await request(app).delete('/cursos/ID_QUALQUER');
       expect([200, 400, 404]).toContain(response.status);
     });
+  });
+  afterAll(async () => {
+    await db.app.delete();
   });
 
 });

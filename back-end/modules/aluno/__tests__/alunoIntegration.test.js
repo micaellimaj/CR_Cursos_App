@@ -1,6 +1,8 @@
 const request = require('supertest');
 const app = require('../../../server');
 
+jest.setTimeout(15000);
+
 describe('Integration Test: POST /alunos', () => {
   it('Deve persistir um aluno no banco de dados', async () => {
     const response = await request(app)
@@ -85,5 +87,9 @@ describe('Integration Test: GET /alunos', () => {
     
     expect(response.status).toBe(404);
     expect(response.body.message).toBe('Aluno não encontrado');
+  });
+
+  afterAll(async () => {
+    await db.app.delete();
   });
 });

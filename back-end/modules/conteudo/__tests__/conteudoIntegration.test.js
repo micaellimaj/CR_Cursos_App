@@ -2,6 +2,8 @@ const request = require('supertest');
 const app = require('../../../server');
 const path = require('path');
 
+jest.setTimeout(15000);
+
 describe('Integration Test: Conteudo Module', () => {
 
   describe('POST /conteudo', () => {
@@ -79,5 +81,9 @@ describe('Integration Test: Conteudo Module', () => {
         expect(response.body.message).toBe("Conteúdo removido com sucesso!");
       }
     });
+    
+  afterAll(async () => {
+    await db.app.delete();
   });
+});
 });

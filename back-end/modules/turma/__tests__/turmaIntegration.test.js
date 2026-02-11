@@ -1,6 +1,8 @@
 const request = require('supertest');
 const app = require('../../../server');
 
+jest.setTimeout(15000);
+
 describe('Integration Test: Turma Module', () => {
 
   describe('POST /turmas', () => {
@@ -85,6 +87,10 @@ describe('Integration Test: Turma Module', () => {
       const response = await request(app).delete('/turmas/ID_QUALQUER');
       expect([200, 404]).toContain(response.status);
     });
+  });
+  
+  afterAll(async () => {
+    await db.app.delete();
   });
 
 });

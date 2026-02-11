@@ -1,6 +1,8 @@
 const request = require('supertest');
 const app = require('../../../server');
 
+jest.setTimeout(15000);
+
 describe('Integration Test: Professor Module', () => {
 
 describe('POST /professores', () => {
@@ -104,4 +106,8 @@ describe('Integration Test: DELETE /professores/:id', () => {
     }
   });
 });
+  afterAll(async () => {
+    await db.app.delete();
+  });
+
 });

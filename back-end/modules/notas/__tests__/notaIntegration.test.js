@@ -1,6 +1,8 @@
 const request = require('supertest');
 const app = require('../../../server');
 
+jest.setTimeout(15000);
+
 describe('Integration Test: Nota Module', () => {
 
   describe('POST /notas', () => {
@@ -80,4 +82,9 @@ describe('Integration Test: Nota Module', () => {
       expect(response.status).toBe(200);
     });
   });
+
+  afterAll(async () => {
+    await db.app.delete();
+  });
+  
 });

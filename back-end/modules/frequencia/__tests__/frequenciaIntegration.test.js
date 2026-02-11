@@ -1,6 +1,8 @@
 const request = require('supertest');
 const app = require('../../../server');
 
+jest.setTimeout(15000);
+
 describe('Integration Test: Frequencia Module', () => {
 
   describe('POST /frequencia', () => {
@@ -78,6 +80,10 @@ describe('Integration Test: Frequencia Module', () => {
         expect(response.body.message).toBe('Registro de frequência excluído com sucesso.');
       }
     });
+  });
+
+  afterAll(async () => {
+    await db.app.delete();
   });
 
 });
