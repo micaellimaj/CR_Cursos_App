@@ -14,8 +14,8 @@ import {
 import { Feather } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { useTheme } from './contexts/ThemeContext';
-import styles from './styles/ProfilealunoStyles';
+import { useTheme } from '../../../contexts/ThemeContext';
+import styles from '../../../styles/ProfileStyles';
 import { API_URL } from '@env';
 
 interface ProfessorData {
@@ -139,7 +139,7 @@ export default function ProfileprofessorScreen() {
               <Text style={[styles.course, { color: colors.subText }]}>Corpo Docente</Text>
             </View>
             <Image
-              source={professor.foto ? { uri: professor.foto } : require('./assets/professor.jpg')}
+              source={professor.foto ? { uri: professor.foto } : require('../../../assets/professor.jpg')}
               style={{ width: avatarSize, height: avatarSize, borderRadius: avatarSize / 2, borderWidth: 2, borderColor: colors.mainText }}
             />
           </View>

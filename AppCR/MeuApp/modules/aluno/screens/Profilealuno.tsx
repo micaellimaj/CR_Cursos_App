@@ -14,8 +14,8 @@ import {
 import { Feather } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { useTheme } from './contexts/ThemeContext';
-import styles from './styles/ProfilealunoStyles';
+import { useTheme } from '../../../contexts/ThemeContext';
+import styles from '../../../styles/ProfileStyles';
 import { API_URL } from '@env';
 
 interface AlunoData {
@@ -141,7 +141,7 @@ export default function ProfileScreen() {
               <Text style={[styles.course, { color: colors.subText }]}>Engenharia de Software</Text>
             </View>
             <Image
-              source={user.foto ? { uri: user.foto } : require('./assets/aluno.png')}
+              source={user.foto ? { uri: user.foto } : require('../../../assets/aluno.png')}
               style={{ width: avatarSize, height: avatarSize, borderRadius: avatarSize / 2, borderWidth: 2, borderColor: colors.mainText }}
             />
           </View>

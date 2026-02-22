@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { useTheme } from './contexts/ThemeContext';
-import { getGlobalStyles } from './styles/globalStyles';
-import styles from './styles/HomeScreenStyles';
+import { useTheme } from '../../../contexts/ThemeContext';
+import { getGlobalStyles } from '../../../styles/globalStyles';
+import styles from '../styles/HomeScreenStyles';
 import { FontAwesome5, MaterialIcons, Feather } from '@expo/vector-icons';
 
 export default function HomeScreen({ navigation }: any) {
@@ -43,7 +43,7 @@ export default function HomeScreen({ navigation }: any) {
             </TouchableOpacity>
             
             <Image
-              source={userPhotoUrl ? { uri: userPhotoUrl } : require('./assets/aluno.png')}
+              source={userPhotoUrl ? { uri: userPhotoUrl } : require('../../../assets/aluno.png')}
               style={styles.avatar}
             />
           </View>

@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { FontAwesome5, Feather, MaterialIcons } from '@expo/vector-icons';
-import { useTheme } from '../contexts/ThemeContext';
+import { useTheme } from '../../../contexts/ThemeContext';
 import styles from '../styles/RegisterScreenStyles';
 
 const formatPhone = (value: string) => {

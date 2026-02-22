@@ -1,20 +1,18 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { useTheme } from '../contexts/ThemeContext';
-import LoginScreen from '../LoginScreen';
-import HomeScreen from '../HomeScreen';
-import Profilealuno from '../Profilealuno';
+import LoginScreen from '../modules/auth/screens/LoginScreen';
+import HomeScreen from '../modules/aluno/screens/HomeScreen';
+import Profilealuno from '../modules/aluno/screens/Profilealuno';
 import CustomDrawerContent from './CustomDrawerContent';
-import RegisterScreen from '../screens/RegisterScreen';
-import AulasScreen from '../AulasScreen';
-import ConteudoScreen from '../ConteudoScreen';
-import Notas from '../Notas';
-import TelaConteudos from '../TelaConteudos';
-import Cursos from '../Cursos';
-import profileexample from '../profileexample';
-import Cadastro from 'screens/Cadastro';
-import TermsOfUseScreen from 'TermosdeUso';
-import ProfileProfessor from 'Profileprofessor'
+import RegisterScreen from '../modules/admin/screens/RegisterScreen';
+import AulasScreen from '../modules/aluno/screens/AulasScreen';
+import ConteudoScreen from '../modules/aluno/screens/ConteudoScreen';
+import Notas from '../modules/aluno/screens/Notas';
+import TelaConteudos from '../modules/aluno/screens/TelaConteudos';
+import Cursos from '../modules/aluno/screens/Cursos';
+import TermsOfUseScreen from '../modules/auth/screens/TermosdeUso';
+import ProfileProfessor from '../modules/professor/screens/Profileprofessor'
 
 
 const Drawer = createDrawerNavigator();
@@ -46,7 +44,6 @@ export default function DrawerNavigator() {
        <Drawer.Screen name="TelaConteudos" component={TelaConteudos} />
        <Drawer.Screen name="Cursos" component={Cursos} />
        <Drawer.Screen name="RegisterScreen" component={RegisterScreen} />
-        <Drawer.Screen name="Cadastro" component={Cadastro} />
         <Drawer.Screen name="TermosdeUso" component={TermsOfUseScreen} />
 
     </Drawer.Navigator>

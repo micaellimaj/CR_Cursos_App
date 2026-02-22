@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import { FontAwesome5, MaterialIcons, Feather } from '@expo/vector-icons';
-import { useTheme } from './contexts/ThemeContext';
-import { getGlobalStyles } from './styles/globalStyles';
-import styles from './styles/AulasScreenStyles'; // Importando os estilos
+import { useTheme } from '../../../contexts/ThemeContext';
+import { getGlobalStyles } from '../../../styles/globalStyles';
+import styles from '../styles/AulasScreenStyles'; // Importando os estilos
 
 export default function AulasScreen({ navigation }: any) { // Adicionado o objeto navigation
   const { theme } = useTheme();

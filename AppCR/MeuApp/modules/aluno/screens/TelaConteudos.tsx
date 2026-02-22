@@ -3,8 +3,8 @@ import { View, Text, ScrollView, TouchableOpacity, TextInput, Alert } from "reac
 import { ProgressBar } from "react-native-paper";
 import { Ionicons, Feather, MaterialIcons } from "@expo/vector-icons";
 import * as DocumentPicker from 'expo-document-picker';
-import { useTheme } from './contexts/ThemeContext'; // Para alternar entre temas
-import styles from './styles/TelaConteudosStyles'; // Importando os estilos
+import { useTheme } from '../../../contexts/ThemeContext'; // Para alternar entre temas
+import styles from '../styles/TelaConteudosStyles'; // Importando os estilos
 
 type Tema = {
   id: number;

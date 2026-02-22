@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import { useTheme } from './contexts/ThemeContext';
+import { useTheme } from '../../../contexts/ThemeContext';
 import { useNavigation } from '@react-navigation/native';
 
 export default function TermsOfUseScreen() {

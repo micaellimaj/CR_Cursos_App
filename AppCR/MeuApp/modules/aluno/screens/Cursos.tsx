@@ -13,10 +13,10 @@ import {
   KeyboardAvoidingView,
   ActivityIndicator,
 } from "react-native";
-import { useTheme } from "./contexts/ThemeContext";
+import { useTheme } from "../../../contexts/ThemeContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import styles from "./styles/CursosStyles";
+import styles from "../styles/CursosStyles";
 
 type Curso = {
   id: number;
@@ -39,7 +39,7 @@ const cursos: Curso[] = [
     destaque: "Destaque",
     descricao:
       "O curso de Designer Gráfico capacita você para criar projetos visuais utilizando ferramentas como CorelDraw, Illustrator, Photoshop e InDesign.",
-    imagem: require("./assets/designer.jpg"),
+    imagem: require("../../../assets/designer.jpg"),
   },
   {
     id: 2,
@@ -55,7 +55,7 @@ const cursos: Curso[] = [
     destaque: "Mais procurado",
     descricao:
       "O curso de Informática Profissional prepara você para atuar em diversas áreas da tecnologia, incluindo sistemas operacionais, pacote Office, edição de vídeo e manutenção de computadores.",
-    imagem: require("./assets/informatica.jpg"),
+    imagem: require("../../../assets/informatica.jpg"),
   },
   {
     id: 3,
@@ -66,7 +66,7 @@ const cursos: Curso[] = [
     destaque: "Novo",
     descricao:
       "O curso de Música oferece aulas teóricas e práticas para desenvolver suas habilidades musicais, seja para iniciantes ou avançados.",
-    imagem: require("./assets/musica.jpeg"),
+    imagem: require("../../../assets/musica.jpeg"),
   },
   {
     id: 4,
@@ -84,7 +84,7 @@ const cursos: Curso[] = [
     destaque: "Bônus: Estágio",
     descricao:
       "O curso de Auxiliar de Farmácia prepara o aluno para atuar em farmácias e drogarias, com módulos de atendimento ao cliente, anatomia, primeiros socorros, farmacologia e segurança do trabalho. Inclui bônus de estágio supervisionado.",
-    imagem: require("./assets/farmacia.jpeg"),
+    imagem: require("../../../assets/farmacia.jpeg"),
   },
   {
     id: 5,
@@ -101,7 +101,7 @@ const cursos: Curso[] = [
     destaque: "Tendência",
     descricao:
       "O curso de Maquiagem Profissional aborda desde maquiagem social até técnicas avançadas para pele madura, camuflagem, olhos e pele, além de preparação para formandas e debutantes.",
-    imagem: require("./assets/beleza.jpeg"),
+    imagem: require("../../../assets/beleza.jpeg"),
   },
   {
     id: 6,
@@ -119,7 +119,7 @@ const cursos: Curso[] = [
     destaque: "Bônus: LIBRAS",
     descricao:
       "O curso de Reforço Escolar oferece apoio em leitura, escrita, atividades escolares, comportamento e atividades extras, com bônus de LIBRAS para inclusão.",
-    imagem: require("./assets/reforço.jpg"),
+    imagem: require("../../../assets/reforço.jpg"),
   },
 ];
 
@@ -184,7 +184,7 @@ export default function Cursos() {
         modalidades: novoCurso.modalidades.split(",").map((m) => m.trim()),
         destaque: novoCurso.destaque,
         descricao: novoCurso.descricao,
-        imagem: novoCurso.imagem ? { uri: novoCurso.imagem.uri } : require("./assets/designer.jpg"),
+        imagem: novoCurso.imagem ? { uri: novoCurso.imagem.uri } : require("../../../assets/designer.jpg"),
       },
     ]);
     setNovoCurso({

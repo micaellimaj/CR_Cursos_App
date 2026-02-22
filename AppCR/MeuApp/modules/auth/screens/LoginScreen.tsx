@@ -8,8 +8,8 @@ import {
   Alert,
   Image
 } from 'react-native';
-import { useTheme } from './contexts/ThemeContext';
-import styles from '../MeuApp/styles/LoginScreenStyles';
+import { useTheme } from '../../../contexts/ThemeContext';
+import styles from '../styles/LoginScreenStyles';
 
 export default function LoginScreen({ navigation }: any) {
   const { theme } = useTheme();
@@ -36,8 +36,8 @@ export default function LoginScreen({ navigation }: any) {
           <Image
             source={
               isDarkTheme
-                ? require('./assets/logoCR.png')
-                : require('./assets/logoCRcursos.png')
+                ? require('../../../assets/logoCR.png')
+                : require('../../../assets/logoCRcursos.png')
             }
             style={styles.logoImage}
           />

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { useTheme } from './contexts/ThemeContext';
-import { getGlobalStyles } from './styles/globalStyles';
+import { useTheme } from '../../../contexts/ThemeContext';
+import { getGlobalStyles } from '../../../styles/globalStyles';
 
 const conteudos = [
     { id: 1, titulo: 'Introdução ao Curso', descricao: 'Conheça o objetivo e estrutura do curso.' },
