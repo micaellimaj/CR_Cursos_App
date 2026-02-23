@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginScreen from './modules/auth/screens/LoginScreen';
-import RegisterScreen from '../MeuApp/modules/admin/screens/RegisterScreen';
+import RegisterScreen from './modules/admin/screens/UsuarioManagementScreen';
 import DrawerNavigator from './navigation/DrawerNavigator';
 
 const Stack = createStackNavigator();

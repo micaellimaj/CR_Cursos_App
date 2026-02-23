@@ -5,7 +5,7 @@ import LoginScreen from '../modules/auth/screens/LoginScreen';
 import HomeScreen from '../modules/aluno/screens/HomeScreen';
 import Profilealuno from '../modules/aluno/screens/Profilealuno';
 import CustomDrawerContent from './CustomDrawerContent';
-import RegisterScreen from '../modules/admin/screens/RegisterScreen';
+import RegisterScreen from '../modules/admin/screens/UsuarioManagementScreen';
 import AulasScreen from '../modules/aluno/screens/AulasScreen';
 import ConteudoScreen from '../modules/aluno/screens/ConteudoScreen';
 import Notas from '../modules/aluno/screens/Notas';
@@ -13,6 +13,10 @@ import TelaConteudos from '../modules/aluno/screens/TelaConteudos';
 import Cursos from '../modules/aluno/screens/Cursos';
 import TermsOfUseScreen from '../modules/auth/screens/TermosdeUso';
 import ProfileProfessor from '../modules/professor/screens/Profileprofessor'
+import AdminHomeScreen from '../modules/admin/screens/AdminHomeScreen';
+import CourseManagementScreen from '../modules/admin/screens/CourseManagementScreen';
+import SubjectManagementScreen from '../modules/admin/screens/SubjectManagementScreen';
+import ClassManagementScreen from '../modules/admin/screens/ClassManagementScreen';
 
 
 const Drawer = createDrawerNavigator();
@@ -45,7 +49,10 @@ export default function DrawerNavigator() {
        <Drawer.Screen name="Cursos" component={Cursos} />
        <Drawer.Screen name="RegisterScreen" component={RegisterScreen} />
         <Drawer.Screen name="TermosdeUso" component={TermsOfUseScreen} />
-
+        <Drawer.Screen name="AdminHome" component={AdminHomeScreen} />
+        <Drawer.Screen name="CourseManagement" component={CourseManagementScreen} />
+        <Drawer.Screen name="SubjectManagement" component={SubjectManagementScreen} />
+        <Drawer.Screen name="ClassManagement" component={ClassManagementScreen} />
     </Drawer.Navigator>
   );
 }
