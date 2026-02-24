@@ -83,32 +83,10 @@ const styles = StyleSheet.create({
     color: '#2563eb',
     marginBottom: 16,
   },
-  activityItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 15,
-    borderRadius: 12,
-    marginBottom: 12,
-  },
-  iconCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#2563eb',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  activityText: {
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  activityTime: {
-    fontSize: 11,
-    color: '#94a3b8',
-  },
   grid: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    flexWrap: 'wrap', // Permite que os itens quebrem para a linha de baixo
   },
   gridCard: {
     backgroundColor: '#1e3a8a',
@@ -117,12 +95,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '48%',
+    marginBottom: 16, // Espaço entre as linhas de botões
   },
   gridCardText: {
     marginTop: 10,
     fontSize: 14,
     color: '#fff',
     fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 
