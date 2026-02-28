@@ -82,7 +82,8 @@ module.exports = {
     findByNome,
     create,
     findAll,
-    findById,
+    findById,      
+    getCursoPorId: findById,
     update,
     remove
 };
