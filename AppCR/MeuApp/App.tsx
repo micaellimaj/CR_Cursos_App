@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { AuthProvider } from './contexts/AuthContext';
 import { View, ActivityIndicator, Text } from 'react-native';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
@@ -54,9 +55,11 @@ export default function App() {
   return (
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
       <ThemeProvider>
-        <NavigationContainer>
-          <DrawerNavigator />
-        </NavigationContainer>
+        <AuthProvider>
+          <NavigationContainer>
+            <DrawerNavigator />
+          </NavigationContainer>
+        </AuthProvider>
       </ThemeProvider>
     </View>
   );

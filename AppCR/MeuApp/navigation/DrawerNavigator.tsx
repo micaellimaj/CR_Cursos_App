@@ -17,12 +17,14 @@ import AdminHomeScreen from '../modules/admin/screens/AdminHomeScreen';
 import CourseManagementScreen from '../modules/admin/screens/CourseManagementScreen';
 import SubjectManagementScreen from '../modules/admin/screens/SubjectManagementScreen';
 import ClassManagementScreen from '../modules/admin/screens/ClassManagementScreen';
-
+import { useAuth } from '../contexts/AuthContext'; 
 
 const Drawer = createDrawerNavigator();
 
 export default function DrawerNavigator() {
   const { theme } = useTheme();
+  const { user } = useAuth();
+  const userType = user?.tipo;
   
   return (
     <Drawer.Navigator
@@ -37,22 +39,46 @@ export default function DrawerNavigator() {
         },
       }}
     >
-      <Drawer.Screen name="Login" component={LoginScreen} />
-      <Drawer.Screen name="Register" component={RegisterScreen} />
-      <Drawer.Screen name="Home" component={HomeScreen} />
-      <Drawer.Screen name="Profilealuno" component={Profilealuno} />
-      <Drawer.Screen name="ProfileProfessor" component={ProfileProfessor} />
-       <Drawer.Screen name="AulasScreen" component={AulasScreen} />
-       <Drawer.Screen name="ConteudoScreen" component={ConteudoScreen} />
-       <Drawer.Screen name="Notas" component={Notas} />
-       <Drawer.Screen name="TelaConteudos" component={TelaConteudos} />
-       <Drawer.Screen name="Cursos" component={Cursos} />
-       <Drawer.Screen name="RegisterScreen" component={RegisterScreen} />
-        <Drawer.Screen name="TermosdeUso" component={TermsOfUseScreen} />
-        <Drawer.Screen name="AdminHome" component={AdminHomeScreen} />
-        <Drawer.Screen name="CourseManagement" component={CourseManagementScreen} />
-        <Drawer.Screen name="SubjectManagement" component={SubjectManagementScreen} />
-        <Drawer.Screen name="ClassManagement" component={ClassManagementScreen} />
+      {!user ? (
+        <Drawer.Screen name="Login" component={LoginScreen} />
+      ) : (
+        <></>
+      )}
+
+      {/* ROTAS DE ALUNO: Só existem se for Aluno ou Admin */}
+      {(userType === 'aluno' ) && (
+        <>
+          <Drawer.Screen name="Home" component={HomeScreen} />
+          <Drawer.Screen name="Profilealuno" component={Profilealuno} />
+          <Drawer.Screen name="AulasScreen" component={AulasScreen} />
+          <Drawer.Screen name="Notas" component={Notas} />
+          <Drawer.Screen name="TelaConteudos" component={TelaConteudos} />
+          <Drawer.Screen name="Cursos" component={Cursos} />
+          <Drawer.Screen name="ConteudoScreen" component={ConteudoScreen} />
+          {/* Adicione as outras telas de aluno aqui */}
+        </>
+      )}
+
+      {/* ROTAS DE PROFESSOR: Só existem se for Professor ou Admin */}
+      {(userType === 'professor') && (
+        <>
+          <Drawer.Screen name="ProfileProfessor" component={ProfileProfessor} />
+        </>
+      )}
+
+      {/* ROTAS DE ADMIN: Só existem na memória se o tipo for admin */}
+      {userType === 'admin' && (
+        <>
+          <Drawer.Screen name="AdminHome" component={AdminHomeScreen} />
+          <Drawer.Screen name="CourseManagement" component={CourseManagementScreen} />
+          <Drawer.Screen name="SubjectManagement" component={SubjectManagementScreen} />
+          <Drawer.Screen name="ClassManagement" component={ClassManagementScreen} />
+          <Drawer.Screen name="UsuarioManagementScreen" component={RegisterScreen} />
+        </>
+      )}
+
+      {/* Rota comum */}
+      <Drawer.Screen name="TermosdeUso" component={TermsOfUseScreen} />
     </Drawer.Navigator>
   );
 }
