@@ -1,17 +1,30 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, Dimensions } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, Dimensions, ActivityIndicator } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
 interface CustomButtonProps {
   title: string;
   onPress: () => void;
+  disabled?: boolean; // Agora o TS aceita essa prop
+  loading?: boolean;  // Opcional: para mostrar um spinner dentro do botão
 }
 
-export default function CustomButton({ title, onPress }: CustomButtonProps) {
+export default function CustomButton({ title, onPress, disabled, loading }: CustomButtonProps) {
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
-      <Text style={styles.buttonText}>{title}</Text>
+    <TouchableOpacity 
+      style={[
+        styles.button, 
+        (disabled || loading) && styles.buttonDisabled 
+      ]} 
+      onPress={onPress}
+      disabled={disabled || loading}
+    >
+      {loading ? (
+        <ActivityIndicator color="#fff" />
+      ) : (
+        <Text style={styles.buttonText}>{title}</Text>
+      )}
     </TouchableOpacity>
   );
 }
@@ -25,6 +38,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 8,
     marginTop: 10,
+    alignSelf: 'center',
+  },
+  buttonDisabled: {
+    backgroundColor: '#94a3b8',
+    opacity: 0.7,
   },
   buttonText: {
     color: '#fff',
