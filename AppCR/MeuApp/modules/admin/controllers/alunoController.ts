@@ -30,6 +30,19 @@ export const getAllAlunos = async (): Promise<IAluno[]> => {
   }
 };
 
+export const updateAluno = async (id: string, dados: Partial<IAluno>): Promise<GenericResponse> => {
+  try {
+    const response = await api.put<GenericResponse>(`/alunos/${id}`, dados);
+    return response.data;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      const message = error.response?.data?.message || "Erro ao atualizar aluno";
+      throw new Error(message);
+    }
+    throw new Error("Erro inesperado ao atualizar aluno");
+  }
+};
+
 // DELETE - Remover Aluno
 export const deleteAluno = async (id: string): Promise<GenericResponse> => {
   try {

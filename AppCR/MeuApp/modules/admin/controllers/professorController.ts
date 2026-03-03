@@ -28,6 +28,19 @@ export const getAllProfessores = async (): Promise<IProfessor[]> => {
   }
 };
 
+export const updateProfessor = async (id: string, dados: Partial<IProfessor>): Promise<GenericResponse> => {
+  try {
+    const response = await api.put<GenericResponse>(`/professores/${id}`, dados);
+    return response.data;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      const message = error.response?.data?.message || "Erro ao atualizar professor";
+      throw new Error(message);
+    }
+    throw new Error("Erro inesperado ao atualizar professor");
+  }
+};
+
 export const deleteProfessor = async (id: string): Promise<GenericResponse> => {
   try {
     const response = await api.delete<GenericResponse>(`/professores/${id}`);

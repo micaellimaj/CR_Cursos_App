@@ -14,7 +14,10 @@ import {
   getAllTurmas, createTurma, updateTurma, deleteTurma, 
   matricularAluno, associarProfessorTurma 
 } from '../controllers/turmaController';
-import { ITurma } from '../types';
+import { getAllCursos } from '../controllers/cursoController';
+import { getAllAlunos } from '../controllers/alunoController';
+import { getAllProfessores } from '../controllers/professorController';
+import { ITurma, IAluno, IProfessor, ICurso } from '../types';
 
 export default function ClassManagementScreen() {
   const { theme } = useTheme();
@@ -23,6 +26,9 @@ export default function ClassManagementScreen() {
 
   // Estados de Dados
   const [classes, setClasses] = useState<ITurma[]>([]);
+  const [cursos, setCursos] = useState<ICurso[]>([]);
+  const [alunos, setAlunos] = useState<IAluno[]>([]);
+  const [professores, setProfessores] = useState<IProfessor[]>([]);
   const [loading, setLoading] = useState(false);
   
   // Modais
@@ -33,21 +39,35 @@ export default function ClassManagementScreen() {
   // Estados de Form
   const [selectedClass, setSelectedClass] = useState<ITurma | null>(null);
   const [formData, setFormData] = useState({ nome: '', curso_id: '', data_inicio: '', data_fim: '' });
-  const [targetId, setTargetId] = useState(''); // ID do aluno ou professor para as ações
+  const [targetId, setTargetId] = useState(''); 
 
+  // Estilos Dinâmicos
   const labelColor = isLightTheme ? '#475569' : '#cbd5e1';
   const inputBg = isLightTheme ? '#f8fafc' : '#1e293b';
+  const textColor = isLightTheme ? '#000' : '#fff';
 
-  useEffect(() => { fetchTurmas(); }, []);
+  useEffect(() => {
+    fetchInitialData();
+  }, []);
 
-  const fetchTurmas = async () => {
+  const fetchInitialData = async () => {
     try {
       setLoading(true);
-      const data = await getAllTurmas();
-      setClasses(Array.isArray(data) ? data : []);
-    } catch (error: any) {
-      Alert.alert("Erro", "Não foi possível carregar as turmas.");
-    } finally { setLoading(false); }
+      const [turmasData, cursosData, alunosData, profsData] = await Promise.all([
+        getAllTurmas(),
+        getAllCursos(),
+        getAllAlunos(),
+        getAllProfessores()
+      ]);
+      setClasses(turmasData);
+      setCursos(cursosData);
+      setAlunos(alunosData);
+      setProfessores(profsData);
+    } catch (error) {
+      Alert.alert("Erro", "Erro ao carregar dados do servidor.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleOpenMainModal = (item?: ITurma) => {
@@ -67,6 +87,7 @@ export default function ClassManagementScreen() {
   };
 
   const handleSave = async () => {
+    if (!formData.curso_id) return Alert.alert("Erro", "Selecione um curso.");
     try {
       setLoading(true);
       if (selectedClass?.id) {
@@ -77,14 +98,14 @@ export default function ClassManagementScreen() {
         Alert.alert("Sucesso", "Turma criada!");
       }
       setModalVisible(false);
-      fetchTurmas();
+      fetchInitialData();
     } catch (error: any) {
       Alert.alert("Erro", error.message);
     } finally { setLoading(false); }
   };
 
   const handleAction = async (type: 'enroll' | 'teacher') => {
-    if (!selectedClass?.id || !targetId) return;
+    if (!selectedClass?.id || !targetId) return Alert.alert("Erro", "Selecione um usuário.");
     try {
       setLoading(true);
       if (type === 'enroll') {
@@ -97,7 +118,7 @@ export default function ClassManagementScreen() {
         setTeacherModalVisible(false);
       }
       setTargetId('');
-      fetchTurmas();
+      fetchInitialData();
     } catch (error: any) {
       Alert.alert("Erro", error.message);
     } finally { setLoading(false); }
@@ -108,17 +129,42 @@ export default function ClassManagementScreen() {
       { text: "Cancelar" },
       { text: "Sim", style: 'destructive', onPress: async () => {
         await deleteTurma(id);
-        fetchTurmas();
+        fetchInitialData();
       }}
     ]);
   };
+
+  // Helper para renderizar lista de seleção dentro dos modais
+  const RenderSelector = ({ data, selectedValue, onSelect, labelKey = 'full_name' }: any) => (
+    <View style={{ maxHeight: 200, backgroundColor: inputBg, borderRadius: 8, marginVertical: 10, borderWidth: 1, borderColor: '#e2e8f0' }}>
+      <ScrollView nestedScrollEnabled>
+        {data.map((item: any) => (
+          <TouchableOpacity 
+            key={item.id} 
+            onPress={() => onSelect(item.id)}
+            style={{ 
+              padding: 12, 
+              flexDirection: 'row', 
+              justifyContent: 'space-between',
+              backgroundColor: selectedValue === item.id ? (isLightTheme ? '#eff6ff' : '#2d3748') : 'transparent',
+              borderBottomWidth: 1,
+              borderBottomColor: isLightTheme ? '#f1f5f9' : '#334155'
+            }}
+          >
+            <Text style={{ color: textColor }}>{item[labelKey] || item.nome}</Text>
+            {selectedValue === item.id && <Feather name="check-circle" size={16} color="#2563eb" />}
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+    </View>
+  );
 
   return (
     <View style={[globalStyles.container, styles.container]}>
       <View style={styles.content}>
         <View style={styles.headerSection}>
           <Text style={[styles.title, { color: isLightTheme ? '#1e3a8a' : '#fff' }]}>Gestão de Turmas</Text>
-          <Text style={styles.subtitle}>Crie turmas, matricule alunos e gerencie professores</Text>
+          <Text style={styles.subtitle}>Gerencie cursos, matrículas e professores</Text>
         </View>
 
         <CustomButton title="+ Nova Turma" onPress={() => handleOpenMainModal()} />
@@ -128,16 +174,15 @@ export default function ClassManagementScreen() {
         <FlatList
           data={classes}
           keyExtractor={(item) => item.id || Math.random().toString()}
-          showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <View style={[styles.classCard, { backgroundColor: isLightTheme ? '#fff' : '#1e293b' }]}>
               <View style={styles.classHeader}>
-                <View style={styles.iconContainer}>
-                  <FontAwesome5 name="users" size={18} color="#2563eb" />
-                </View>
+                <View style={styles.iconContainer}><FontAwesome5 name="users" size={18} color="#2563eb" /></View>
                 <View style={styles.classMainInfo}>
-                  <Text style={[styles.className, { color: isLightTheme ? '#1e293b' : '#fff' }]}>{item.nome}</Text>
-                  <Text style={styles.classSubDetails}>Curso: {item.curso_id}</Text>
+                  <Text style={[styles.className, { color: textColor }]}>{item.nome}</Text>
+                  <Text style={styles.classSubDetails}>
+                    Curso: {cursos.find(c => c.id === item.curso_id)?.nome || 'Não encontrado'}
+                  </Text>
                 </View>
                 <View style={{ flexDirection: 'row' }}>
                   <TouchableOpacity onPress={() => handleOpenMainModal(item)}>
@@ -149,31 +194,14 @@ export default function ClassManagementScreen() {
                 </View>
               </View>
 
-              <View style={styles.tagRow}>
-                <View style={styles.infoTag}>
-                   <Feather name="calendar" size={12} color="#475569" />
-                   <Text style={styles.tagText}>{item.data_inicio} até {item.data_fim}</Text>
-                </View>
-                <View style={styles.infoTag}>
-                   <Feather name="users" size={12} color="#475569" />
-                   <Text style={styles.tagText}>{Object.keys(item.alunos || {}).length} alunos</Text>
-                </View>
-              </View>
-
               <View style={styles.manageButtons}>
-                <TouchableOpacity 
-                    style={styles.actionTextButton} 
-                    onPress={() => { setSelectedClass(item); setEnrollModalVisible(true); }}
-                >
-                  <Ionicons name="person-add-outline" size={14} color={isLightTheme ? "#1e293b" : "#fff"} />
-                  <Text style={[styles.actionText, {color: isLightTheme ? "#1e293b" : "#fff"}]}>Matricular</Text>
+                <TouchableOpacity style={styles.actionTextButton} onPress={() => { setSelectedClass(item); setEnrollModalVisible(true); }}>
+                  <Ionicons name="person-add-outline" size={14} color={textColor} />
+                  <Text style={[styles.actionText, {color: textColor}]}>Matricular</Text>
                 </TouchableOpacity>
-                <TouchableOpacity 
-                    style={styles.actionTextButton}
-                    onPress={() => { setSelectedClass(item); setTeacherModalVisible(true); }}
-                >
-                  <Ionicons name="git-network-outline" size={14} color={isLightTheme ? "#1e293b" : "#fff"} />
-                  <Text style={[styles.actionText, {color: isLightTheme ? "#1e293b" : "#fff"}]}>Professor</Text>
+                <TouchableOpacity style={styles.actionTextButton} onPress={() => { setSelectedClass(item); setTeacherModalVisible(true); }}>
+                  <Ionicons name="git-network-outline" size={14} color={textColor} />
+                  <Text style={[styles.actionText, {color: textColor}]}>Professor</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -193,11 +221,20 @@ export default function ClassManagementScreen() {
                 <MaterialIcons name="close" size={26} color={labelColor} />
               </TouchableOpacity>
             </View>
-            <ScrollView showsVerticalScrollIndicator={false}>
-              <TextInput placeholder="Nome da Turma" value={formData.nome} onChangeText={t => setFormData({...formData, nome: t})} style={[styles.input, { backgroundColor: inputBg, color: isLightTheme ? '#000' : '#fff' }]} />
-              <TextInput placeholder="ID do Curso" value={formData.curso_id} onChangeText={t => setFormData({...formData, curso_id: t})} style={[styles.input, { backgroundColor: inputBg, color: isLightTheme ? '#000' : '#fff' }]} />
-              <TextInput placeholder="Data Início (AAAA-MM-DD)" value={formData.data_inicio} onChangeText={t => setFormData({...formData, data_inicio: t})} style={[styles.input, { backgroundColor: inputBg, color: isLightTheme ? '#000' : '#fff' }]} />
-              <TextInput placeholder="Data Fim (AAAA-MM-DD)" value={formData.data_fim} onChangeText={t => setFormData({...formData, data_fim: t})} style={[styles.input, { backgroundColor: inputBg, color: isLightTheme ? '#000' : '#fff' }]} />
+            <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled>
+              <Text style={{ color: labelColor, marginBottom: 5 }}>Nome da Turma</Text>
+              <TextInput value={formData.nome} onChangeText={t => setFormData({...formData, nome: t})} style={[styles.input, { backgroundColor: inputBg, color: textColor }]} />
+              
+              <Text style={{ color: labelColor, marginTop: 10 }}>Selecionar Curso</Text>
+              <RenderSelector 
+                data={cursos} 
+                selectedValue={formData.curso_id} 
+                onSelect={(id: string) => setFormData({...formData, curso_id: id})} 
+                labelKey="nome"
+              />
+
+              <TextInput placeholder="Data Início (AAAA-MM-DD)" value={formData.data_inicio} onChangeText={t => setFormData({...formData, data_inicio: t})} style={[styles.input, { backgroundColor: inputBg, color: textColor }]} />
+              <TextInput placeholder="Data Fim (AAAA-MM-DD)" value={formData.data_fim} onChangeText={t => setFormData({...formData, data_fim: t})} style={[styles.input, { backgroundColor: inputBg, color: textColor }]} />
               <CustomButton title="Salvar Turma" onPress={handleSave} loading={loading} />
             </ScrollView>
           </View>
@@ -209,14 +246,14 @@ export default function ClassManagementScreen() {
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContent, { backgroundColor: isLightTheme ? '#fff' : '#0f172a' }]}>
             <Text style={[styles.title, { fontSize: 18, color: isLightTheme ? '#1e3a8a' : '#fff', marginBottom: 15 }]}>Matricular Aluno</Text>
-            <TextInput 
-              placeholder="Cole o ID do Aluno" 
-              value={targetId} 
-              onChangeText={setTargetId} 
-              style={[styles.input, { backgroundColor: inputBg, color: isLightTheme ? '#000' : '#fff' }]} 
+            <RenderSelector 
+                data={alunos} 
+                selectedValue={targetId} 
+                onSelect={setTargetId} 
+                labelKey="full_name"
             />
             <CustomButton title="Confirmar Matrícula" onPress={() => handleAction('enroll')} loading={loading} />
-            <TouchableOpacity onPress={() => setEnrollModalVisible(false)} style={{ marginTop: 10 }}>
+            <TouchableOpacity onPress={() => { setEnrollModalVisible(false); setTargetId(''); }} style={{ marginTop: 15 }}>
               <Text style={{ color: '#ef4444', textAlign: 'center' }}>Cancelar</Text>
             </TouchableOpacity>
           </View>
@@ -228,14 +265,14 @@ export default function ClassManagementScreen() {
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContent, { backgroundColor: isLightTheme ? '#fff' : '#0f172a' }]}>
             <Text style={[styles.title, { fontSize: 18, color: isLightTheme ? '#1e3a8a' : '#fff', marginBottom: 15 }]}>Associar Professor</Text>
-            <TextInput 
-              placeholder="Cole o ID do Professor" 
-              value={targetId} 
-              onChangeText={setTargetId} 
-              style={[styles.input, { backgroundColor: inputBg, color: isLightTheme ? '#000' : '#fff' }]} 
+            <RenderSelector 
+                data={professores} 
+                selectedValue={targetId} 
+                onSelect={setTargetId} 
+                labelKey="full_name"
             />
             <CustomButton title="Vincular Professor" onPress={() => handleAction('teacher')} loading={loading} />
-            <TouchableOpacity onPress={() => setTeacherModalVisible(false)} style={{ marginTop: 10 }}>
+            <TouchableOpacity onPress={() => { setTeacherModalVisible(false); setTargetId(''); }} style={{ marginTop: 15 }}>
               <Text style={{ color: '#ef4444', textAlign: 'center' }}>Cancelar</Text>
             </TouchableOpacity>
           </View>

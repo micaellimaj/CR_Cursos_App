@@ -8,13 +8,16 @@ import { useTheme } from '../../../contexts/ThemeContext';
 import { getGlobalStyles } from '../../../styles/globalStyles';
 import CustomButton from '../../../components/CustomButton';
 import styles from '../styles/SubjectManagementStyles';
+import { getAllCursos } from '../controllers/cursoController';
+import { getAllProfessores } from '../controllers/professorController'
+import { getAllTurmas } from '../controllers/turmaController';
 
 // Importação dos Controllers e Types
 import { 
   getAllDisciplinas, createDisciplina, updateDisciplina, 
   deleteDisciplina, associarTurmaDisciplina 
 } from '../controllers/disciplinaController';
-import { IDisciplina } from '../types';
+import { ICurso, IProfessor, IDisciplina, ITurma } from '../types';
 
 export default function SubjectManagementScreen() {
   const { theme } = useTheme();
@@ -26,6 +29,9 @@ export default function SubjectManagementScreen() {
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [assocModalVisible, setAssocModalVisible] = useState(false);
+  const [courses, setCourses] = useState<ICurso[]>([]);
+  const [professors, setProfessors] = useState<IProfessor[]>([]);
+  const [turmas, setTurmas] = useState<ITurma[]>([]);
   
   // Estados de Form
   const [selectedSubject, setSelectedSubject] = useState<IDisciplina | null>(null);
@@ -35,7 +41,25 @@ export default function SubjectManagementScreen() {
   const labelColor = isLightTheme ? '#475569' : '#cbd5e1';
   const inputBg = isLightTheme ? '#f8fafc' : '#1e293b';
 
-  useEffect(() => { fetchDisciplinas(); }, []);
+  useEffect(() => { 
+    fetchDisciplinas(); 
+    fetchInitialData();
+  }, []);
+
+  const fetchInitialData = async () => {
+  try {
+    const [cursosData, profesData, turmasData] = await Promise.all([
+      getAllCursos(),
+      getAllProfessores(),
+      getAllTurmas()
+    ]);
+    setCourses(Array.isArray(cursosData) ? cursosData : []);
+    setProfessors(Array.isArray(profesData) ? profesData : []);
+    setTurmas(Array.isArray(turmasData) ? turmasData : []);
+  } catch (error) {
+    console.error("Erro ao carregar dados auxiliares");
+  }
+};
 
   const fetchDisciplinas = async () => {
     try {
@@ -127,6 +151,25 @@ export default function SubjectManagementScreen() {
     ]);
   };
 
+  // Funções Auxiliares de Estilização
+  const renderSelectContainer = () => ({
+    backgroundColor: inputBg,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: isLightTheme ? '#e2e8f0' : '#334155',
+    overflow: 'hidden' as const,
+  });
+
+  const renderOptionStyle = (isSelected: boolean) => ({
+    padding: 12,
+    flexDirection: 'row' as const,
+    justifyContent: 'space-between' as const,
+    alignItems: 'center' as const,
+    backgroundColor: isSelected ? (isLightTheme ? '#eff6ff' : '#1e293b') : 'transparent',
+    borderBottomWidth: 1,
+    borderBottomColor: isLightTheme ? '#f1f5f9' : '#334155',
+  });
+
   return (
     <View style={[globalStyles.container, styles.container]}>
       <View style={styles.content}>
@@ -145,32 +188,35 @@ export default function SubjectManagementScreen() {
           showsVerticalScrollIndicator={false}
           style={{ width: '100%' }}
           contentContainerStyle={{ paddingBottom: 20 }}
-          renderItem={({ item }) => (
-            <View style={[styles.subjectCard, { backgroundColor: isLightTheme ? '#fff' : '#1e293b' }]}>
-              <View style={styles.iconContainer}>
-                <Ionicons name="layers-outline" size={24} color="#2563eb" />
-              </View>
-              <View style={styles.subjectInfo}>
-                <View style={styles.subjectHeader}>
-                  <Text style={[styles.subjectName, { color: isLightTheme ? '#1e3a8a' : '#fff' }]}>{item.nome}</Text>
-                  <Text style={styles.subjectCode}>{item.id?.substring(0, 5)}</Text>
+          renderItem={({ item }) => {
+            const cursoNome = courses.find(c => c.id === item.cursoId)?.nome || item.cursoId;
+            return (
+              <View style={[styles.subjectCard, { backgroundColor: isLightTheme ? '#fff' : '#1e293b' }]}>
+                <View style={styles.iconContainer}>
+                  <Ionicons name="layers-outline" size={24} color="#2563eb" />
                 </View>
-                <Text style={styles.courseTag}><Ionicons name="book-outline" size={12}/> {item.cursoId}</Text>
-                <Text style={styles.creditsTag}>{item.turmasAssociadas?.length || 0} turmas vinculadas</Text>
+                <View style={styles.subjectInfo}>
+                  <View style={styles.subjectHeader}>
+                    <Text style={[styles.subjectName, { color: isLightTheme ? '#1e3a8a' : '#fff' }]}>{item.nome}</Text>
+                    <Text style={styles.subjectCode}>{item.id?.substring(0, 5)}</Text>
+                  </View>
+                  <Text style={styles.courseTag}><Ionicons name="book-outline" size={12}/> {cursoNome}</Text>
+                  <Text style={styles.creditsTag}>{item.turmasAssociadas?.length || 0} turmas vinculadas</Text>
+                </View>
+                <View style={styles.actionButtons}>
+                  <TouchableOpacity style={styles.iconBtn} onPress={() => handleOpenAssoc(item)}>
+                    <MaterialCommunityIcons name="link-plus" size={20} color="#10b981" />
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.iconBtn} onPress={() => handleOpenModal(item)}>
+                    <Feather name="edit-2" size={18} color="#2563eb" />
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.iconBtn} onPress={() => item.id && handleDelete(item.id)}>
+                    <Feather name="trash-2" size={18} color="#ef4444" />
+                  </TouchableOpacity>
+                </View>
               </View>
-              <View style={styles.actionButtons}>
-                <TouchableOpacity style={styles.iconBtn} onPress={() => handleOpenAssoc(item)}>
-                  <MaterialCommunityIcons name="link-plus" size={20} color="#10b981" />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.iconBtn} onPress={() => handleOpenModal(item)}>
-                  <Feather name="edit-2" size={18} color="#2563eb" />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.iconBtn} onPress={() => item.id && handleDelete(item.id)}>
-                  <Feather name="trash-2" size={18} color="#ef4444" />
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
+            );
+          }}
         />
       </View>
 
@@ -199,23 +245,39 @@ export default function SubjectManagementScreen() {
               </View>
 
               <View style={styles.inputGroup}>
-                <Text style={[styles.inputLabel, { color: labelColor }]}>ID do Curso Vinculado</Text>
-                <TextInput 
-                  style={[styles.input, { backgroundColor: inputBg, color: isLightTheme ? '#000' : '#fff' }]} 
-                  value={formData.cursoId}
-                  onChangeText={t => setFormData({...formData, cursoId: t})}
-                  placeholder="Cole o ID do curso aqui" 
-                />
+                <Text style={[styles.inputLabel, { color: labelColor }]}>Curso Vinculado</Text>
+                <View style={renderSelectContainer()}>
+                  <ScrollView style={{ maxHeight: 120 }} nestedScrollEnabled>
+                    {courses.map(c => (
+                      <TouchableOpacity 
+                        key={c.id} 
+                        style={renderOptionStyle(formData.cursoId === c.id)}
+                        onPress={() => setFormData({...formData, cursoId: c.id || ''})}
+                      >
+                        <Text style={{ color: isLightTheme ? '#000' : '#fff' }}>{c.nome}</Text>
+                        {formData.cursoId === c.id && <Ionicons name="checkmark-circle" size={18} color="#2563eb" />}
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+                </View>
               </View>
 
               <View style={styles.inputGroup}>
-                <Text style={[styles.inputLabel, { color: labelColor }]}>ID do Professor Responsável</Text>
-                <TextInput 
-                  style={[styles.input, { backgroundColor: inputBg, color: isLightTheme ? '#000' : '#fff' }]} 
-                  value={formData.professorId}
-                  onChangeText={t => setFormData({...formData, professorId: t})}
-                  placeholder="ID do Professor" 
-                />
+                <Text style={[styles.inputLabel, { color: labelColor }]}>Professor Responsável</Text>
+                <View style={renderSelectContainer()}>
+                  <ScrollView style={{ maxHeight: 120 }} nestedScrollEnabled>
+                    {professors.map(p => (
+                      <TouchableOpacity 
+                        key={p.id} 
+                        style={renderOptionStyle(formData.professorId === p.id)}
+                        onPress={() => setFormData({...formData, professorId: p.id || ''})}
+                      >
+                        <Text style={{ color: isLightTheme ? '#000' : '#fff' }}>{p.full_name}</Text>
+                        {formData.professorId === p.id && <Ionicons name="checkmark-circle" size={18} color="#2563eb" />}
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+                </View>
               </View>
 
               <TouchableOpacity style={styles.saveButton} onPress={handleSave} disabled={loading}>
@@ -238,23 +300,39 @@ export default function SubjectManagementScreen() {
             </View>
 
             <View style={styles.inputGroup}>
-              <Text style={[styles.inputLabel, { color: labelColor }]}>ID da Turma</Text>
-              <TextInput 
-                style={[styles.input, { backgroundColor: inputBg, color: isLightTheme ? '#000' : '#fff' }]} 
-                placeholder="Ex: TURMA_ADS_2024"
-                value={assocData.turmaId}
-                onChangeText={t => setAssocData({...assocData, turmaId: t})}
-              />
+              <Text style={[styles.inputLabel, { color: labelColor }]}>Selecionar Turma</Text>
+              <View style={renderSelectContainer()}>
+                <ScrollView style={{ maxHeight: 120 }} nestedScrollEnabled>
+                  {turmas.map(t => (
+                    <TouchableOpacity 
+                      key={t.id} 
+                      style={renderOptionStyle(assocData.turmaId === t.id)}
+                      onPress={() => setAssocData({...assocData, turmaId: t.id || ''})}
+                    >
+                      <Text style={{ color: isLightTheme ? '#000' : '#fff' }}>{t.nome}</Text>
+                      {assocData.turmaId === t.id && <Ionicons name="checkmark-circle" size={18} color="#10b981" />}
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
             </View>
 
             <View style={styles.inputGroup}>
-              <Text style={[styles.inputLabel, { color: labelColor }]}>ID do Professor Autorizador</Text>
-              <TextInput 
-                style={[styles.input, { backgroundColor: inputBg, color: isLightTheme ? '#000' : '#fff' }]} 
-                placeholder="ID do Professor"
-                value={assocData.professorId}
-                onChangeText={t => setAssocData({...assocData, professorId: t})}
-              />
+              <Text style={[styles.inputLabel, { color: labelColor }]}>Professor Autorizador</Text>
+              <View style={renderSelectContainer()}>
+                <ScrollView style={{ maxHeight: 120 }} nestedScrollEnabled>
+                  {professors.map(p => (
+                    <TouchableOpacity 
+                      key={p.id} 
+                      style={renderOptionStyle(assocData.professorId === p.id)}
+                      onPress={() => setAssocData({...assocData, professorId: p.id || ''})}
+                    >
+                      <Text style={{ color: isLightTheme ? '#000' : '#fff' }}>{p.full_name}</Text>
+                      {assocData.professorId === p.id && <Ionicons name="checkmark-circle" size={18} color="#2563eb" />}
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
             </View>
 
             <CustomButton title="Vincular Agora" onPress={handleConfirmAssoc} loading={loading} />
