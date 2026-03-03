@@ -2,7 +2,7 @@ const { db } = require('../../shared/config/firebase');
 const firebaseAdmin = require('firebase-admin');
 
 const createProfessorService = async (id, dados) => {
-  const turmasIniciais = dados.turma_id_principal 
+  const turmasIniciais = (dados.turma_id_principal && dados.turma_id_principal !== "")
     ? { [dados.turma_id_principal]: true } 
     : {};
 

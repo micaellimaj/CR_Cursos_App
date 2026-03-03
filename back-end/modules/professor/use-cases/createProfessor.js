@@ -18,19 +18,22 @@ module.exports = async (dados) => {
   }
 
   let turmaExiste = null;
-  if (dados.turma_id_principal) {
+  const temTurma = dados.turma_id_principal && dados.turma_id_principal.trim() !== "";
+
+  if (temTurma) {
     turmaExiste = await turmaService.getTurmaPorId(dados.turma_id_principal);
     if (!turmaExiste) throw { status: 404, message: 'Turma principal não encontrada.' };
   }
 
   const hashedSenha = await bcrypt.hash(dados.senha, 10);
   const customId = gerarIdProfessor();
-  
+
   const novoProfessor = new Professor({ 
     ...dados, 
     id: customId, 
     senha: hashedSenha, 
-    idade 
+    idade,
+    turma_id_principal: temTurma ? dados.turma_id_principal : null
   });
 
   const id = await createProfessorService(novoProfessor.id, novoProfessor.toJSON());
@@ -42,6 +45,6 @@ module.exports = async (dados) => {
   return { 
     id, 
     message: 'Professor criado com sucesso',
-    turma_associada: turmaExiste ? turmaExiste.nome : 'Nenhuma'
+    turma_associada: turmaExiste ? (turmaExiste.nome || 'Associada') : 'Nenhuma'
   };
 };
