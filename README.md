@@ -86,92 +86,48 @@ A plataforma opera sob um modelo de controle de acesso baseado em funções (RBA
 
 ## <img src= "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExb204djhvc3BlYWZrcTAwdnU4MHJjMTg5ZHNvZHRjMXQ2OXJ1bWhydiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/mWJXoTfV7mFNiXFuFm/giphy.gif" alt="class" width="50" height="50" /> Estrutura do Banco de Dados e API
 
-O projeto utiliza o **Firebase Realtime Database** para persistência dos dados e **Express.js** como framework para API REST. Abaixo estão as principais entidades com seus campos e rotas REST organizadas por recurso.
+O projeto utiliza o Firebase Realtime Database como banco NoSQL de alta disponibilidade e o Express.js para orquestrar uma API REST modularizada. Para conferir a documentação técnica completa (parâmetros, payloads e respostas), acesse: [Documentação Interativa da API (Swagger)](https://cr-cursos-app-2.onrender.com/api-docs)
 
 ---
 
-### <img src= "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzgydXV6ZGF1ODFjMXRqZWlrbHliNzJzbjExeDNkZm4zdWxjOWJzbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3ov9jNkYm8QqxakeCQ/giphy.gif" alt="class" width="25" height="25" /> Alunos (`/alunos`)
+### <img src= "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzgydXV6ZGF1ODFjMXRqZWlrbHliNzJzbjExeDNkZm4zdWxjOWJzbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3ov9jNkYm8QqxakeCQ/giphy.gif" alt="class" width="25" height="25" /> Organização do Banco de Dados (Firebase)
 
-#### Campos no banco:
+Os dados estão estruturados de forma a otimizar a leitura em tempo real, divididos nos seguintes nós principais:
 
-| Campo               | Tipo     | Descrição                                      |
-|---------------------|----------|-----------------------------------------------|
-| `full_name`         | String   | Nome completo                                  |
-| `email`             | String   | E-mail do aluno                                |
-| `senha`             | String   | Senha criptografada com bcrypt                 |
-| `data_nascimento`   | String   | Data de nascimento                             |
-| `idade`             | Number   | Idade calculada automaticamente                |
-| `telefone`          | String   | Telefone do aluno                              |
-| `nome_responsavel`  | String   | Nome do responsável (se menor de idade)        |
-| `email_responsavel` | String   | E-mail do responsável (se menor de idade)      |
-| `telefone_responsavel` | String | Telefone do responsável (se menor de idade)    |
-| `created_at`        | String   | Data de criação do cadastro (ISO)              |
-
-####  Endpoints:
-
-| Método | Rota                  | Descrição                            |
-|--------|-----------------------|--------------------------------------|
-| `POST` | `/alunos`             | Cria um novo aluno                   |
-| `GET`  | `/alunos`             | Retorna todos os alunos              |
-| `GET`  | `/alunos/:id`         | Retorna um aluno específico          |
-| `PUT`  | `/alunos/:id`         | Atualiza os dados de um aluno        |
-| `DELETE` | `/alunos/:id`       | Remove um aluno                      |
+| Módulo                 | Descrição                                                   | Principais Entidades                              |
+|------------------------|------------------------------------------------------------|---------------------------------------------------|
+| Núcleo de Usuários     | Gestão de perfis, permissões e autenticação.              | alunos, professores, administradores              |
+| Gestão Acadêmica       | Estrutura de ensino e organização escolar.                | cursos, disciplinas, turmas, classes              |
+| Pedagógico             | Materiais de apoio e avaliação de desempenho.             | conteudos, atividades, notas, frequencias         |
+| Comunicação & Sistema  | Interações e logs do sistema.                             | mensagens_privadas, uploads                       |
 
 ---
 
-### <img src= "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzgydXV6ZGF1ODFjMXRqZWlrbHliNzJzbjExeDNkZm4zdWxjOWJzbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3ov9jNkYm8QqxakeCQ/giphy.gif" alt="class" width="25" height="25" /> Professores (`/professores`)
+### <img src= "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzgydXV6ZGF1ODFjMXRqZWlrbHliNzJzbjExeDNkZm4zdWxjOWJzbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3ov9jNkYm8QqxakeCQ/giphy.gif" alt="class" width="25" height="25" /> Módulos da API REST
 
-####  Campos no banco:
+A API foi desenhada seguindo os princípios de separação de domínios, onde cada módulo possui seu próprio conjunto de rotas padrão (CRUD) e lógicas específicas:
 
-| Campo             | Tipo     | Descrição                        |
-|-------------------|----------|-----------------------------------|
-| `full_name`       | String   | Nome completo                    |
-| `email`           | String   | E-mail do professor              |
-| `senha`           | String   | Senha criptografada com bcrypt   |
-| `data_nascimento` | String   | Data de nascimento               |
-| `idade`           | Number   | Idade calculada automaticamente  |
-| `telefone`        | String   | Telefone                         |
-| `created_at`      | String   | Data de criação do cadastro      |
+1. **Módulo de Usuários & Auth (/alunos, /professores, /auth)**
+* **Funcionalidades**: Cadastro completo com validação de e-mail, geração de IDs personalizados e cálculo automático de idade.
+* **Segurança**: Autenticação via JWT com middlewares de proteção para rotas de Admin e verificação de perfil próprio.
 
-####  Endpoints:
+2. **Módulo Acadêmico (/cursos, /disciplinas, /turmas)**
+* **Funcionalidades**: Gerenciamento da árvore escolar. Permite vincular professores a turmas e alunos a cursos específicos.
 
-| Método | Rota                      | Descrição                             |
-|--------|---------------------------|---------------------------------------|
-| `POST` | `/professores`            | Cria um novo professor                |
-| `GET`  | `/professores`            | Retorna todos os professores          |
-| `GET`  | `/professores/:id`        | Retorna um professor específico       |
-| `PUT`  | `/professores/:id`        | Atualiza os dados de um professor     |
-| `DELETE` | `/professores/:id`      | Remove um professor                   |
+3. **Módulo Pedagógico (/conteudos, /atividades, /notas, /frequencias)**
+* **Funcionalidades**: Central de upload de materiais (PDF/Vídeo), controle de chamadas em tempo real e lançamento de avaliações com cálculo de média.
+
+4. **Módulo de Arquivos & Comunicação (/upload, /privado)**
+* **Funcionalidades**: Gestão de arquivos via Multer (armazenamento local/containerizado) e sistema de mensagens internas entre perfis.
 
 ---
 
-### <img src= "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzgydXV6ZGF1ODFjMXRqZWlrbHliNzJzbjExeDNkZm4zdWxjOWJzbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3ov9jNkYm8QqxakeCQ/giphy.gif" alt="class" width="25" height="25" /> Administradores (`/administradores`)
+### <img src= "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzgydXV6ZGF1ODFjMXRqZWlrbHliNzJzbjExeDNkZm4zdWxjOWJzbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3ov9jNkYm8QqxakeCQ/giphy.gif" alt="class" width="25" height="25" /> Padrão de Respostas e Segurança
 
-####  Campos no banco:
-
-| Campo       | Tipo   | Descrição                           |
-|-------------|--------|--------------------------------------|
-| `full_name` | String | Nome completo do administrador       |
-| `email`     | String | E-mail                               |
-| `senha`     | String | Senha criptografada com bcrypt       |
-
-
----
-
-### <img src= "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzgydXV6ZGF1ODFjMXRqZWlrbHliNzJzbjExeDNkZm4zdWxjOWJzbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3ov9jNkYm8QqxakeCQ/giphy.gif" alt="class" width="25" height="25" /> Arquivos (`/upload`)
-
-####  Os arquivos são armazenados no sistema de arquivos local do servidor com operações realizadas via Multer.
-
-####  Endpoints:
-
-| Método    | Rota                       | Descrição                              |
-|-----------|----------------------------|----------------------------------------|
-| `POST`    | `/upload`                  | Envia um novo arquivo                  |
-| `GET`     | `/upload`                  | Lista todos os arquivos                |
-| `GET`     | `/upload/:fileName`        | Faz o download de um arquivo específico|
-| `PUT`     | `/upload/:fileName`        | Atualiza um arquivo existente          |
-| `DELETE`  | `/upload/:fileName`        | Deleta um arquivo do sistema           |
-
+Todas as rotas da API seguem um padrão de resposta unificado para facilitar a integração com o Front-End:
+* **Sucesso**: 200 OK ou 201 Created com objeto JSON.
+* **Erro de Validação**: 400 Bad Request com detalhamento do campo inválido.
+* **Segurança**: 401 Unauthorized ou 403 Forbidden para acessos sem o token JWT ou sem nível de permissão adequado.
 
 ##  <img src= "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExYnI1NHB4YjRzeWU0enBpOWJ2bjV2enk2eDA3am50bGJxb21ic3F2ciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/8Fo162g5cK3tQVj909/giphy.gif" alt="class" width="50" height="50" /> Estrutura do Projeto:
 ```
