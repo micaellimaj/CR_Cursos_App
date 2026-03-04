@@ -16,7 +16,7 @@ O objetivo central é modernizar a experiência de ensino-aprendizagem da instit
 
 ## <img src= "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExem0zOWYyeTZ3bHo2M2ViZjhtbXZpZGdrZzE5aHViYnVlbGNvZmFyOSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/ImKDUp5nKeMxaUiNan/giphy.gif" alt="class" width="50" height="50" /> Arquitetura do Projeto:
 
-![projeto/arquitetura](readme/arquiteturanodejs.gif)
+![projeto/arquitetura](readme/arquiteturaprojeto.gif)
 
 ##  <img src= "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExajh0OXc4bzlzNTlqOWdvOHk5MWwyb2IwZmcwOWgyOHp6a3F2M3B6eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/J6td6BTmG1PeGinoqB/giphy.gif" alt="class" width="50" height="50" /> Tecnologias:
 
@@ -82,7 +82,7 @@ A plataforma opera sob um modelo de controle de acesso baseado em funções (RBA
 
 ## <img src= "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExNTBqMGo1OXJzNGxjcnNuc3p1bGVubGF6bmg3N202c24zODM3Y3ZweSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/8m4gPv1UFz1jmiCtKd/giphy.gif" alt="class" width="50" height="50" /> Visualização do Projeto:
 
-![projeto/visualizacao](readme/CR_CURSOS_APP.gif)
+![projeto/visualizacao](readme/crcursovisualizacao.gif)
 
 ## <img src= "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExb204djhvc3BlYWZrcTAwdnU4MHJjMTg5ZHNvZHRjMXQ2OXJ1bWhydiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/mWJXoTfV7mFNiXFuFm/giphy.gif" alt="class" width="50" height="50" /> Estrutura do Banco de Dados e API
 
