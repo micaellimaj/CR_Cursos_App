@@ -52,55 +52,33 @@ A plataforma opera sob um modelo de controle de acesso baseado em funções (RBA
 * **Matrícula & Cadastro**: Responsável pelo ingresso de novos alunos e professores no ecossistema.
 * **Auditoria Acadêmica**: Supervisão geral da integridade dos dados, cursos, turmas e fluxos da plataforma.
 
-##  <img src= "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXQxdGV6dXQzM3hrbGx2NjhtdGpjZXR5a2M1N3E2emphZWRidWFxdiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Q8DYzZxZweZpLS4y6s/giphy.gif" alt="class" width="50" height="50" /> Etapas do Projeto:
+##  <img src= "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXQxdGV6dXQzM3hrbGx2NjhtdGpjZXR5a2M1N3E2emphZWRidWFxdiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Q8DYzZxZweZpLS4y6s/giphy.gif" alt="class" width="50" height="50" /> Etapas do Projeto
 
 ### <img src= "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExc3ZyMHB1aHJ5bTNkN3c4dDl1MHB4azJyaHNldnM4b202ZDE3MjY5cyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/26vIfZEpQJtbSC9u8/giphy.gif" alt="class" width="25" height="25" /> Front-End:
-- Uso do React Native + Expo.
-- Navegação implementada com **Drawer Navigation**.
-- Componentes reutilizáveis em `components/`.
-- Context API para gerenciamento de temas e estados globais (`ThemeContext.tsx`).
-- Separação clara entre telas (`screens/`) e estilos (`styles/`).
-- Páginas organizadas por fluxo de usuário: login, cadastro, aulas, perfil, notificações, etc.
-- Uso do **Firebase Realtime Database** para persistência de dados.
-- Integração com **API do back-end** para upload, login e consulta de dados.
-
----
+* **Core**: Desenvolvimento híbrido utilizando React Native + Expo com suporte total a TypeScript.
+* **Arquitetura por Módulos**: Organização modular segmentada por perfis de usuário (admin/, aluno/, auth/, professor/), onde cada módulo possui seus próprios componentes, controllers e estilos.
+* **Gerenciamento de Estado**: Uso avançado de Context API para estados globais (Auth e Theme) e Zustand/Redux para persistência de dados complexos.
+* **Navegação Dinâmica**: Implementação de fluxos complexos utilizando React Navigation (Drawer e Stack).
+* **Consumo de API**: Camada de serviços centralizada com Axios, garantindo comunicação eficiente com o back-end e tratamento de erros global.
 
 ### <img src= "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExc3ZyMHB1aHJ5bTNkN3c4dDl1MHB4azJyaHNldnM4b202ZDE3MjY5cyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/26vIfZEpQJtbSC9u8/giphy.gif" alt="class" width="25" height="25" /> Back-End:
-* Projeto modularizado com separação clara de responsabilidades: controllers/, routes/, services/, middlewares/, utils/, e config/.
-* Utiliza Node.js com o framework Express.js para construção da API REST.
-* Arquivo principal do servidor: server.js, responsável por configurar middlewares, rotas e iniciar o servidor.
+* **Arquitetura Limpa (Clean Architecture)**: Projeto desacoplado e modularizado, garantindo que as regras de negócio sejam independentes de frameworks.
+* **Escalabilidade**: Utilização de Use Cases isolados para cada ação do sistema (ex: createAluno.js), facilitando a manutenção e expansão.
+* **Autenticação e Segurança**:
+* Implementação de JWT (JSON Web Token) com controle de acesso baseado em níveis (Admin, Professor, Aluno).
+* Middlewares robustos para verificação de permissões e segurança de rotas privadas.
+* Documentação: Integração com Swagger, oferecendo uma interface interativa para teste e visualização de todos os endpoints da API.
+* Sistema de Notificações: Envio de e-mails transacionais (como recuperação de senha) utilizando Nodemailer e templates Handlebars (.hbs).
 
-1. **Estrutura Técnica**:
-* controllers/: Lógica de controle das requisições HTTP, separada por domínio:
-  * alunoController.js, professorController.js, authController.js, etc.
-* routes/: Define as rotas da API agrupadas por entidade (aluno, professor, auth, upload, imagem).
-* services/: Camada de regra de negócio, responsável por interações com Firebase e manipulações lógicas dos dados.
-* middlewares/: Middleware de autenticação JWT (authMiddleware.js) para proteger rotas sensíveis.
-* utils/:
-  * Funções auxiliares para cálculo de idade, geração de senhas e validação de e-mails (calcularIdade.js, gerarIdPersonalizado.js, validarEmail.js).
-* uploads/:
-  * Pasta para gerenciamento e armazenamento temporário de arquivos enviados.
+### <img src= "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExc3ZyMHB1aHJ5bTNkN3c4dDl1MHB4azJyaHNldnM4b202ZDE3MjY5cyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/26vIfZEpQJtbSC9u8/giphy.gif" alt="class" width="25" height="25" /> Qualidade e Testes (QA):
+* **Testes Unitários**: Aplicação de testes rigorosos nos Use Cases com Jest, garantindo que cada regra de negócio funcione isoladamente.
+* **Testes de Integração**: Verificação do fluxo completo entre módulos e banco de dados dentro da pasta __tests__ de cada domínio.
 
-2. **Autenticação e Segurança**:
-* Autenticação via JWT (JSON Web Token), implementada em authService.js e verificada por middleware.
-* Separação entre usuários do tipo aluno, professor e administrador.
-* Validações customizadas e geração de identificadores únicos para usuários.
-
---- 
-
-### <img src= "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExc3ZyMHB1aHJ5bTNkN3c4dDl1MHB4azJyaHNldnM4b202ZDE3MjY5cyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/26vIfZEpQJtbSC9u8/giphy.gif" alt="class" width="25" height="25" /> Banco de dados:
-
-1. **Firebase Realtime Database**
-* Utilizado como banco NoSQL em tempo real para persistência dos dados dos alunos, professores e administradores.
-* Configuração feita em config/firebase.js com a chave de serviço firebaseServiceAccountKey.json.
-* Interação com o Firebase feita exclusivamente pela camada de services/, promovendo separação e reuso de código.
-
-2. **Docker (Docker Desktop)**
-* Utilizado principalmente para o gerenciamento de upload de arquivos.
-* Composição feita via docker-compose.yml para orquestração de containers.
-* Imagem definida no Dockerfile, permitindo que o back-end seja facilmente containerizado e replicável.
-* Arquivos são enviados através do uploadController.js, processados por uploadService.js e armazenados localmente em uploads/.
+### <img src= "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExc3ZyMHB1aHJ5bTNkN3c4dDl1MHB4azJyaHNldnM4b202ZDE3MjY5cyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/26vIfZEpQJtbSC9u8/giphy.gif" alt="class" width="25" height="25" /> Infraestrutura e Dados:
+* **Firebase Realtime Database**: Banco NoSQL em tempo real para persistência de dados de usuários e conteúdos acadêmicos.
+* **Firebase Admin SDK**: Integração segura no back-end para manipulação avançada de dados e autenticação.
+* **Docker & Docker Compose**: Containerização completa da API e serviços, garantindo que o ambiente de desenvolvimento seja idêntico ao de produção.
+* **Storage Local & Cloud**: Gerenciamento de uploads de arquivos com suporte a processamento temporário e persistência organizada
 
 ## <img src= "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExNTBqMGo1OXJzNGxjcnNuc3p1bGVubGF6bmg3N202c24zODM3Y3ZweSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/8m4gPv1UFz1jmiCtKd/giphy.gif" alt="class" width="50" height="50" /> Visualização do Projeto:
 
