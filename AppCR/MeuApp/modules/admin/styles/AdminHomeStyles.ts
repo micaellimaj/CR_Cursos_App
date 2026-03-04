@@ -69,19 +69,22 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
   },
   statNumber: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: 'bold',
-    marginVertical: 4,
+  
   },
   statLabel: {
     color: '#64748b',
     fontSize: 12,
+    fontWeight: '500',
+    marginTop: 2,
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#2563eb',
     marginBottom: 16,
+    marginTop: 5,
   },
   grid: {
     flexDirection: 'row',
@@ -104,6 +107,29 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+
+  statGridCard: {
+    width: '48%',
+    padding: 20,
+    borderRadius: 16,
+    alignItems: 'center',
+    marginBottom: 16,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  iconCircle: {
+    width: 45,
+    height: 45,
+    borderRadius: 22.5,
+    backgroundColor: 'rgba(37, 99, 235, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+
 });
 
 export default styles;

@@ -174,11 +174,26 @@ export default function SubjectManagementScreen() {
     <View style={[globalStyles.container, styles.container]}>
       <View style={styles.content}>
         <View style={styles.headerSection}>
-          <Text style={[styles.title, { color: isLightTheme ? '#1e3a8a' : '#fff' }]}>Gestão de Disciplinas</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 2 }}>
+            <Ionicons 
+              name="book-outline" 
+              size={24} 
+              color={isLightTheme ? '#1e3a8a' : '#fff'} 
+              style={{ marginRight: 10 }} 
+            />
+            <Text style={[styles.title, { color: isLightTheme ? '#1e3a8a' : '#fff' }]}>
+              Gestão de Disciplinas
+            </Text>
+          </View>
           <Text style={styles.subtitle}>Crie e gerencie as matérias e seus vínculos</Text>
         </View>
 
-        <CustomButton title="+ Nova Disciplina" onPress={() => handleOpenModal()} />
+        <View style={styles.createButtonContainer}>
+          <CustomButton 
+            title="+ Nova Disciplina" 
+            onPress={() => handleOpenModal()} 
+          />
+        </View>
 
         {loading && <ActivityIndicator color="#2563eb" style={{ marginVertical: 10 }} />}
 
@@ -193,19 +208,27 @@ export default function SubjectManagementScreen() {
             return (
               <View style={[styles.subjectCard, { backgroundColor: isLightTheme ? '#fff' : '#1e293b' }]}>
                 <View style={styles.iconContainer}>
-                  <Ionicons name="layers-outline" size={24} color="#2563eb" />
+                  <Ionicons name="book-outline" size={22} color="#2563eb" />
                 </View>
+                
                 <View style={styles.subjectInfo}>
                   <View style={styles.subjectHeader}>
                     <Text style={[styles.subjectName, { color: isLightTheme ? '#1e3a8a' : '#fff' }]}>{item.nome}</Text>
                     <Text style={styles.subjectCode}>{item.id?.substring(0, 5)}</Text>
                   </View>
-                  <Text style={styles.courseTag}><Ionicons name="book-outline" size={12}/> {cursoNome}</Text>
-                  <Text style={styles.creditsTag}>{item.turmasAssociadas?.length || 0} turmas vinculadas</Text>
-                </View>
+                  <Text style={styles.courseTag}><Ionicons name="school-outline" size={12}/> {cursoNome}</Text>
+                  
+                      {/* Estilo de tag similar ao de Turmas para vínculos */}
+                      <View style={styles.tagRow}>
+                        <View style={[styles.infoTag, { backgroundColor: isLightTheme ? '#f1f5f9' : '#2d3748' }]}>
+                          <Ionicons name="people-outline" size={12} color="#475569" />
+                          <Text style={styles.tagText}>{item.turmasAssociadas?.length || 0} Turmas</Text>
+                        </View>
+                      </View>
+                    </View>
                 <View style={styles.actionButtons}>
                   <TouchableOpacity style={styles.iconBtn} onPress={() => handleOpenAssoc(item)}>
-                    <MaterialCommunityIcons name="link-plus" size={20} color="#10b981" />
+                    <Ionicons name="git-network-outline" size={20} color="#050707" />
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.iconBtn} onPress={() => handleOpenModal(item)}>
                     <Feather name="edit-2" size={18} color="#2563eb" />

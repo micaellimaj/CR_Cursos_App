@@ -31,14 +31,12 @@ export default function CustomButton({ title, onPress, disabled, loading }: Cust
 
 const styles = StyleSheet.create({
   button: {
-    width: width * 0.9,
+    width: '100%',
     height: 50,
-    backgroundColor: '#007BFF',
+    backgroundColor: '#1e3a8a',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    marginTop: 10,
-    alignSelf: 'center',
   },
   buttonDisabled: {
     backgroundColor: '#94a3b8',

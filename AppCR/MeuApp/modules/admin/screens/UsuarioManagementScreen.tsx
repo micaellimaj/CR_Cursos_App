@@ -3,7 +3,7 @@ import {
   View, Text, FlatList, TouchableOpacity, TextInput, 
   Modal, ScrollView, KeyboardAvoidingView, Platform, Alert, SafeAreaView, ActivityIndicator,
 } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import { Feather, Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../../contexts/ThemeContext';
 import { getGlobalStyles } from '../../../styles/globalStyles';
 import CustomButton from '../../../components/CustomButton';
@@ -202,10 +202,26 @@ export default function UsuarioManagementScreen() {
     <SafeAreaView style={[globalStyles.container, { backgroundColor: isLightTheme ? '#f5f7fa' : '#0f172a' }]}>
       <View style={styles.content}>
         <View style={styles.headerSection}>
-          <Text style={[styles.title, { color: isLightTheme ? '#1e3a8a' : '#fff' }]}>Gestão de Usuários</Text>
-          <Text style={styles.subtitle}>Administre {viewType === 'student' ? 'alunos' : 'professores'}</Text>
+          {/* Container para alinhar ícone e título em linha */}
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 2 }}>
+            <Ionicons 
+              name="person-add-outline" 
+              size={24} 
+              color={isLightTheme ? '#1e3a8a' : '#fff'} 
+              style={{ marginRight: 10 }} 
+            />
+            <Text style={[styles.title, { color: isLightTheme ? '#1e3a8a' : '#fff' }]}>
+              Gestão de Usuários
+            </Text>
+          </View>
+          
+          <Text style={styles.subtitle}>
+            Administre {viewType === 'student' ? 'alunos' : 'professores'}
+          </Text>
         </View>
-
+  
+  {/* Restante do seu código (botões, busca, lista...) */}
+       
         <View style={[styles.tabContainer, { backgroundColor: isLightTheme ? '#e2e8f0' : '#1e293b' }]}>
           <TouchableOpacity 
             style={[styles.tabButton, viewType === 'student' && styles.tabButtonActive]} 
@@ -221,11 +237,13 @@ export default function UsuarioManagementScreen() {
           </TouchableOpacity>
         </View>
 
-        <CustomButton 
-            title={loading ? "Carregando..." : `+ Novo ${viewType === 'student' ? 'Aluno' : 'Professor'}`} 
-            onPress={() => handleOpenModal()} 
-            disabled={loading}
-        />
+       <View style={styles.createButtonContainer}>
+          <CustomButton 
+              title={loading ? "Carregando..." : `+ Novo ${viewType === 'student' ? 'Aluno' : 'Professor'}`} 
+              onPress={() => handleOpenModal()} 
+              disabled={loading}
+          />
+      </View>
 
         <View style={[styles.searchBar, { backgroundColor: inputBg }]}>
           <Feather name="search" size={18} color="#94a3b8" />
@@ -238,13 +256,19 @@ export default function UsuarioManagementScreen() {
           renderItem={({ item }) => {
             const tId = (item as any).turma_id || (item as any).turma_id_principal;
             const turmaNome = turmas.find(t => t.id === tId)?.nome || 'Sem Turma';
+            
             return (
               <View style={[styles.userCard, { backgroundColor: cardBg }]}>
+                <View style={styles.iconContainer}>
+                  <Ionicons name="person-add-outline" size={22} color="#2563eb" />
+                </View>
+
                 <View style={styles.userInfo}>
                   <Text style={styles.userBadge}>{turmaNome}</Text>
                   <Text style={[styles.userName, { color: textColor }]}>{item.full_name}</Text>
                   <Text style={styles.userEmail}>{item.email}</Text>
                 </View>
+
                 <View style={styles.actionButtons}>
                   <TouchableOpacity style={styles.iconBtn} onPress={() => handleOpenModal(item)}>
                     <Feather name="edit-2" size={18} color="#2563eb" />

@@ -106,16 +106,9 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: labelColor }]}>ADMINISTRAÇÃO</Text>
           <DrawerItem 
-            label="Painel Admin" 
+            label="Ir para o Painel" 
             icon={({ size }) => <MaterialIcons name="dashboard" size={size} color={iconColor} />}
-            onPress={() => props.navigation.navigate('AdminHome')}
-            style={styles.drawerItem}
-            labelStyle={[styles.drawerLabel, { color: labelColor }]}
-          />
-          <DrawerItem 
-            label="Gerenciar Usuários" 
-            icon={({ size }) => <MaterialIcons name="person-add" size={size} color={iconColor} />}
-            onPress={() => props.navigation.navigate('UsuarioManagementScreen')}
+            onPress={() => props.navigation.navigate('AdminHome')} // Vai para o Tab Navigator
             style={styles.drawerItem}
             labelStyle={[styles.drawerLabel, { color: labelColor }]}
           />

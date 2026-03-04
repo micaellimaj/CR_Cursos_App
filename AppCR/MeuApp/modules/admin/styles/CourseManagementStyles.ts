@@ -8,8 +8,9 @@ const styles = StyleSheet.create({
   },
   content: { 
     flex: 1,
-    paddingHorizontal: 16, // Espaçamento padrão mobile
+    paddingHorizontal: 16,
     paddingTop: 10,
+    width: '100%',
   },
   headerSection: { 
     marginBottom: 15 
@@ -24,6 +25,10 @@ const styles = StyleSheet.create({
     color: '#64748b', 
     marginTop: 2 
   },
+  createButtonContainer: {
+    width: '100%',
+    marginBottom: 10,
+  },
   
   searchBar: {
     flexDirection: 'row',
@@ -34,6 +39,7 @@ const styles = StyleSheet.create({
     height: 48, // Altura ideal para toque (touch target)
     borderWidth: 1,
     borderColor: 'rgba(0,0,0,0.05)',
+    width: '100%',
   },
   searchInput: { 
     flex: 1, 
@@ -50,25 +56,35 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    // Sombras leves para Mobile
+    width: '100%',
     elevation: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
+  iconContainer: {
+    width: 45,
+    height: 45,
+    borderRadius: 12,
+    backgroundColor: 'rgba(37, 99, 235, 0.1)', // Azul clarinho transparente
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexShrink: 0, // Impede o ícone de amassar
+  },
   courseInfo: { 
     flex: 1, 
-    marginLeft: 12 
+    marginLeft: 15
   },
   courseName: { 
     fontSize: 16, 
     fontWeight: 'bold',
-    marginBottom: 2
+    marginBottom: 2,
+    color: '#040406'
   },
   courseCode: { 
     fontSize: 12, 
-    color: '#2563eb', 
+    color: '#1e3a8a', 
     fontWeight: '700',
     backgroundColor: 'rgba(37, 99, 235, 0.1)',
     alignSelf: 'flex-start',
@@ -80,6 +96,7 @@ const styles = StyleSheet.create({
   actionButtons: { 
     flexDirection: 'row',
     alignItems: 'center',
+    marginLeft: 10,
   },
   iconBtn: { 
     padding: 10, // Área de toque maior

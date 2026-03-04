@@ -2,7 +2,7 @@ import { StyleSheet, Dimensions } from 'react-native';
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  content: { flex: 1, paddingHorizontal: 16, paddingTop: 10 },
+  content: { flex: 1, paddingHorizontal: 16, paddingTop: 10, width: '100%'},
   headerSection: { marginBottom: 15 },
   title: { fontSize: 22, fontWeight: 'bold', letterSpacing: 0.5 },
   subtitle: { fontSize: 13, color: '#64748b', marginTop: 2 },
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   tabButton: { flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 10 },
-  tabButtonActive: { backgroundColor: '#2563eb' },
+  tabButtonActive: { backgroundColor: '#1e3a8a' },
   tabText: { fontSize: 14, fontWeight: '600', color: '#64748b' },
   tabTextActive: { color: '#fff' },
 
@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
     height: 48,
     borderWidth: 1,
     borderColor: 'rgba(0,0,0,0.05)',
+    width: '100%',
   },
   searchInput: { flex: 1, marginLeft: 10, fontSize: 15 },
 
@@ -38,17 +39,18 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     flexDirection: 'row',
     alignItems: 'center',
+    width: '100%',
     elevation: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1, shadowRadius: 4,
   },
-  userInfo: { flex: 1, marginLeft: 12 },
+  userInfo: { flex: 1, marginLeft: 15 },
   userName: { fontSize: 16, fontWeight: 'bold', marginBottom: 2 },
   userEmail: { fontSize: 13, color: '#64748b' },
   userBadge: { // Igual ao código do curso (CC-101)
     fontSize: 12, 
-    color: '#2563eb', 
+    color: '#1e3a8a', 
     fontWeight: '700',
     backgroundColor: 'rgba(37, 99, 235, 0.1)',
     alignSelf: 'flex-start',
@@ -85,7 +87,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 30,
   },
-  saveButtonText: { color: '#fff', fontWeight: 'bold', fontSize: 16 }
+  saveButtonText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
+  createButtonContainer: {
+    width: '100%',
+    marginBottom: 15, // Espaço entre o botão e a barra de busca
+  },
+  iconContainer: {
+    width: 45,
+    height: 45,
+    borderRadius: 10,
+    backgroundColor: 'rgba(37, 99, 235, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexShrink: 0,
+  },
 });
 
 export default styles;

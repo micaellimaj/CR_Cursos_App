@@ -9,9 +9,10 @@ const styles = StyleSheet.create({
     flex: 1, 
     paddingHorizontal: 16, 
     paddingTop: 10,
-    width: '100%' 
+    width: '100%',
+    alignItems: 'center',
   },
-  headerSection: { marginBottom: 15 },
+  headerSection: { width: '100%', marginBottom: 20, alignItems: 'flex-start' },
   title: { fontSize: 22, fontWeight: 'bold' },
   subtitle: { fontSize: 13, color: '#64748b' },
   
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
   },
   subjectInfo: { 
     flex: 1, 
-    marginLeft: 12,
+    marginLeft: 15,
     marginRight: 8 
   },
   subjectHeader: { 
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
   },
   subjectCode: { 
     fontSize: 10, 
-    color: '#2563eb', 
+    color: '#1e3a8a', 
     fontWeight: '700', 
     backgroundColor: 'rgba(37, 99, 235, 0.1)', 
     paddingHorizontal: 5, 
@@ -151,7 +152,29 @@ modalHeader: {
     color: '#fff', 
     fontWeight: 'bold', 
     fontSize: 16 
-  }
+  },
+  createButtonContainer: {
+    width: '100%',     
+    marginBottom: 25,
+    alignItems: 'center',
+  },
+  tagRow: { 
+    flexDirection: 'row', 
+    marginTop: 6 
+  },
+  infoTag: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 6,
+  },
+  tagText: { 
+    fontSize: 11, 
+    marginLeft: 4, 
+    color: '#475569', 
+    fontWeight: '600' 
+  },
 });
 
 export default styles;

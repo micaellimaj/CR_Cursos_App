@@ -4,9 +4,14 @@ const styles = StyleSheet.create({
   container: { flex: 1, width: '100%' },
   content: { flex: 1, paddingHorizontal: 16, paddingTop: 10, width: '100%' },
   headerSection: { marginBottom: 15 },
-  title: { fontSize: 22, fontWeight: 'bold' },
+  title: { fontSize: 22, fontWeight: 'bold', letterSpacing: 0.5 },
   subtitle: { fontSize: 13, color: '#64748b' },
-  
+
+  createButtonContainer: {
+    width: '100%',
+    marginBottom: 20,
+  },
+
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',

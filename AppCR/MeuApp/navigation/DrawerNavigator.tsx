@@ -18,6 +18,7 @@ import CourseManagementScreen from '../modules/admin/screens/CourseManagementScr
 import SubjectManagementScreen from '../modules/admin/screens/SubjectManagementScreen';
 import ClassManagementScreen from '../modules/admin/screens/ClassManagementScreen';
 import { useAuth } from '../contexts/AuthContext'; 
+import AdminTabNavigator from './AdminTabNavigator';
 
 const Drawer = createDrawerNavigator();
 
@@ -69,15 +70,14 @@ export default function DrawerNavigator() {
       {/* ROTAS DE ADMIN: Só existem na memória se o tipo for admin */}
       {userType === 'admin' && (
         <>
-          <Drawer.Screen name="AdminHome" component={AdminHomeScreen} />
-          <Drawer.Screen name="CourseManagement" component={CourseManagementScreen} />
-          <Drawer.Screen name="SubjectManagement" component={SubjectManagementScreen} />
-          <Drawer.Screen name="ClassManagement" component={ClassManagementScreen} />
-          <Drawer.Screen name="UsuarioManagementScreen" component={RegisterScreen} />
+          <Drawer.Screen 
+            name="AdminHome" 
+            component={AdminTabNavigator} 
+            options={{ title: 'Painel Administrativo' }}
+          />
         </>
       )}
 
-      {/* Rota comum */}
       <Drawer.Screen name="TermosdeUso" component={TermsOfUseScreen} />
     </Drawer.Navigator>
   );

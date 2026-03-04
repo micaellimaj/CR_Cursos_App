@@ -3,7 +3,7 @@ import {
   View, Text, FlatList, TouchableOpacity, TextInput, 
   Modal, ScrollView, KeyboardAvoidingView, Platform, Alert, ActivityIndicator 
 } from 'react-native';
-import { MaterialIcons, Feather } from '@expo/vector-icons';
+import { MaterialIcons, Feather, FontAwesome5 } from '@expo/vector-icons';
 import { useTheme } from '../../../contexts/ThemeContext';
 import { getGlobalStyles } from '../../../styles/globalStyles';
 import CustomButton from '../../../components/CustomButton';
@@ -105,22 +105,35 @@ export default function CourseManagementScreen() {
         
         {/* Header */}
         <View style={styles.headerSection}>
-          <Text style={[styles.title, { color: isLightTheme ? '#1e3a8a' : '#fff' }]}>Gestão de Cursos</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 2 }}>
+            <FontAwesome5 
+              name="graduation-cap" 
+              size={22} 
+              color={isLightTheme ? '#1e3a8a' : '#fff'} 
+              style={{ marginRight: 10 }} 
+            />
+            <Text style={[styles.title, { color: isLightTheme ? '#1e3a8a' : '#fff' }]}>
+              Gestão de Cursos
+            </Text>
+          </View>
           <Text style={styles.subtitle}>Administre a grade curricular</Text>
         </View>
 
-        <CustomButton 
-          title="+ Criar Novo Curso" 
-          onPress={() => handleOpenModal()} 
-          disabled={loading}
-        />
+        {/* CORREÇÃO: Container envolvente para o botão ficar alinhado e com margem */}
+        <View style={styles.createButtonContainer}>
+          <CustomButton 
+            title="+ Criar Novo Curso" 
+            onPress={() => handleOpenModal()} 
+            disabled={loading}
+          />
+        </View>
 
         {/* Busca */}
         <View style={[styles.searchBar, { backgroundColor: isLightTheme ? '#fff' : '#1e293b' }]}>
           <Feather name="search" size={20} color="#94a3b8" />
           <TextInput 
             placeholder="Pesquisar..." 
-            style={[styles.searchInput, { color: isLightTheme ? '#000' : '#fff' }]} 
+            style={[styles.searchInput, { color: isLightTheme ? '#1e293b' : '#fff' }]} // Cor padronizada
             placeholderTextColor="#94a3b8" 
           />
         </View>
@@ -135,18 +148,25 @@ export default function CourseManagementScreen() {
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <View style={[styles.courseCard, { backgroundColor: isLightTheme ? '#fff' : '#1e293b' }]}>
+              {/* Ícone à esquerda igual ao de Turmas */}
+              <View style={styles.iconContainer}>
+                <FontAwesome5 name="graduation-cap" size={18} color="#2563eb" />
+              </View>
+
               <View style={styles.courseInfo}>
                 <Text style={styles.courseCode}>{item.id?.substring(0, 8)}</Text>
-                <Text style={[styles.courseName, { color: isLightTheme ? '#1e3a8a' : '#fff' }]}>{item.nome}</Text>
+                <Text style={[styles.courseName, { color: isLightTheme ? '#1e3a8a' : '#fff' }]}>
+                  {item.nome}
+                </Text>
                 <Text style={styles.subtitle} numberOfLines={2}>{item.descricao}</Text>
               </View>
               
               <View style={styles.actionButtons}>
                 <TouchableOpacity style={styles.iconBtn} onPress={() => handleOpenModal(item)}>
-                  <Feather name="edit-2" size={20} color="#2563eb" />
+                  <Feather name="edit-2" size={18} color="#2563eb" />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.iconBtn} onPress={() => item.id && handleDelete(item.id)}>
-                  <Feather name="trash-2" size={20} color="#ef4444" />
+                  <Feather name="trash-2" size={18} color="#ef4444" />
                 </TouchableOpacity>
               </View>
             </View>
