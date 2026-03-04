@@ -130,6 +130,7 @@ Todas as rotas da API seguem um padrão de resposta unificado para facilitar a i
 * **Segurança**: 401 Unauthorized ou 403 Forbidden para acessos sem o token JWT ou sem nível de permissão adequado.
 
 ##  <img src= "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExYnI1NHB4YjRzeWU0enBpOWJ2bjV2enk2eDA3am50bGJxb21ic3F2ciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/8Fo162g5cK3tQVj909/giphy.gif" alt="class" width="50" height="50" /> Estrutura do Projeto:
+
 ```
 CR_Cursos_App/
 │
@@ -274,8 +275,12 @@ docker-compose up --build
 PORT=3000
 FIREBASE_DATABASE_URL=https://seu-app.firebaseio.com
 FIREBASE_PROJECT_ID=cr-cursos
-firebaseServiceAccountKey.json: necessário para autenticação com Firebase Admin SDK. 
+firebaseServiceAccountKey.json: necessário para autenticação com Firebase Admin SDK.
+JWT_SECRET=123456
+ADMIN_EMAIL=administrados.com
+ADMIN_SENHA=12345689
+API_URL=http://localhost:3000
 ```
 ##  <img src= "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExemx1ZTJ5bG9nenp1NnhzN2RibWtiNWN5NmZ1bTdrdHI2ZWh2dmV0MSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/HKBzxh3pdv3Fe/giphy.gif" alt="class" width="50" height="50" /> Conclusão:
 
-Com esta plataforma, a CR Cursos de Toritama amplia suas possibilidades de ensino, alcançando alunos de maneira mais dinâmica, moderna e acessível. A iniciativa representa um avanço importante na digitalização do ensino profissionalizante na região do Agreste Pernambucano.
+A plataforma CR Cursos redefine a experiência educacional em Toritama - PE, unindo uma arquitetura de software moderna e escalável à necessidade real de digitalização do ensino profissionalizante. Ao integrar Clean Architecture, Testes Automatizados e uma interface mobile intuitiva, o projeto não apenas amplia o alcance pedagógico da instituição, mas estabelece um novo padrão de eficiência e acessibilidade tecnológica para a região do Agreste Pernambucano. Esta iniciativa é o reflexo de um compromisso contínuo com a inovação e com o fortalecimento da comunidade escolar através da tecnologia.
