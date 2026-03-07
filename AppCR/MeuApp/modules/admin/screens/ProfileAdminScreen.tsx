@@ -11,7 +11,8 @@ import {
   useWindowDimensions,
   ActivityIndicator,
 } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import { Feather, Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native'; 
 import { useTheme } from '../../../contexts/ThemeContext';
 import styles from '../../../styles/ProfileStyles';
 import { getAdminProfile, updateAdminProfile } from '../controllers/profileController';
@@ -19,6 +20,7 @@ import { IAdmin } from '../types';
 
 export default function ProfileAdminScreen() {
   const { theme } = useTheme();
+  const navigation = useNavigation<any>();
   const isLightTheme = theme === 'light';
   const { width } = useWindowDimensions();
 
@@ -92,7 +94,21 @@ export default function ProfileAdminScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bgScreen }}>
       <ScrollView contentContainerStyle={{ alignItems: 'center', paddingBottom: 32 }}>
-        <View style={[styles.card, { backgroundColor: colors.cardBg, width: cardWidth, marginTop: 32, padding: 20 }]}>
+        
+        {/* BOTÃO VOLTAR */}
+        <View style={{ width: cardWidth, marginTop: 20, alignItems: 'flex-start' }}>
+          <TouchableOpacity 
+            onPress={() => navigation.navigate('AdminHome')}
+            style={{ flexDirection: 'row', alignItems: 'center' }}
+          >
+            <Ionicons name="arrow-back" size={24} color={colors.mainText} />
+            <Text style={{ color: colors.mainText, fontSize: 16, marginLeft: 8, fontWeight: '600' }}>
+              Voltar para o Início
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={[styles.card, { backgroundColor: colors.cardBg, width: cardWidth, marginTop: 20, padding: 20 }]}>
           
           <View style={styles.header}>
             <View style={{ flex: 1 }}>

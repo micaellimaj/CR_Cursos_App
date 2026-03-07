@@ -79,7 +79,7 @@ export default function DrawerNavigator() {
           <Drawer.Screen 
             name="ProfileAdmin" 
             component={ProfileAdminScreen} 
-            options={{ title: 'Perfil Administrativo' }}
+            options={{ title: 'Painel Administrativo' }}
           />
         </>
       )}
