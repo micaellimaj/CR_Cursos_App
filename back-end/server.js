@@ -16,6 +16,7 @@ const conteudoRoutes = require('./modules/conteudo/conteudoRoutes');
 const atividadeRoutes = require('./modules/atividades/atividadeRoutes');
 const classeRoutes = require('./modules/classe/classeRoutes');
 const privadoRoutes = require('./modules/privado/privadoRoutes.js');
+const adminRoutes = require('./modules/administrador/adminRoutes');
 const path = require("path");
 const hbs = require('hbs');
 
@@ -60,6 +61,7 @@ app.use('/conteudo', conteudoRoutes);
 app.use('/atividade', atividadeRoutes);
 app.use('/classe', classeRoutes);
 app.use('/privado', privadoRoutes);
+app.use('/administradores', adminRoutes);
 // arquivos estáticos
 app.use("/js", express.static(path.join(__dirname, "public/js")));
 // views

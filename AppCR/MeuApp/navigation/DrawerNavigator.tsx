@@ -17,6 +17,7 @@ import AdminHomeScreen from '../modules/admin/screens/AdminHomeScreen';
 import CourseManagementScreen from '../modules/admin/screens/CourseManagementScreen';
 import SubjectManagementScreen from '../modules/admin/screens/SubjectManagementScreen';
 import ClassManagementScreen from '../modules/admin/screens/ClassManagementScreen';
+import ProfileAdminScreen from '../modules/admin/screens/ProfileAdminScreen';
 import { useAuth } from '../contexts/AuthContext'; 
 import AdminTabNavigator from './AdminTabNavigator';
 
@@ -74,6 +75,11 @@ export default function DrawerNavigator() {
             name="AdminHome" 
             component={AdminTabNavigator} 
             options={{ title: 'Painel Administrativo' }}
+          />
+          <Drawer.Screen 
+            name="ProfileAdmin" 
+            component={ProfileAdminScreen} 
+            options={{ title: 'Perfil Administrativo' }}
           />
         </>
       )}

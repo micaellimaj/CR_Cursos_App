@@ -94,3 +94,18 @@ export interface CreateTurmaResponse {
   curso: string;
   message: string;
 }
+
+export interface IAdmin {
+  id?: string;
+  full_name: string;
+  email: string;
+  senha?: string;
+  tipo?: 'admin';
+}
+
+export interface AdminProfileResponse {
+  id: string;
+  full_name: string;
+  email: string;
+  tipo: string;
+}
