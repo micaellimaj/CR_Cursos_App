@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, ActivityIndicator, RefreshControl } from 'react-native';
+import { View, Text, ScrollView, RefreshControl } from 'react-native';
 import { FontAwesome5, Feather, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTheme } from '../../../contexts/ThemeContext';
 import { getGlobalStyles } from '../../../styles/globalStyles';
 import styles from '../styles/AdminHomeStyles';
 import { getDashboardStats } from '../controllers/dashboardController';
+import { StatCard } from '../components/StatCard';
 
 export default function AdminHomeScreen() {
   const { theme } = useTheme();
@@ -46,21 +47,13 @@ export default function AdminHomeScreen() {
     loadData();
   };
 
-  // Função auxiliar para renderizar os números ou o loading
-  const renderStat = (value: number) => {
-    return loading ? (
-      <ActivityIndicator size="small" color="#2563eb" />
-    ) : (
-      <Text style={[styles.statNumber, { color: titleColor }]}>{value}</Text>
-    );
-  };
-
   return (
     <View style={globalStyles.container}>
       <ScrollView 
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#2563eb" />}
       >
+        {/* Header simplificado visualmente */}
         <View style={[globalStyles.header, styles.header]}>
           <View style={{ flex: 1 }}>
             <Text style={globalStyles.headerTitle}>Painel Administrativo</Text>
@@ -84,51 +77,63 @@ export default function AdminHomeScreen() {
           <Text style={styles.sectionTitle}>Estatísticas da Organização</Text>
           
           <View style={styles.grid}>
-            {/* Total Geral */}
-            <View style={[styles.statGridCard, { backgroundColor: cardBg }]}>
-              <View style={styles.iconCircle}><Feather name="users" size={22} color="#2563eb" /></View>
-              {renderStat(stats.totalUsuarios)}
-              <Text style={styles.statLabel}>Usuários Totais</Text>
-            </View>
+            <StatCard 
+              label="Usuários Totais" 
+              value={stats.totalUsuarios} 
+              loading={loading} 
+              cardBg={cardBg} 
+              titleColor={titleColor}
+              icon={<Feather name="users" size={22} color="#2563eb" />}
+            />
 
-            {/* Alunos */}
-            <View style={[styles.statGridCard, { backgroundColor: cardBg }]}>
-              <View style={styles.iconCircle}><Ionicons name="school-outline" size={22} color="#2563eb" /></View>
-              {renderStat(stats.totalAlunos)}
-              <Text style={styles.statLabel}>Alunos</Text>
-            </View>
+            <StatCard 
+              label="Alunos" 
+              value={stats.totalAlunos} 
+              loading={loading} 
+              cardBg={cardBg} 
+              titleColor={titleColor}
+              icon={<Ionicons name="school-outline" size={22} color="#2563eb" />}
+            />
 
-            {/* Professores */}
-            <View style={[styles.statGridCard, { backgroundColor: cardBg }]}>
-              <View style={styles.iconCircle}><FontAwesome5 name="chalkboard-teacher" size={18} color="#2563eb" /></View>
-              {renderStat(stats.totalProfessores)}
-              <Text style={styles.statLabel}>Professores</Text>
-            </View>
+            <StatCard 
+              label="Professores" 
+              value={stats.totalProfessores} 
+              loading={loading} 
+              cardBg={cardBg} 
+              titleColor={titleColor}
+              icon={<FontAwesome5 name="chalkboard-teacher" size={18} color="#2563eb" />}
+            />
 
-            {/* Cursos */}
-            <View style={[styles.statGridCard, { backgroundColor: cardBg }]}>
-              <View style={styles.iconCircle}><FontAwesome5 name="graduation-cap" size={18} color="#2563eb" /></View>
-              {renderStat(stats.totalCursos)}
-              <Text style={styles.statLabel}>Cursos</Text>
-            </View>
+            <StatCard 
+              label="Cursos" 
+              value={stats.totalCursos} 
+              loading={loading} 
+              cardBg={cardBg} 
+              titleColor={titleColor}
+              icon={<FontAwesome5 name="graduation-cap" size={18} color="#2563eb" />}
+            />
 
-            {/* Disciplinas */}
-            <View style={[styles.statGridCard, { backgroundColor: cardBg }]}>
-              <View style={styles.iconCircle}><Ionicons name="book-outline" size={22} color="#2563eb" /></View>
-              {renderStat(stats.totalDisciplinas)}
-              <Text style={styles.statLabel}>Disciplinas</Text>
-            </View>
+            <StatCard 
+              label="Disciplinas" 
+              value={stats.totalDisciplinas} 
+              loading={loading} 
+              cardBg={cardBg} 
+              titleColor={titleColor}
+              icon={<Ionicons name="book-outline" size={22} color="#2563eb" />}
+            />
 
-            {/* Turmas */}
-            <View style={[styles.statGridCard, { backgroundColor: cardBg }]}>
-              <View style={styles.iconCircle}><Ionicons name="people-outline" size={24} color="#2563eb" /></View>
-              {renderStat(stats.totalTurmas)}
-              <Text style={styles.statLabel}>Turmas</Text>
-            </View>
+            <StatCard 
+              label="Turmas" 
+              value={stats.totalTurmas} 
+              loading={loading} 
+              cardBg={cardBg} 
+              titleColor={titleColor}
+              icon={<Ionicons name="people-outline" size={24} color="#2563eb" />}
+            />
           </View>
 
-          <View style={{ marginTop: 20, padding: 15, borderRadius: 12, backgroundColor: 'rgba(37, 99, 235, 0.05)', borderStyle: 'dashed', borderWidth: 1, borderColor: '#2563eb' }}>
-              <Text style={{ color: '#2563eb', fontWeight: 'bold', textAlign: 'center' }}>
+          <View style={styles.footerInfo}>
+              <Text style={styles.footerText}>
                 Arraste para baixo para atualizar os dados
               </Text>
           </View>

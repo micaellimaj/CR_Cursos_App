@@ -8,6 +8,8 @@ import { useTheme } from '../../../contexts/ThemeContext';
 import { getGlobalStyles } from '../../../styles/globalStyles';
 import CustomButton from '../../../components/CustomButton';
 import styles from '../styles/ClassManagementStyles';
+import { DataSelector } from '../components/DataSelector';
+import { ClassCard } from '../components/ClassCard';
 
 // Importação dos Controllers
 import { 
@@ -164,15 +166,8 @@ export default function ClassManagementScreen() {
       <View style={styles.content}>
         <View style={styles.headerSection}>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 2 }}>
-            <FontAwesome5 
-              name="users" 
-              size={20} 
-              color={isLightTheme ? '#1e3a8a' : '#fff'} 
-              style={{ marginRight: 10 }} 
-            />
-            <Text style={[styles.title, { color: isLightTheme ? '#1e3a8a' : '#fff' }]}>
-              Gestão de Turmas
-            </Text>
+            <FontAwesome5 name="users" size={20} color={isLightTheme ? '#1e3a8a' : '#fff'} style={{ marginRight: 10 }} />
+            <Text style={[styles.title, { color: isLightTheme ? '#1e3a8a' : '#fff' }]}>Gestão de Turmas</Text>
           </View>
           <Text style={styles.subtitle}>Gerencie cursos, matrículas e professores</Text>
         </View>
@@ -187,36 +182,16 @@ export default function ClassManagementScreen() {
           data={classes}
           keyExtractor={(item) => item.id || Math.random().toString()}
           renderItem={({ item }) => (
-            <View style={[styles.classCard, { backgroundColor: isLightTheme ? '#fff' : '#1e293b' }]}>
-              <View style={styles.classHeader}>
-                <View style={styles.iconContainer}><FontAwesome5 name="users" size={18} color="#2563eb" /></View>
-                <View style={styles.classMainInfo}>
-                  <Text style={[styles.className, { color: textColor }]}>{item.nome}</Text>
-                  <Text style={styles.classSubDetails}>
-                    Curso: {cursos.find(c => c.id === item.curso_id)?.nome || 'Não encontrado'}
-                  </Text>
-                </View>
-                <View style={{ flexDirection: 'row' }}>
-                  <TouchableOpacity onPress={() => handleOpenMainModal(item)}>
-                    <Feather name="edit-2" size={18} color="#2563eb" style={{ marginRight: 15 }} />
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => item.id && handleDelete(item.id)}>
-                    <Feather name="trash-2" size={18} color="#ef4444" />
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={styles.manageButtons}>
-                <TouchableOpacity style={styles.actionTextButton} onPress={() => { setSelectedClass(item); setEnrollModalVisible(true); }}>
-                  <Ionicons name="person-add-outline" size={14} color={textColor} />
-                  <Text style={[styles.actionText, {color: textColor}]}>Matricular</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.actionTextButton} onPress={() => { setSelectedClass(item); setTeacherModalVisible(true); }}>
-                  <Ionicons name="git-network-outline" size={14} color={textColor} />
-                  <Text style={[styles.actionText, {color: textColor}]}>Professor</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
+            <ClassCard 
+              item={item}
+              isLightTheme={isLightTheme}
+              textColor={textColor}
+              courseName={cursos.find(c => c.id === item.curso_id)?.nome || 'Não encontrado'}
+              onEdit={() => handleOpenMainModal(item)}
+              onDelete={() => item.id && handleDelete(item.id)}
+              onEnroll={() => { setSelectedClass(item); setEnrollModalVisible(true); }}
+              onSetTeacher={() => { setSelectedClass(item); setTeacherModalVisible(true); }}
+            />
           )}
         />
       </View>
@@ -238,39 +213,27 @@ export default function ClassManagementScreen() {
               <TextInput value={formData.nome} onChangeText={t => setFormData({...formData, nome: t})} style={[styles.input, { backgroundColor: inputBg, color: textColor }]} />
               
               <Text style={{ color: labelColor, marginTop: 10 }}>Selecionar Curso</Text>
-                <RenderSelector 
-                  data={cursos} 
-                  selectedValue={formData.curso_id} 
-                  onSelect={(id: string) => setFormData({...formData, curso_id: id})} 
-                  labelKey="nome"
-                />
+              <DataSelector 
+                data={cursos} 
+                selectedValue={formData.curso_id} 
+                onSelect={(id) => setFormData({...formData, curso_id: id})} 
+                labelKey="nome"
+                inputBg={inputBg}
+                textColor={textColor}
+                isLightTheme={isLightTheme}
+              />
 
-                {/* DATA DE INÍCIO REESTABELECIDA */}
-                <View style={{ marginTop: 10 }}>
-                  <Text style={{ color: labelColor, marginBottom: 5 }}>Data de Início</Text>
-                  <TextInput 
-                    placeholder="AAAA-MM-DD" 
-                    value={formData.data_inicio} 
-                    onChangeText={t => setFormData({...formData, data_inicio: t})} 
-                    style={[styles.input, { backgroundColor: inputBg, color: textColor }]} 
-                    keyboardType="numeric"
-                  />
-                </View>
+              <View style={{ marginTop: 10 }}>
+                <Text style={{ color: labelColor, marginBottom: 5 }}>Data de Início</Text>
+                <TextInput placeholder="AAAA-MM-DD" value={formData.data_inicio} onChangeText={t => setFormData({...formData, data_inicio: t})} style={[styles.input, { backgroundColor: inputBg, color: textColor }]} keyboardType="numeric" />
+              </View>
 
-                {/* DATA DE FIM */}
-                <View style={{ marginTop: 10 }}>
-                  <Text style={{ color: labelColor, marginBottom: 5 }}>Data de Término</Text>
-                  <TextInput 
-                    placeholder="AAAA-MM-DD" 
-                    value={formData.data_fim} 
-                    onChangeText={t => setFormData({...formData, data_fim: t})} 
-                    style={[styles.input, { backgroundColor: inputBg, color: textColor }]} 
-                    keyboardType="numeric"
-                  />
-                </View>
+              <View style={{ marginTop: 10 }}>
+                <Text style={{ color: labelColor, marginBottom: 5 }}>Data de Término</Text>
+                <TextInput placeholder="AAAA-MM-DD" value={formData.data_fim} onChangeText={t => setFormData({...formData, data_fim: t})} style={[styles.input, { backgroundColor: inputBg, color: textColor }]} keyboardType="numeric" />
+              </View>
 
               <View style={{ height: 25 }} />
-
               <CustomButton title="Salvar Turma" onPress={handleSave} loading={loading} />
             </ScrollView>
           </View>
@@ -282,11 +245,13 @@ export default function ClassManagementScreen() {
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContent, { backgroundColor: isLightTheme ? '#fff' : '#0f172a' }]}>
             <Text style={[styles.title, { fontSize: 18, color: isLightTheme ? '#1e3a8a' : '#fff', marginBottom: 15 }]}>Matricular Aluno</Text>
-            <RenderSelector 
+            <DataSelector 
                 data={alunos} 
                 selectedValue={targetId} 
                 onSelect={setTargetId} 
-                labelKey="full_name"
+                inputBg={inputBg}
+                textColor={textColor}
+                isLightTheme={isLightTheme}
             />
             <CustomButton title="Confirmar Matrícula" onPress={() => handleAction('enroll')} loading={loading} />
             <TouchableOpacity onPress={() => { setEnrollModalVisible(false); setTargetId(''); }} style={{ marginTop: 15 }}>
@@ -301,11 +266,13 @@ export default function ClassManagementScreen() {
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContent, { backgroundColor: isLightTheme ? '#fff' : '#0f172a' }]}>
             <Text style={[styles.title, { fontSize: 18, color: isLightTheme ? '#1e3a8a' : '#fff', marginBottom: 15 }]}>Associar Professor</Text>
-            <RenderSelector 
+            <DataSelector 
                 data={professores} 
                 selectedValue={targetId} 
                 onSelect={setTargetId} 
-                labelKey="full_name"
+                inputBg={inputBg}
+                textColor={textColor}
+                isLightTheme={isLightTheme}
             />
             <CustomButton title="Vincular Professor" onPress={() => handleAction('teacher')} loading={loading} />
             <TouchableOpacity onPress={() => { setTeacherModalVisible(false); setTargetId(''); }} style={{ marginTop: 15 }}>

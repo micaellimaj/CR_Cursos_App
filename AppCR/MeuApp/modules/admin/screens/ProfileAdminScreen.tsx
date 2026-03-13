@@ -17,6 +17,7 @@ import { useTheme } from '../../../contexts/ThemeContext';
 import styles from '../../../styles/ProfileStyles';
 import { getAdminProfile, updateAdminProfile } from '../controllers/profileController';
 import { IAdmin } from '../types';
+import { ProfileInput } from '../components/ProfileInput';
 
 export default function ProfileAdminScreen() {
   const { theme } = useTheme();
@@ -95,7 +96,7 @@ export default function ProfileAdminScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bgScreen }}>
       <ScrollView contentContainerStyle={{ alignItems: 'center', paddingBottom: 32 }}>
         
-        {/* BOTÃO VOLTAR */}
+        {/* BOTÃO VOLTAR - Dica: Isso também poderia ser um componente 'AdminHeaderBack' */}
         <View style={{ width: cardWidth, marginTop: 20, alignItems: 'flex-start' }}>
           <TouchableOpacity 
             onPress={() => navigation.navigate('AdminHome')}
@@ -122,49 +123,36 @@ export default function ProfileAdminScreen() {
 
           <View style={[styles.divider, { backgroundColor: colors.divider }]} />
 
-          <Text style={{ fontWeight: 'bold', fontSize: 16, color: colors.mainText, marginVertical: 15 }}>Configurações da Conta</Text>
+          <Text style={{ fontWeight: 'bold', fontSize: 16, color: colors.mainText, marginVertical: 15 }}>
+            Configurações da Conta
+          </Text>
 
-          {/* Nome */}
-          <View style={styles.infoRow}>
-            <View style={{ flex: 1 }}>
-              <Text style={{ color: colors.subText, fontSize: 12 }}>Nome</Text>
-              <TextInput
-                style={{ color: colors.mainText, fontSize: 16, borderBottomWidth: 1, borderColor: colors.divider }}
-                value={admin.full_name}
-                onChangeText={(t) => setAdmin({ ...admin, full_name: t })}
-              />
-            </View>
-            <Feather name="edit-2" size={18} color={colors.iconColor} style={styles.iconButton} />
-          </View>
+          <ProfileInput 
+            label="Nome"
+            value={admin.full_name}
+            onChangeText={(t) => setAdmin({ ...admin, full_name: t })}
+            iconName="edit-2"
+            colors={colors}
+          />
 
-          {/* Email */}
-          <View style={styles.infoRow}>
-            <View style={{ flex: 1 }}>
-              <Text style={{ color: colors.subText, fontSize: 12 }}>E-mail</Text>
-              <TextInput
-                style={{ color: colors.mainText, fontSize: 16, borderBottomWidth: 1, borderColor: colors.divider }}
-                value={admin.email}
-                onChangeText={(t) => setAdmin({ ...admin, email: t })}
-                keyboardType="email-address"
-                autoCapitalize="none"
-              />
-            </View>
-            <Feather name="mail" size={18} color={colors.iconColor} style={styles.iconButton} />
-          </View>
+          <ProfileInput 
+            label="E-mail"
+            value={admin.email}
+            onChangeText={(t) => setAdmin({ ...admin, email: t })}
+            iconName="mail"
+            colors={colors}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
 
-          {/* Senha */}
-          <View style={styles.infoRow}>
-            <View style={{ flex: 1 }}>
-              <Text style={{ color: colors.subText, fontSize: 12 }}>Nova Senha</Text>
-              <TextInput
-                style={{ color: colors.mainText, fontSize: 16, borderBottomWidth: 1, borderColor: colors.divider }}
-                secureTextEntry
-                value={passwordInput}
-                onChangeText={setPasswordInput}
-              />
-            </View>
-            <Feather name="lock" size={18} color={colors.iconColor} style={styles.iconButton} />
-          </View>
+          <ProfileInput 
+            label="Nova Senha"
+            value={passwordInput}
+            onChangeText={setPasswordInput}
+            iconName="lock"
+            colors={colors}
+            secureTextEntry
+          />
 
           <TouchableOpacity
             style={[styles.updateButton, { backgroundColor: colors.mainText, marginTop: 25 }]}

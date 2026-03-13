@@ -8,14 +8,13 @@ import { useTheme } from '../../../contexts/ThemeContext';
 import { getGlobalStyles } from '../../../styles/globalStyles';
 import CustomButton from '../../../components/CustomButton';
 import styles from '../styles/UsuarioManagementStyles';
-
-// Controllers
 import { createProfessor, getAllProfessores, updateProfessor, deleteProfessor } from '../controllers/professorController';
 import { createAluno, getAllAlunos, updateAluno, deleteAluno } from '../controllers/alunoController';
 import { getAllTurmas } from '../controllers/turmaController'; 
-
-// Types - Importando ambos
 import { IAluno, IProfessor } from '../types';
+import { DataSelector } from '../components/DataSelector';
+import { FormInput } from '../components/FormInput';
+import { UserCard } from '../components/UserCard';
 
 const formatPhone = (v: string) => v.replace(/\D/g, '').replace(/^(\d{2})(\d)/, '($1) $2').replace(/(\d{5})(\d{4})$/, '$1-$2').slice(0, 15);
 const formatDate = (v: string) => v.replace(/\D/g, '').replace(/^(\d{2})(\d)/, '$1/$2').replace(/^(\d{2})\/(\d{2})(\d)/, '$1/$2/$3').slice(0, 10);
@@ -201,8 +200,8 @@ export default function UsuarioManagementScreen() {
   return (
     <SafeAreaView style={[globalStyles.container, { backgroundColor: isLightTheme ? '#f5f7fa' : '#0f172a' }]}>
       <View style={styles.content}>
+        {/* HEADER */}
         <View style={styles.headerSection}>
-          {/* Container para alinhar ícone e título em linha */}
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 2 }}>
             <Ionicons 
               name="person-add-outline" 
@@ -214,14 +213,12 @@ export default function UsuarioManagementScreen() {
               Gestão de Usuários
             </Text>
           </View>
-          
           <Text style={styles.subtitle}>
             Administre {viewType === 'student' ? 'alunos' : 'professores'}
           </Text>
         </View>
-  
-  {/* Restante do seu código (botões, busca, lista...) */}
-       
+
+        {/* TABS */}
         <View style={[styles.tabContainer, { backgroundColor: isLightTheme ? '#e2e8f0' : '#1e293b' }]}>
           <TouchableOpacity 
             style={[styles.tabButton, viewType === 'student' && styles.tabButtonActive]} 
@@ -237,52 +234,49 @@ export default function UsuarioManagementScreen() {
           </TouchableOpacity>
         </View>
 
-       <View style={styles.createButtonContainer}>
+        {/* BOTÃO NOVO */}
+        <View style={styles.createButtonContainer}>
           <CustomButton 
               title={loading ? "Carregando..." : `+ Novo ${viewType === 'student' ? 'Aluno' : 'Professor'}`} 
               onPress={() => handleOpenModal()} 
               disabled={loading}
           />
-      </View>
-
-        <View style={[styles.searchBar, { backgroundColor: inputBg }]}>
-          <Feather name="search" size={18} color="#94a3b8" />
-          <TextInput placeholder="Pesquisar..." style={[styles.searchInput, { color: textColor }]} placeholderTextColor="#94a3b8" />
         </View>
 
-        <FlatList
-          data={users}
-          keyExtractor={(item) => item.id || Math.random().toString()}
-          renderItem={({ item }) => {
-            const tId = (item as any).turma_id || (item as any).turma_id_principal;
-            const turmaNome = turmas.find(t => t.id === tId)?.nome || 'Sem Turma';
-            
-            return (
-              <View style={[styles.userCard, { backgroundColor: cardBg }]}>
-                <View style={styles.iconContainer}>
-                  <Ionicons name="person-add-outline" size={22} color="#2563eb" />
-                </View>
+        {/* BUSCA */}
+        <View style={[styles.searchBar, { backgroundColor: inputBg }]}>
+          <Feather name="search" size={18} color="#94a3b8" />
+          <TextInput 
+            placeholder="Pesquisar..." 
+            style={[styles.searchInput, { color: textColor }]} 
+            placeholderTextColor="#94a3b8" 
+          />
+        </View>
 
-                <View style={styles.userInfo}>
-                  <Text style={styles.userBadge}>{turmaNome}</Text>
-                  <Text style={[styles.userName, { color: textColor }]}>{item.full_name}</Text>
-                  <Text style={styles.userEmail}>{item.email}</Text>
-                </View>
-
-                <View style={styles.actionButtons}>
-                  <TouchableOpacity style={styles.iconBtn} onPress={() => handleOpenModal(item)}>
-                    <Feather name="edit-2" size={18} color="#2563eb" />
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.iconBtn} onPress={() => item.id && handleDelete(item.id)}>
-                    <Feather name="trash-2" size={20} color="#ef4444" />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            );
-          }}
-        />
+        {/* LISTA */}
+        {loading ? (
+          <ActivityIndicator color="#2563eb" style={{ marginTop: 20 }} />
+        ) : (
+          <FlatList
+            data={users}
+            keyExtractor={(item) => item.id || Math.random().toString()}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <UserCard 
+                item={item}
+                textColor={textColor}
+                cardBg={cardBg}
+                turmaNome={turmas.find(t => t.id === ((item as any).turma_id || (item as any).turma_id_principal))?.nome || 'Sem Turma'}
+                onEdit={() => handleOpenModal(item)}
+                onDelete={() => item.id && handleDelete(item.id)}
+              />
+            )}
+            contentContainerStyle={{ paddingBottom: 100 }}
+          />
+        )}
       </View>
 
+      {/* MODAL DE CADASTRO/EDIÇÃO */}
       <Modal visible={modalVisible} animationType="slide" transparent statusBarTranslucent>
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.modalOverlay}>
           <View style={[styles.modalContent, { backgroundColor: isLightTheme ? '#fff' : '#1e293b' }]}>
@@ -296,96 +290,72 @@ export default function UsuarioManagementScreen() {
             </View>
 
             <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled>
-              <View style={styles.inputGroup}>
-                <Label required>Nome Completo</Label>
-                <TextInput 
-                  style={[styles.input, { backgroundColor: inputBg, color: textColor }]} 
-                  value={formData.full_name} 
-                  onChangeText={(v) => handleInputChange('full_name', v)} 
-                />
-              </View>
+              <FormInput 
+                label="Nome Completo" required value={formData.full_name}
+                onChangeText={(v) => handleInputChange('full_name', v)}
+                inputBg={inputBg} textColor={textColor}
+              />
 
-              <View style={styles.inputGroup}>
-                <Label required>Turma</Label>
-                <View style={renderSelectContainer()}>
-                  <ScrollView style={{ maxHeight: 120 }} nestedScrollEnabled>
-                    {turmas.map(t => (
-                      <TouchableOpacity 
-                        key={t.id} 
-                        style={renderOptionStyle(formData.turma_id === t.id)}
-                        onPress={() => handleInputChange('turma_id', t.id)}
-                      >
-                        <Text style={{ color: textColor }}>{t.nome}</Text>
-                        {formData.turma_id === t.id && <Feather name="check-circle" size={16} color="#2563eb" />}
-                      </TouchableOpacity>
-                    ))}
-                  </ScrollView>
-                </View>
-              </View>
+              <DataSelector 
+                label="Turma Principal" data={turmas} selectedId={formData.turma_id}
+                onSelect={(id) => handleInputChange('turma_id', id)}
+                displayField="nome" isLightTheme={isLightTheme}
+                labelColor={labelColor} inputBg={inputBg}
+              />
 
-              <View style={styles.inputGroup}>
-                <Label required>Data de Nascimento</Label>
-                <TextInput 
-                  style={[styles.input, { backgroundColor: inputBg, color: textColor }]} 
-                  placeholder="DD/MM/AAAA"
-                  keyboardType="numeric"
-                  value={formData.birthDate} 
-                  onChangeText={(v) => handleInputChange('birthDate', formatDate(v))} 
-                />
-              </View>
+              <FormInput 
+                label="Data de Nascimento" required value={formData.birthDate}
+                placeholder="DD/MM/AAAA" keyboardType="numeric"
+                onChangeText={(v) => handleInputChange('birthDate', formatDate(v))}
+                inputBg={inputBg} textColor={textColor}
+              />
 
-              <View style={styles.inputGroup}>
-                <Label>Telefone</Label>
-                <TextInput 
-                  style={[styles.input, { backgroundColor: inputBg, color: textColor }]} 
-                  keyboardType="numeric"
-                  value={formData.phone} 
-                  onChangeText={(v) => handleInputChange('phone', formatPhone(v))} 
-                />
-              </View>
+              <FormInput 
+                label="Telefone" value={formData.phone} keyboardType="numeric"
+                onChangeText={(v) => handleInputChange('phone', formatPhone(v))}
+                inputBg={inputBg} textColor={textColor}
+              />
 
-              <View style={styles.inputGroup}>
-                <Label required>Email</Label>
-                <TextInput 
-                  style={[styles.input, { backgroundColor: inputBg, color: textColor }]} 
-                  autoCapitalize="none"
-                  keyboardType="email-address"
-                  value={formData.email} 
-                  onChangeText={(v) => handleInputChange('email', v)} 
-                />
-              </View>
+              <FormInput 
+                label="Email" required value={formData.email}
+                autoCapitalize="none" keyboardType="email-address"
+                onChangeText={(v) => handleInputChange('email', v)}
+                inputBg={inputBg} textColor={textColor}
+              />
 
-              <View style={styles.inputGroup}>
-                <Label required={!selectedUser}>Senha</Label>
-                <TextInput 
-                  style={[styles.input, { backgroundColor: inputBg, color: textColor }]} 
-                  secureTextEntry
-                  placeholder={selectedUser ? "Deixar vazio para não alterar" : "Mínimo 6 caracteres"}
-                  value={formData.password} 
-                  onChangeText={(v) => handleInputChange('password', v)} 
-                />
-              </View>
+              <FormInput 
+                label="Senha" required={!selectedUser} value={formData.password}
+                secureTextEntry placeholder={selectedUser ? "Vazio para manter" : "Mínimo 6 caracteres"}
+                onChangeText={(v) => handleInputChange('password', v)}
+                inputBg={inputBg} textColor={textColor}
+              />
 
               {isMinor && (
-                <View style={{ borderTopWidth: 1, borderColor: '#e2e8f0', marginTop: 10, paddingTop: 10 }}>
-                  <Text style={[styles.inputLabel, { color: '#2563eb', marginBottom: 10 }]}>Dados do Responsável</Text>
-                  <Label required>Nome</Label>
-                  <TextInput 
-                    style={[styles.input, { backgroundColor: inputBg, color: textColor, marginBottom: 10 }]} 
-                    value={formData.responsibleFullName}
+                <View style={{ borderTopWidth: 1, borderColor: isLightTheme ? '#e2e8f0' : '#334155', marginTop: 10, paddingTop: 10 }}>
+                  <Text style={{ color: '#2563eb', fontWeight: 'bold', marginBottom: 15 }}>Dados do Responsável</Text>
+                  
+                  <FormInput 
+                    label="Nome do Responsável" required value={formData.responsibleFullName}
                     onChangeText={(v) => handleInputChange('responsibleFullName', v)}
+                    inputBg={inputBg} textColor={textColor}
                   />
-                  <Label required>Email</Label>
-                  <TextInput 
-                    style={[styles.input, { backgroundColor: inputBg, color: textColor }]} 
-                    value={formData.responsibleEmail}
+                  <FormInput 
+                    label="Email do Responsável" required value={formData.responsibleEmail}
+                    keyboardType="email-address" autoCapitalize="none"
                     onChangeText={(v) => handleInputChange('responsibleEmail', v)}
+                    inputBg={inputBg} textColor={textColor}
+                  />
+                  <FormInput 
+                    label="Telefone do Responsável" required value={formData.responsiblePhone}
+                    keyboardType="numeric"
+                    onChangeText={(v) => handleInputChange('responsiblePhone', formatPhone(v))}
+                    inputBg={inputBg} textColor={textColor}
                   />
                 </View>
               )}
 
               <CustomButton title="Confirmar" onPress={handleSave} loading={loading} />
-              <View style={{ height: 30 }} />
+              <View style={{ height: 40 }} />
             </ScrollView>
           </View>
         </KeyboardAvoidingView>
