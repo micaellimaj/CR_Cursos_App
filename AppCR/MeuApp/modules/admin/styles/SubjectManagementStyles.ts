@@ -10,7 +10,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16, 
     paddingTop: 10,
     width: '100%',
-    alignItems: 'center',
   },
   headerSection: { width: '100%', marginBottom: 20, alignItems: 'flex-start' },
   title: { fontSize: 22, fontWeight: 'bold' },

@@ -56,25 +56,26 @@ export default function SubjectManagementScreen() {
   }, []);
 
   const fetchInitialData = async () => {
-    try {
-      setLoading(true);
-      const [subs, curs, profs, turs] = await Promise.all([
-        getAllDisciplinas(),
-        getAllCursos(),
-        getAllProfessores(),
-        getAllTurmas()
-      ]);
-      setSubjects(Array.isArray(subs) ? subs : []);
-      setCourses(Array.isArray(curs) ? curs : []);
-      setProfessors(Array.isArray(profs) ? profs : []);
-      setTurmas(Array.isArray(turs) ? turs : []);
-    } catch (error) {
-      console.error("Erro ao carregar dados");
-      Alert.alert("Erro", "Falha ao sincronizar dados com o servidor.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    setLoading(true);
+    const [subs, curs, profs, turs] = await Promise.all([
+      getAllDisciplinas(),
+      getAllCursos(),
+      getAllProfessores(),
+      getAllTurmas()
+    ]);
+
+    setSubjects(subs);
+    setCourses(curs);
+    setProfessors(profs);
+    setTurmas(turs);
+  } catch (error) {
+    console.error("Erro detalhado:", error);
+    Alert.alert("Erro", "Falha ao sincronizar dados.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleOpenModal = (item?: IDisciplina) => {
     if (item) {
@@ -180,6 +181,8 @@ export default function SubjectManagementScreen() {
 
         <FlatList
           data={subjects}
+          style={{ width: '100%' }}
+          contentContainerStyle={{ paddingBottom: 20 }}
           keyExtractor={(item) => item.id || Math.random().toString()}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (

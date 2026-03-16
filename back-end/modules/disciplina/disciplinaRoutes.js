@@ -10,6 +10,10 @@ const {
   associarTurmaController,
 } = require("./disciplinaController");
 
+const authMiddleware = require('../../shared/middlewares/authMiddleware');
+const verificarAdmin = require('../../shared/middlewares/verificarAdmin');
+const verificarProprioUsuario = require('../../shared/middlewares/verificarProprioUsuario');
+
 /**
  * @swagger
  * tags:

@@ -18,12 +18,9 @@ export const createDisciplina = async (dados: IDisciplina): Promise<CreateDiscip
 export const getAllDisciplinas = async (): Promise<IDisciplina[]> => {
   try {
     const response = await api.get('/disciplina');
+    const dados = response.data?.data || response.data;
 
-    if (response.data && response.data.data) {
-      return response.data.data;
-    }
-    
-    return [];
+    return Array.isArray(dados) ? dados : [];
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       const message = error.response?.data?.message || "Erro ao buscar disciplinas";

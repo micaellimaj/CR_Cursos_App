@@ -67,14 +67,15 @@ export interface IDisciplina {
   turmasAssociadas?: string[];
   created_at?: string;
   updated_at?: string;
+  createdAt?: string; 
+  updatedAt?: string;
 }
 
 export interface CreateDisciplinaResponse {
-  id: string;
-  message: string;
-  data: IDisciplina;
+  message?: string;
+  data?: IDisciplina;
+  id?: string;
 }
-
 export interface ITurma {
   id?: string;
   nome: string;
