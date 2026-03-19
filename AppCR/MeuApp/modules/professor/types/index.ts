@@ -95,3 +95,167 @@ export interface FrequenciaResponse {
   message: string;
   data?: IFrequencia;
 }
+
+export interface IProfessor {
+  id: string;
+  full_name: string;
+  email: string;
+  senha?: string;
+  telefone: string | null;
+  data_nascimento: string;
+  idade: number;
+  turma_id_principal: string | null;
+  tipo: 'professor';
+  collection: string;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
+export interface IUpdateProfessorPayload {
+  full_name?: string;
+  email?: string;
+  senha?: string;
+  telefone?: string;
+  data_nascimento?: string;
+  turma_id_principal?: string;
+}
+
+export interface IProfessorActionResponse {
+  message: string;
+}
+
+export type TConteudoTipo = 'texto' | 'arquivo' | 'video' | 'link';
+
+export interface IConteudo {
+  id: string;
+  disciplinaId: string;
+  titulo: string;
+  descricao?: string;
+  tipo: TConteudoTipo;
+  valor?: string | null;
+  url?: string | null;
+  mimeType?: string | null;
+  fileName?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ICreateConteudoPayload {
+  disciplinaId: string;
+  titulo: string;
+  tipo: TConteudoTipo;
+  descricao?: string;
+  valor?: string;
+  url?: string;
+  arquivo?: any;
+}
+
+export interface IConteudoResponse {
+  message: string;
+  id?: string;
+  data?: IConteudo;
+}
+
+export type TAtividadeTipo = 'texto' | 'pdf' | 'slide';
+
+export interface IAtividade {
+  id: string;
+  titulo: string;
+  descricao: string;
+  disciplinaId: string;
+  tipo: TAtividadeTipo;
+  conteudoTexto: string | null;
+  urlArquivo: string | null;
+  dataEntrega: string | null;
+  collection: string;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
+export interface ICreateAtividadePayload {
+  titulo: string;
+  disciplinaId: string;
+  tipo: TAtividadeTipo;
+  descricao?: string;
+  conteudoTexto?: string;
+  dataEntrega?: string;
+  arquivo?: any;
+}
+
+export interface IAtividadeResponse {
+  message: string;
+  id?: string;
+  data?: IAtividade;
+}
+
+export type TClasseTipo = 'material' | 'aviso' | 'atividade';
+
+export interface IAnexo {
+  nome: string;
+  url: string;
+  tipo: string;
+}
+
+export interface IClasse {
+  id: string;
+  turma_id: string;
+  professor_id: string;
+  titulo: string;
+  descricao: string;
+  tipo: TClasseTipo;
+  anexos: IAnexo[];
+  collection: string;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
+export interface ICreateClassePayload {
+  turma_id: string;
+  professor_id: string;
+  titulo: string;
+  tipo: TClasseTipo;
+  descricao?: string;
+  links?: string[];
+  files?: any[];
+}
+
+export interface IClasseResponse {
+  message?: string;
+  mensagem?: string;
+  id?: string;
+  classe?: IClasse;
+}
+
+export interface IArquivoPrivado {
+  nome: string;
+  url: string;
+  tipo: string;
+}
+
+export interface IPrivado {
+  id: string;
+  professor_id: string;
+  aluno_id: string;
+  turma_id: string;
+  mensagem: string;
+  arquivos: IArquivoPrivado[];
+  visualizado: boolean;
+  collection: string;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
+export interface IEnviarConteudoPrivadoPayload {
+  aluno_id: string;
+  turma_id: string;
+  mensagem?: string;
+  links?: string[];
+  files?: any[]; 
+}
+
+export interface IPrivadoResponse {
+  mensagem?: string;
+  message?: string;
+  id?: string;
+  privado?: IPrivado;
+}
