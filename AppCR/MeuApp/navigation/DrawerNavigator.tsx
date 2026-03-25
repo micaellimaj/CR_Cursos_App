@@ -18,6 +18,10 @@ import CourseManagementScreen from '../modules/admin/screens/CourseManagementScr
 import SubjectManagementScreen from '../modules/admin/screens/SubjectManagementScreen';
 import ClassManagementScreen from '../modules/admin/screens/ClassManagementScreen';
 import ProfileAdminScreen from '../modules/admin/screens/ProfileAdminScreen';
+import MyDisciplinasScreen from '../modules/professor/screens/MyDisciplinasScreen';
+import DisciplinaDetailScreen from '../modules/professor/screens/DisciplinaDetailScreen';
+import ConteudoProfessorScreen from '../modules/professor/screens/ConteudoScreen';
+import AtividadeProfessorScreen from '../modules/professor/screens/AtividadeProfessorScreen';
 import { useAuth } from '../contexts/AuthContext'; 
 import AdminTabNavigator from './AdminTabNavigator';
 
@@ -64,7 +68,33 @@ export default function DrawerNavigator() {
       {/* ROTAS DE PROFESSOR: Só existem se for Professor ou Admin */}
       {(userType === 'professor') && (
         <>
-          <Drawer.Screen name="ProfileProfessor" component={ProfileProfessor} />
+          <Drawer.Screen 
+            name="ProfileProfessor" 
+            component={ProfileProfessor} 
+            options={{ title: 'Meu Perfil' }}
+          />
+          <Drawer.Screen 
+            name="MyDisciplinas" 
+            component={MyDisciplinasScreen} 
+            options={{ title: 'Minhas Disciplinas' }}
+          />
+          
+          {/* TELAS DE APOIO (Ocultas no Drawer via DrawerItem, mas registradas no Navigator) */}
+          <Drawer.Screen 
+            name="DisciplinaDetail" 
+            component={DisciplinaDetailScreen} 
+            options={{ title: 'Detalhes da Disciplina' }}
+          />
+          <Drawer.Screen 
+            name="ConteudoProfessor" 
+            component={ConteudoProfessorScreen} 
+            options={{ title: 'Conteúdos' }}
+          />
+          <Drawer.Screen 
+            name="AtividadeProfessor" 
+            component={AtividadeProfessorScreen} 
+            options={{ title: 'Atividades' }}
+          />
         </>
       )}
 

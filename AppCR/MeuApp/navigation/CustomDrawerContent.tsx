@@ -3,7 +3,7 @@ import { View, Image, Text, Linking } from 'react-native';
 import { DrawerContentScrollView, DrawerItem, DrawerContentComponentProps } from '@react-navigation/drawer';
 import { useTheme } from '../contexts/ThemeContext';
 import { LinearGradient } from 'expo-linear-gradient';
-import { FontAwesome5, MaterialIcons, Ionicons } from '@expo/vector-icons';
+import { FontAwesome5, MaterialIcons, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import styles from '../styles/CustomDrawerStyles';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -98,6 +98,15 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
             style={styles.drawerItem}
             labelStyle={[styles.drawerLabel, { color: labelColor }]}
           />
+          <DrawerItem 
+            label="Minhas Disciplinas" 
+            icon={({ size }) => <MaterialCommunityIcons name="book-open" size={size} color={iconColor} />}
+            onPress={() => props.navigation.navigate('MyDisciplinas')}
+            style={styles.drawerItem}
+            labelStyle={[styles.drawerLabel, { color: labelColor }]}
+          />
+          
+          
         </View>
       )}
 
