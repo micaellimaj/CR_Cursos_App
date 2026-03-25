@@ -24,6 +24,8 @@ import ConteudoProfessorScreen from '../modules/professor/screens/ConteudoScreen
 import AtividadeProfessorScreen from '../modules/professor/screens/AtividadeProfessorScreen';
 import TurmaDetailScreen from 'modules/professor/screens/TurmaDetailScreen';
 import MyTurmasScreen from '../modules/professor/screens/MyTurmasScreen';
+import FrequenciaChamadaScreen from 'modules/professor/screens/FrequenciaChamadaScreen';
+import NotasLancamentoScreen from 'modules/professor/screens/NotasLancamentoScreen';
 import { useAuth } from '../contexts/AuthContext'; 
 import AdminTabNavigator from './AdminTabNavigator';
 
@@ -106,8 +108,18 @@ export default function DrawerNavigator() {
             name="TurmaDetail" 
             component={TurmaDetailScreen} 
             options={{ title: 'Detalhes da Turma' }}
+          
           />
-
+          <Drawer.Screen 
+            name="FrequenciaChamada" 
+            component={FrequenciaChamadaScreen} 
+            options={{ title: 'Frequência e Chamada' }}
+          />
+          <Drawer.Screen 
+            name="NotasLancamento" 
+            component={NotasLancamentoScreen} 
+            options={{ title: 'Lançamento de Notas' }}
+          />
           
         </>
       )}

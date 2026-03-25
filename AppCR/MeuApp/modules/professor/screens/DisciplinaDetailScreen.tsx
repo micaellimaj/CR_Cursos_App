@@ -16,7 +16,7 @@ export default function DisciplinaDetailScreen({ route, navigation }: any) {
     { title: 'Atividades', icon: 'clipboard-edit-outline', screen: 'AtividadeProfessor', color: '#059669' },
     { title: 'Frequência', icon: 'calendar-check-outline', screen: 'FrequenciaChamada', color: '#d97706' },
     { title: 'Notas', icon: 'star-outline', screen: 'NotasLancamento', color: '#7c3aed' },
-  ];
+      ];
 
   return (
     <SafeAreaView style={[globalStyles.container, { backgroundColor: isLightTheme ? '#f5f7fa' : '#0f172a' }]}>
