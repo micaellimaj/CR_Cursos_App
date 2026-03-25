@@ -20,7 +20,7 @@ module.exports = async (dados) => {
     throw { status: 400, message: 'E-mail já cadastrado' };
   }
 
-  const turmaExiste = await turmaService.getTurmaPorId(dados.turma_id);
+  const turmaExiste = await turmaService.getTurmaById(dados.turma_id);
   if (!turmaExiste) throw { status: 404, message: 'Turma não encontrada' };
 
   const hashedSenha = await bcrypt.hash(dados.senha, 10);

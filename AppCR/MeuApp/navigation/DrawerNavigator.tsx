@@ -22,6 +22,8 @@ import MyDisciplinasScreen from '../modules/professor/screens/MyDisciplinasScree
 import DisciplinaDetailScreen from '../modules/professor/screens/DisciplinaDetailScreen';
 import ConteudoProfessorScreen from '../modules/professor/screens/ConteudoScreen';
 import AtividadeProfessorScreen from '../modules/professor/screens/AtividadeProfessorScreen';
+import TurmaDetailScreen from 'modules/professor/screens/TurmaDetailScreen';
+import MyTurmasScreen from '../modules/professor/screens/MyTurmasScreen';
 import { useAuth } from '../contexts/AuthContext'; 
 import AdminTabNavigator from './AdminTabNavigator';
 
@@ -78,6 +80,11 @@ export default function DrawerNavigator() {
             component={MyDisciplinasScreen} 
             options={{ title: 'Minhas Disciplinas' }}
           />
+           <Drawer.Screen 
+            name="MyTurmas" 
+            component={MyTurmasScreen} 
+            options={{ title: 'Minhas Turmas' }}
+          />
           
           {/* TELAS DE APOIO (Ocultas no Drawer via DrawerItem, mas registradas no Navigator) */}
           <Drawer.Screen 
@@ -95,6 +102,13 @@ export default function DrawerNavigator() {
             component={AtividadeProfessorScreen} 
             options={{ title: 'Atividades' }}
           />
+          <Drawer.Screen 
+            name="TurmaDetail" 
+            component={TurmaDetailScreen} 
+            options={{ title: 'Detalhes da Turma' }}
+          />
+
+          
         </>
       )}
 

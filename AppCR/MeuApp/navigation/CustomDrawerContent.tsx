@@ -105,6 +105,13 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
             style={styles.drawerItem}
             labelStyle={[styles.drawerLabel, { color: labelColor }]}
           />
+          <DrawerItem 
+            label="Minhas Turmas" 
+            icon={({ size }) => <MaterialCommunityIcons name="book-open" size={size} color={iconColor} />}
+            onPress={() => props.navigation.navigate('MyTurmas')}
+            style={styles.drawerItem}
+            labelStyle={[styles.drawerLabel, { color: labelColor }]}
+          />
           
           
         </View>
