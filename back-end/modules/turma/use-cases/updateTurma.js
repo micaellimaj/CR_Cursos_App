@@ -5,7 +5,7 @@ const cursoService = require('../../curso/cursoService');
 module.exports = async (id, novosDados) => {
     if (!id) throw { status: 400, message: 'ID obrigatório.' };
 
-    const turmaExistente = await turmaService.getTurmaPorId(id);
+    const turmaExistente = await turmaService.getTurmaById(id);
     if (!turmaExistente) throw { status: 404, message: 'Turma não encontrada.' };
     
     if (novosDados.curso_id) {

@@ -9,7 +9,7 @@ module.exports = async ({ professorId, turmaId }) => {
   const professor = await getProfessorByIdService(professorId);
   if (!professor) throw { status: 404, message: 'Professor não encontrado.' };
 
-  const turma = await turmaService.getTurmaPorId(turmaId);
+  const turma = await turmaService.getTurmaById(turmaId);
   if (!turma) throw { status: 404, message: 'Turma não encontrada.' };
 
   if (turma.professores && turma.professores[professorId]) {

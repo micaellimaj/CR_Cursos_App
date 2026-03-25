@@ -7,14 +7,14 @@ describe('Unit Test: deleteTurma', () => {
   beforeEach(() => jest.clearAllMocks());
 
   it('Deve lançar erro 404 se tentar deletar turma inexistente', async () => {
-    turmaService.getTurmaPorId.mockResolvedValue(null);
+    turmaService.getTurmaById.mockResolvedValue(null);
 
     await expect(deleteTurma('ID_INVALIDO'))
       .rejects.toMatchObject({ status: 404 });
   });
 
   it('Deve deletar com sucesso se a turma existir', async () => {
-    turmaService.getTurmaPorId.mockResolvedValue({ id: 'T1' });
+    turmaService.getTurmaById.mockResolvedValue({ id: 'T1' });
     turmaService.deletarTurma.mockResolvedValue(true);
 
     const resultado = await deleteTurma('T1');

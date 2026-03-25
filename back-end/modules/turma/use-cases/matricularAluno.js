@@ -8,7 +8,7 @@ module.exports = async ({ alunoId, turmaId }) => {
 
     const [aluno, turma] = await Promise.all([
         alunoService.getAlunoPorId(alunoId),
-        turmaService.getTurmaPorId(turmaId)
+        turmaService.getTurmaById(turmaId)
     ]);
 
     if (!aluno) throw { status: 404, message: 'Aluno não encontrado.' };

@@ -28,7 +28,7 @@ async function getTurmaPorId(id) {
     const snapshot = await db.ref(`${ENTIDADE}/${id}`).once('value');
     if (!snapshot.exists()) return null;
     
-    return { id, ...snapshot.val() };
+    return snapshot.val();
 }
 
 /**
