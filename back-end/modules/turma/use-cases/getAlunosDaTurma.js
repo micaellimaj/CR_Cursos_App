@@ -4,7 +4,7 @@ const alunoService = require('../../aluno/alunoService');
 module.exports = async (turmaId) => {
     if (!turmaId) throw { status: 400, message: 'O ID da Turma é obrigatório.' };
 
-    const turma = await turmaService.getTurmaPorId(turmaId);
+    const turma = await turmaService.getTurmaById(id);
     if (!turma) throw { status: 404, message: 'Turma não encontrada.' };
     
     const alunosIds = turma.alunos ? Object.keys(turma.alunos) : [];
