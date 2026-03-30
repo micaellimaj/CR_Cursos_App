@@ -1,10 +1,10 @@
 const validarDadosFrequencia = (dados) => {
-  const { aluno_id, turma_id, disciplina_id, professor_id, data, status } = dados;
+  const { aluno_id, turma_id, professor_id, data, status } = dados;
 
-  if (!aluno_id || !turma_id || !disciplina_id || !professor_id || !data) {
+  if (!aluno_id || !turma_id || !professor_id || !data) {
     throw { 
       status: 400, 
-      message: 'Campos obrigatórios faltando: aluno_id, turma_id, disciplina_id, professor_id e data.' 
+      message: 'Campos obrigatórios faltando: aluno_id, turma_id, professor_id e data.' 
     };
   }
 

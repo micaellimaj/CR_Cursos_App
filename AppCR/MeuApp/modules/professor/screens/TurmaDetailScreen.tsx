@@ -13,6 +13,7 @@ import { IAlunoTurma } from '../types';
 
 export default function TurmaDetailScreen({ route, navigation }: any) {
   const { turmaId, turmaNome } = route.params;
+  const [disciplinas, setDisciplinas] = useState([]);
   const { theme } = useTheme();
   const globalStyles = getGlobalStyles(theme);
   const isLightTheme = theme === 'light';
@@ -82,6 +83,24 @@ export default function TurmaDetailScreen({ route, navigation }: any) {
           size={22} 
           color="#059669" 
         />
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('DisciplinaDetail', {
+            turmaId: turmaId,
+            turmaNome: turmaNome,
+            disciplinaId: 'disciplina_exemplo',
+            disciplinaNome: 'Disciplina'
+          })}
+        style={{
+          backgroundColor: '#2563eb',
+          padding: 12,
+          borderRadius: 8,
+          marginBottom: 10
+        }}
+      >
+        <Text style={{ color: '#fff', textAlign: 'center', fontWeight: 'bold' }}>
+          Acessar Disciplina
+        </Text>
       </TouchableOpacity>
     </View>
   );

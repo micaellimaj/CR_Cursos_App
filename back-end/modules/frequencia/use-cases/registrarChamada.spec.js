@@ -8,7 +8,6 @@ describe('Unit Test: registrarChamada', () => {
   
   const payloadValido = {
     turma_id: 'TURMA-1',
-    disciplina_id: 'DIS-1',
     professor_id: 'PROF-1',
     data: '25/10/2024',
     alunos: [

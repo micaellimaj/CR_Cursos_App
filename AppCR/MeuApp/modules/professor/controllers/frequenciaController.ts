@@ -6,16 +6,9 @@ import axios from 'axios';
  * Registra a chamada de vários alunos ao mesmo tempo (Batch)
  * Rota: POST /frequencia
  */
-export const registrarChamada = async (payload: IRegistrarChamadaPayload): Promise<void> => {
-  try {
-    // O back-end valida o formato DD/MM/AAAA no payload.data
-    await api.post('/frequencia', payload);
-  } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data?.message || "Erro ao registrar chamada");
-    }
-    throw new Error("Erro inesperado ao salvar frequência");
-  }
+export const registrarFrequencias = async (registros: any) => {
+  const response = await api.post('/frequencia/lote', registros);
+  return response.data;
 };
 
 /**

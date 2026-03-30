@@ -14,7 +14,6 @@ class Frequencia {
     this.id = id;
     this.aluno_id = aluno_id;
     this.turma_id = turma_id;
-    this.disciplina_id = disciplina_id;
     this.professor_id = professor_id;
     this.data = data; 
     this.status = status !== undefined ? status : true; 

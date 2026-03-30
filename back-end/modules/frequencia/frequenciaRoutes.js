@@ -24,7 +24,6 @@ const verificarAdmin = require('../../shared/middlewares/verificarAdmin');
  *       type: object
  *       required:
  *         - turma_id
- *         - disciplina_id
  *         - professor_id
  *         - data
  *         - alunos
@@ -32,7 +31,6 @@ const verificarAdmin = require('../../shared/middlewares/verificarAdmin');
  *         turma_id:
  *           type: string
  *           example: turma_123
- *         disciplina_id:
  *           type: string
  *           example: disc_matematica
  *         professor_id:

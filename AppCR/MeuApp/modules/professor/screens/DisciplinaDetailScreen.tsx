@@ -6,7 +6,7 @@ import { getGlobalStyles } from '../../../styles/globalStyles';
 import styles from '../styles/MyDisciplinasStyles'; // Reaproveitando base de estilos
 
 export default function DisciplinaDetailScreen({ route, navigation }: any) {
-  const { disciplinaId, disciplinaNome } = route.params;
+  const { disciplinaId, disciplinaNome,  turmaId, turmaNome } = route.params;
   const { theme } = useTheme();
   const globalStyles = getGlobalStyles(theme);
   const isLightTheme = theme === 'light';
@@ -31,7 +31,7 @@ export default function DisciplinaDetailScreen({ route, navigation }: any) {
             <TouchableOpacity 
               key={index}
               style={[styles.subjectCard, { width: '48%', flexDirection: 'column', height: 120, justifyContent: 'center' }]}
-              onPress={() => navigation.navigate(item.screen, { disciplinaId, disciplinaNome })}
+              onPress={() => navigation.navigate(item.screen, { disciplinaId, disciplinaNome, turmaId: route.params.turmaId, turmaNome: route.params.turmaNome, })}
             >
               <MaterialCommunityIcons name={item.icon as any} size={32} color={item.color} />
               <Text style={[styles.subjectName, { marginTop: 10, fontSize: 14 }]}>{item.title}</Text>

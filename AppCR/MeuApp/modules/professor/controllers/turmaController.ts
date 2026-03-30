@@ -34,7 +34,16 @@ export const getMyTurmas = async (professorId: string): Promise<ITurmaProfessor[
 export const getAlunosDaTurma = async (turmaId: string): Promise<IAlunoTurma[]> => {
   try {
     const response = await api.get(`/turma/${turmaId}/alunos`);
-    return Array.isArray(response.data) ? response.data : [];
+
+    if (Array.isArray(response.data)) {
+      return response.data;
+    }
+
+    if (Array.isArray(response.data?.data)) {
+      return response.data.data;
+    }
+
+    return [];
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       throw new Error(error.response?.data?.message || "Erro ao buscar alunos da turma");

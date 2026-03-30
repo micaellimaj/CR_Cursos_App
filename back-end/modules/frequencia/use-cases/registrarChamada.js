@@ -4,12 +4,12 @@ const { registrarFrequencias } = require('../frequenciaService');
 const gerarIdPersonalizado = require('../../aluno/utils/gerarIdPersonalizado');
 
 module.exports = async (payload) => {
-  const { turma_id, disciplina_id, professor_id, data, alunos } = payload;
+  const { turma_id, professor_id, data, alunos } = payload;
   const batchUpdates = {};
   const agora = new Date().toISOString();
 
   alunos.forEach(aluno => {
-    const dados = { aluno_id: aluno.aluno_id, turma_id, disciplina_id, professor_id, data, status: aluno.status };
+    const dados = { aluno_id: aluno.aluno_id, turma_id, professor_id, data, status: aluno.status };
     validarDadosFrequencia(dados);
 
     const customId = gerarIdPersonalizado();

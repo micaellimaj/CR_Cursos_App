@@ -46,7 +46,7 @@ export default function MyDisciplinasScreen({ navigation }: any) {
       ]}
       onPress={() => navigation.navigate('DisciplinaDetail', { 
         disciplinaId: item.id,
-        disciplinaNome: item.nome 
+        disciplinaNome: item.nome, 
       })}
       activeOpacity={0.7}
     >
