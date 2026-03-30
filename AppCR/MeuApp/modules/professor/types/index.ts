@@ -73,7 +73,6 @@ export interface IFrequencia {
   id?: string;
   aluno_id: string;
   turma_id: string;
-  disciplina_id: string;
   professor_id: string;
   data: string;
   status: boolean;
@@ -82,7 +81,6 @@ export interface IFrequencia {
 
 export interface IRegistrarChamadaPayload {
   turma_id: string;
-  disciplina_id: string;
   professor_id: string;
   data: string;
   alunos: {

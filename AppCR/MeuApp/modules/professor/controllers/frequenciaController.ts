@@ -7,7 +7,7 @@ import axios from 'axios';
  * Rota: POST /frequencia
  */
 export const registrarFrequencias = async (registros: any) => {
-  const response = await api.post('/frequencia/lote', registros);
+  const response = await api.post('/frequencia', registros);
   return response.data;
 };
 

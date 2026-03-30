@@ -61,7 +61,7 @@ export default function FrequenciaChamadaScreen({ route }: any) {
       setAlunos(alunosFormatados);
 
       console.log("TURMA ID:", turmaId);
-      console.log("DISCIPLINA ID:", disciplinaId);
+
 
     } catch (e) {
       Alert.alert("Erro", "Falha ao carregar dados.");
@@ -82,13 +82,15 @@ export default function FrequenciaChamadaScreen({ route }: any) {
       const id = `${Date.now()}_${alunoId}`;
 
       const payload = {
-        [id]: {
-          aluno_id: alunoId,
-          turma_id: turmaId,
-          professor_id: user?.id || '',
-          data: dataHoje,
-          status
-        }
+        turma_id: turmaId,
+        professor_id: user?.id || '',
+        data: dataHoje,
+        alunos: [
+          {
+            aluno_id: alunoId,
+            status
+          }
+        ]
       };
 
       await registrarFrequencias(payload);
