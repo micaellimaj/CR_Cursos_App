@@ -56,18 +56,12 @@ export default function FrequenciaChamadaScreen({ route }: any) {
         turma_id: aluno.turma_id || turmaId
       }));
 
-      // ✅ FILTRO POR DISCIPLINA (ESSENCIAL)
-      const frequenciasFiltradas = (listaFreq || []).filter(
-        (f: IFrequencia) =>
-          f.disciplina_id === disciplinaId
-      );
+     
 
       setAlunos(alunosFormatados);
-      setHistorico(frequenciasFiltradas);
 
       console.log("TURMA ID:", turmaId);
       console.log("DISCIPLINA ID:", disciplinaId);
-      console.log("FREQUENCIAS FILTRADAS:", frequenciasFiltradas);
 
     } catch (e) {
       Alert.alert("Erro", "Falha ao carregar dados.");
@@ -91,7 +85,6 @@ export default function FrequenciaChamadaScreen({ route }: any) {
         [id]: {
           aluno_id: alunoId,
           turma_id: turmaId,
-          disciplina_id: disciplinaId || '',
           professor_id: user?.id || '',
           data: dataHoje,
           status
