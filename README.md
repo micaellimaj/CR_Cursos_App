@@ -6,7 +6,7 @@
 A plataforma CR Cursos nasceu de uma colaboração estratégica entre a escola profissionalizante CR Cursos, em Toritama - PE, e alunos do Unifavip Wyden. O projeto teve início no âmbito acadêmico, sob a orientação do Prof. Wolney na disciplina de Programação para Dispositivos Móveis.
 
 O que começou como um projeto de classe evoluiu para uma solução full-stack robusta, impulsionada por um estudo aprofundado em arquitetura de software e desenvolvimento escalável. Hoje, a plataforma representa a convergência entre o aprendizado acadêmico e as necessidades reais do mercado, entregando uma ferramenta tecnológica de alto impacto para a comunidade escolar do Agreste Pernambucano.
-* **Projeto com previsão de entrega em maio de 2026**
+
 
 ## <img src= "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ21oOW9vYzFwYmprc3ltb2tpdGl0cXhkbHplMGR2MGZqdm0wdGlneSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/VbDDnwHgbsmXdCY2TG/giphy.gif" alt="class" width="50" height="50" /> Objetivo:
 O objetivo central é modernizar a experiência de ensino-aprendizagem da instituição por meio de um ecossistema mobile integrado. A plataforma visa:
