@@ -46,21 +46,22 @@ export default function TurmaDetailScreen({ route, navigation }: any) {
   };
 
   const renderAlunoCard = (item: IAlunoTurma) => (
-    <View 
-      style={[
-        styles.subjectCard, 
-        { backgroundColor: isLightTheme ? '#fff' : '#1e293b' }
-      ]}
-    >
+  <View 
+    style={[
+      styles.subjectCard, 
+      { backgroundColor: isLightTheme ? '#fff' : '#1e293b' }
+    ]}
+  >
+    <View style={styles.cardMainContent}>
       <View style={[styles.iconContainer, { backgroundColor: 'rgba(5, 150, 105, 0.1)' }]}>
         <MaterialCommunityIcons name="account" size={24} color="#059669" />
       </View>
 
       <View style={styles.subjectInfo}>
-        <Text style={[styles.subjectName, { color: isLightTheme ? '#1e293b' : '#fff' }]}>
+        <Text numberOfLines={1} style={[styles.subjectName, { color: isLightTheme ? '#1e293b' : '#fff' }]}>
           {item.full_name}
         </Text>
-        <Text style={styles.courseTag}>{item.email}</Text>
+        <Text numberOfLines={1} style={styles.courseTag}>{item.email}</Text>
         
         {item.telefone && (
           <View style={styles.tagRow}>
@@ -75,35 +76,29 @@ export default function TurmaDetailScreen({ route, navigation }: any) {
         )}
       </View>
 
-      <TouchableOpacity 
-        onPress={() => navigation.navigate('PrivadoChat', { alunoId: item.id, turmaId })}
-      >
-        <MaterialCommunityIcons 
-          name="message-text-outline" 
-          size={22} 
-          color="#059669" 
-        />
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => navigation.navigate('DisciplinaDetail', {
-            turmaId: turmaId,
-            turmaNome: turmaNome,
-            disciplinaId: 'disciplina_exemplo',
-            disciplinaNome: 'Disciplina'
-          })}
-        style={{
-          backgroundColor: '#2563eb',
-          padding: 12,
-          borderRadius: 8,
-          marginBottom: 10
-        }}
-      >
-        <Text style={{ color: '#fff', textAlign: 'center', fontWeight: 'bold' }}>
-          Acessar Disciplina
-        </Text>
-      </TouchableOpacity>
+      <View style={styles.actionColumn}>
+        <TouchableOpacity 
+          onPress={() => navigation.navigate('PrivadoChat', { alunoId: item.id, turmaId })}
+          style={styles.actionButton}
+        >
+          <MaterialCommunityIcons name="message-text-outline" size={24} color="#059669" />
+        </TouchableOpacity>
+        
+        <TouchableOpacity
+          onPress={() => navigation.navigate('DisciplinaDetail', {
+              turmaId: turmaId,
+              turmaNome: turmaNome,
+              disciplinaId: 'disciplina_exemplo',
+              disciplinaNome: 'Disciplina'
+            })}
+          style={styles.miniBadgeButton}
+        >
+          <MaterialCommunityIcons name="book-open-variant" size={20} color="#fff" />
+        </TouchableOpacity>
+      </View>
     </View>
-  );
+  </View>
+);
 
   return (
     <SafeAreaView style={[globalStyles.container, { backgroundColor: isLightTheme ? '#f5f7fa' : '#0f172a' }]}>

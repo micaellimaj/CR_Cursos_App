@@ -17,7 +17,13 @@ export default StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 3,
+    overflow: 'hidden'
   },
+  cardMainContent: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  padding: 16,
+},
   iconContainer: {
     width: 48,
     height: 48,
@@ -26,9 +32,28 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  subjectInfo: { flex: 1, marginLeft: 16 },
-  subjectName: { fontSize: 16, fontWeight: 'bold', marginBottom: 2 },
-  courseTag: { fontSize: 12, color: '#64748b' },
+  subjectInfo: { flex: 1, marginLeft: 16 , justifyContent: 'center'},
+  subjectName: { fontSize: 15, fontWeight: 'bold', marginBottom: 2 },
+  courseTag: { fontSize: 11, color: '#64748b', maxWidth: '90%'},
+
+  actionColumn: {
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  marginLeft: 8,
+  gap: 10, 
+},
+
+  actionButton: {
+    padding: 8,
+  },
+
+  miniBadgeButton: {
+  backgroundColor: '#2563eb',
+  padding: 8,
+  borderRadius: 8,
+  justifyContent: 'center',
+  alignItems: 'center',
+},
   
   tagRow: { flexDirection: 'row', marginTop: 8 },
   infoTag: {

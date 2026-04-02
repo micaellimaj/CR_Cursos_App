@@ -104,6 +104,7 @@ async function getTurmasPorCursoId(cursoId) {
 module.exports = {
     criarTurma,
     getTurmaById: getTurmaPorId,
+    getTurmaPorId,
     getTodasTurmas,
     adicionarAluno,
     adicionarProfessor,
