@@ -7,7 +7,7 @@ import axios from 'axios';
  */
 export const getAtividadesByDisciplina = async (disciplinaId: string): Promise<IAtividade[]> => {
   try {
-    const response = await api.get(`/atividades/disciplina/${disciplinaId}`);
+    const response = await api.get(`/atividade/disciplina/${disciplinaId}`);
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
@@ -35,7 +35,7 @@ export const createAtividade = async (payload: ICreateAtividadePayload): Promise
       }
     });
 
-    const response = await api.post('/atividades', formData, {
+    const response = await api.post('/atividade', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
 
@@ -65,7 +65,7 @@ export const updateAtividade = async (
       }
     });
 
-    const response = await api.put(`/atividades/${id}`, formData, {
+    const response = await api.put(`/atividade/${id}`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
 
@@ -83,7 +83,7 @@ export const updateAtividade = async (
  */
 export const deleteAtividade = async (id: string): Promise<IAtividadeResponse> => {
   try {
-    const response = await api.delete(`/atividades/${id}`);
+    const response = await api.delete(`/atividade/${id}`);
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {

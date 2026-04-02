@@ -44,7 +44,7 @@ export default function MyDisciplinasScreen({ navigation }: any) {
         styles.subjectCard, 
         { backgroundColor: isLightTheme ? '#fff' : '#1e293b' }
       ]}
-      onPress={() => navigation.navigate('DisciplinaDetail', { 
+      onPress={() => navigation.navigate('DisciplinaMateriais', { 
         disciplinaId: item.id,
         disciplinaNome: item.nome, 
       })}

@@ -3,72 +3,66 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   content: { 
     flex: 1, 
-    paddingHorizontal: 16, 
-    paddingTop: 10,
+    paddingHorizontal: 20, 
+    paddingTop: 15,
     width: '100%' 
   },
   headerSection: { 
     width: '100%', 
-    marginBottom: 20, 
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center' 
+    marginBottom: 25,
   },
   title: { 
-    fontSize: 22, 
-    fontWeight: 'bold' 
+    fontSize: 26, 
+    fontWeight: '800',
+    letterSpacing: -0.5
   },
   cardConteudo: {
-    borderRadius: 12,
+    borderRadius: 16,
     padding: 16,
-    marginBottom: 10,
+    marginBottom: 12,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+    borderWidth: 1,
+    // Sombras removidas como solicitado anteriormente
+    elevation: 0,
+    shadowOpacity: 0,
   },
   infoContainer: {
     flex: 1,
-    marginRight: 10,
+    marginRight: 12,
   },
   nomeConteudo: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 4,
+    fontSize: 17,
+    fontWeight: '700',
+    marginBottom: 6,
   },
   tipoBadge: {
     fontSize: 10,
-    fontWeight: '700',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 4,
+    fontWeight: '800',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
     alignSelf: 'flex-start',
-    textTransform: 'uppercase',
+    overflow: 'hidden',
   },
   modalOverlay: { 
     flex: 1, 
-    backgroundColor: 'rgba(0,0,0,0.6)', 
+    backgroundColor: 'rgba(15, 23, 42, 0.8)', // Tom mais escuro/azulado para o overlay
     justifyContent: 'flex-end',
-    width: '100%',
   },
   modalContent: { 
-    borderTopLeftRadius: 25, 
-    borderTopRightRadius: 25, 
+    borderTopLeftRadius: 30, 
+    borderTopRightRadius: 30, 
     padding: 24, 
-    maxHeight: '90%',
-    width: '100%',
-    maxWidth: 600,
-    alignSelf: 'center',
+    paddingBottom: 40, // Espaço extra para o teclado/home indicator
+    maxHeight: '85%',
   },
   modalHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 25,
   }
 });
 

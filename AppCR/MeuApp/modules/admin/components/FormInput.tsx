@@ -12,11 +12,13 @@ interface FormInputProps {
   autoCapitalize?: 'none' | 'sentences';
   inputBg: string;
   textColor: string;
+  multiline?: boolean;
+  numberOfLines?: number;
 }
 
 export const FormInput: React.FC<FormInputProps> = ({
   label, value, onChangeText, placeholder, required, secureTextEntry, 
-  keyboardType, autoCapitalize, inputBg, textColor
+  keyboardType, autoCapitalize, inputBg, textColor, multiline
 }) => (
   <View style={{ marginBottom: 15 }}>
     <Text style={{ fontSize: 14, fontWeight: '600', marginBottom: 6, color: textColor }}>

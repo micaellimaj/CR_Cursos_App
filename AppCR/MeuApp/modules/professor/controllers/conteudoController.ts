@@ -7,7 +7,7 @@ import axios from 'axios';
  */
 export const getConteudosByDisciplina = async (disciplinaId: string): Promise<IConteudo[]> => {
   try {
-    const response = await api.get(`/conteudos/disciplina/${disciplinaId}`);
+    const response = await api.get(`/conteudo/disciplina/${disciplinaId}`);
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
@@ -35,7 +35,7 @@ export const createConteudo = async (payload: ICreateConteudoPayload): Promise<I
       }
     });
 
-    const response = await api.post('/conteudos', formData, {
+    const response = await api.post('/conteudo', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     
@@ -53,7 +53,7 @@ export const createConteudo = async (payload: ICreateConteudoPayload): Promise<I
  */
 export const deleteConteudo = async (id: string): Promise<IConteudoResponse> => {
   try {
-    const response = await api.delete(`/conteudos/${id}`);
+    const response = await api.delete(`/conteudo/${id}`);
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
@@ -68,7 +68,7 @@ export const deleteConteudo = async (id: string): Promise<IConteudoResponse> => 
  */
 export const updateConteudo = async (id: string, dados: Partial<IConteudo>): Promise<IConteudoResponse> => {
   try {
-    const response = await api.put(`/conteudos/${id}`, dados);
+    const response = await api.put(`/conteudo/${id}`, dados);
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
