@@ -17,6 +17,7 @@ export const getConteudoPrivadoByAluno = async (alunoId: string): Promise<IPriva
   }
 };
 
+
 /**
  * Envia uma mensagem ou arquivos de forma privada para um aluno.
  */

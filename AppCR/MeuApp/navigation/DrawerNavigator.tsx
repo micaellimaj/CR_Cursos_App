@@ -90,6 +90,8 @@ export default function DrawerNavigator() {
           <Drawer.Screen name="DisciplinaMateriais" component={DisciplinaMateriaisScreen} />
           <Drawer.Screen name="FrequenciaChamada" component={FrequenciaChamadaScreen} />
           <Drawer.Screen name="NotasLancamento" component={NotasLancamentoScreen} />
+          <Drawer.Screen name="ConteudoProfessor" component={ConteudoProfessorScreen} />
+          <Drawer.Screen name="AtividadeProfessor" component={AtividadeProfessorScreen} />
           {/* Adicione outras sub-telas aqui se necessário */}
         </>
       )}

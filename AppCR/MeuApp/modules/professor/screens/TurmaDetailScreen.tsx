@@ -43,55 +43,99 @@ export default function TurmaDetailScreen({ route, navigation }: any) {
     }
   };
 
+  const handleEmail = (email?: string) => {
+  if (email) {
+    Linking.openURL(`mailto:${email}`);
+  } else {
+    Alert.alert("Aviso", "E-mail não cadastrado.");
+  }
+};
+
   const renderAlunoCard = (item: IAlunoTurma) => (
-    <View 
-      style={[
-        styles.subjectCard, 
-        { backgroundColor: isLightTheme ? '#fff' : '#1e293b' }
-      ]}
-    >
-      <View style={styles.cardMainContent}>
-        {/* Ícone em Azul */}
-        <View style={[styles.iconContainer, { backgroundColor: 'rgba(37, 99, 235, 0.1)' }]}>
-          <MaterialCommunityIcons name="account" size={24} color="#2563eb" />
-        </View>
+  <View 
+    style={[
+      styles.subjectCard, 
+      { 
+        backgroundColor: isLightTheme ? '#fff' : '#1e293b',
+        elevation: 0, 
+        shadowOpacity: 0, 
+        borderWidth: 1, 
+        borderColor: isLightTheme ? '#e2e8f0' : '#334155',
+        padding: 16,
+        marginBottom: 12,
+        borderRadius: 12
+      }
+    ]}
+  >
+    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      {/* Avatar Placeholder */}
+      <View style={{ 
+        width: 45, 
+        height: 45, 
+        borderRadius: 22.5, 
+        backgroundColor: 'rgba(37, 99, 235, 0.1)', 
+        justifyContent: 'center', 
+        alignItems: 'center' 
+      }}>
+        <MaterialCommunityIcons name="account" size={24} color="#2563eb" />
+      </View>
 
-        <View style={styles.subjectInfo}>
-          <Text numberOfLines={1} style={[styles.subjectName, { color: isLightTheme ? '#1e293b' : '#fff' }]}>
-            {item.full_name}
+      <View style={{ flex: 1, marginLeft: 12 }}>
+        <Text numberOfLines={1} style={{ 
+          color: isLightTheme ? '#1e293b' : '#fff', 
+          fontSize: 15, 
+          fontWeight: 'bold' 
+        }}>
+          {item.full_name}
+        </Text>
+        
+        {/* Clique no e-mail para abrir o app de mensagens */}
+        <TouchableOpacity onPress={() => handleEmail(item.email)}>
+          <Text numberOfLines={1} style={{ color: '#2563eb', fontSize: 12, textDecorationLine: 'underline' }}>
+            {item.email}
           </Text>
-          <Text numberOfLines={1} style={styles.courseTag}>{item.email}</Text>
-          
-          {item.telefone && (
-            <View style={styles.tagRow}>
-              <TouchableOpacity 
-                onPress={() => handleCall(item.telefone)}
-                style={[styles.infoTag, { backgroundColor: 'rgba(37, 99, 235, 0.1)' }]}
-              >
-                <MaterialCommunityIcons name="phone-outline" size={12} color="#2563eb" />
-                <Text style={[styles.tagText, { color: '#2563eb' }]}>{item.telefone}</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </View>
+        </TouchableOpacity>
+      </View>
 
-        <View style={styles.actionColumn}>
-          {/* Botão de Ação Único: Notas e Frequência */}
-          <TouchableOpacity
-            onPress={() => navigation.navigate('DisciplinaDetail', {
-                alunoId: item.id,
-                alunoNome: item.full_name,
-                turmaId: turmaId,
-                turmaNome: turmaNome
-              })}
-            style={styles.miniBadgeButton}
+      <View style={{ flexDirection: 'row', gap: 8 }}>
+        {item.telefone && (
+          <TouchableOpacity 
+            onPress={() => handleCall(item.telefone)}
+            style={{ 
+              width: 38, 
+              height: 38, 
+              borderRadius: 10, 
+              backgroundColor: isLightTheme ? '#f1f5f9' : '#334155', 
+              justifyContent: 'center', 
+              alignItems: 'center' 
+            }}
           >
-            <MaterialCommunityIcons name="clipboard-text-clock-outline" size={20} color="#fff" />
+            <MaterialCommunityIcons name="phone-outline" size={18} color="#2563eb" />
           </TouchableOpacity>
-        </View>
+        )}
+
+        <TouchableOpacity
+          onPress={() => navigation.navigate('DisciplinaDetail', {
+              alunoId: item.id,
+              alunoNome: item.full_name,
+              turmaId: turmaId,
+              turmaNome: turmaNome
+            })}
+          style={{ 
+            width: 38, 
+            height: 38, 
+            borderRadius: 10, 
+            backgroundColor: '#2563eb', 
+            justifyContent: 'center', 
+            alignItems: 'center' 
+          }}
+        >
+          <MaterialCommunityIcons name="clipboard-text-clock-outline" size={20} color="#fff" />
+        </TouchableOpacity>
       </View>
     </View>
-  );
+  </View>
+);
 
   return (
     <SafeAreaView style={[globalStyles.container, { backgroundColor: isLightTheme ? '#f8fafc' : '#0f172a' }]}>

@@ -6,6 +6,7 @@ import { useAuth } from '../../../contexts/AuthContext';
 import { getGlobalStyles } from '../../../styles/globalStyles';
 import styles from '../../admin/styles/AdminHomeStyles'; // Reaproveitando a estrutura de estilos
 import { StatCard } from '../../admin/components/StatCard'; // Reaproveitando o componente de card
+import { getProfessorDashboardStats, IProfessorStats } from '../controllers/professorDashboardController';
 
 export default function ProfessorHomeScreen() {
   const { theme } = useTheme();
@@ -20,33 +21,26 @@ export default function ProfessorHomeScreen() {
   const [refreshing, setRefreshing] = useState(false);
 
   // Estado para os KPIs do Professor
-  const [stats, setStats] = useState({
+  const [stats, setStats] = useState<IProfessorStats>({
     meusAlunos: 0,
     minhasTurmas: 0,
     minhasDisciplinas: 0,
-    materiaisPostados: 0,
+    totalConteudos: 0,
+    totalAtividades: 0,
     avisosMural: 0,
-    mensagensPendentes: 0
   });
 
   const loadData = async () => {
+    if (!user?.id) return;
+
     try {
       setLoading(true);
-      // Aqui entrará a chamada para o seu controller futuro:
-      // const data = await getProfessorDashboardStats(user?.id);
-      // setStats(data);
-      
-      // Simulação de dados temporária
-      setStats({
-        meusAlunos: 42,
-        minhasTurmas: 5,
-        minhasDisciplinas: 3,
-        materiaisPostados: 12,
-        avisosMural: 8,
-        mensagensPendentes: 2
-      });
+      // CHAMADA REAL:
+      const data = await getProfessorDashboardStats(user.id);
+      setStats(data);
     } catch (error) {
       console.error(error);
+      // Você pode exibir um Alert aqui se desejar
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -121,12 +115,21 @@ export default function ProfessorHomeScreen() {
             />
 
             <StatCard 
-              label="Materiais" 
-              value={stats.materiaisPostados} 
+              label="Conteúdos" 
+              value={stats.totalConteudos} 
               loading={loading} 
               cardBg={cardBg} 
               titleColor={titleColor}
               icon={<Ionicons name="cloud-upload-outline" size={22} color="#2563eb" />}
+            />
+
+            <StatCard 
+              label="Atividades" 
+              value={stats.totalAtividades} 
+              loading={loading} 
+              cardBg={cardBg} 
+              titleColor={titleColor}
+              icon={<Ionicons name="chatbox-ellipses-outline" size={22} color="#2563eb" />}
             />
 
             <StatCard 
@@ -138,14 +141,6 @@ export default function ProfessorHomeScreen() {
               icon={<MaterialCommunityIcons name="bulletin-board" size={22} color="#2563eb" />}
             />
 
-            <StatCard 
-              label="Mensagens" 
-              value={stats.mensagensPendentes} 
-              loading={loading} 
-              cardBg={cardBg} 
-              titleColor={titleColor}
-              icon={<Ionicons name="chatbox-ellipses-outline" size={22} color="#2563eb" />}
-            />
           </View>
 
           <View style={styles.footerInfo}>

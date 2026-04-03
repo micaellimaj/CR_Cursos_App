@@ -20,10 +20,8 @@ import {
 import { useAuth } from '../../../contexts/AuthContext';
 import { IAlunoTurma, IFrequencia } from '../types';
 
-export default function FrequenciaChamadaScreen({ route }: any) {
-
-  const { turmaId, turmaNome, disciplinaId } = route.params;
-
+export default function FrequenciaChamadaScreen({ route, navigation }: any) {
+  const { turmaId, turmaNome } = route.params;
   const { theme } = useTheme();
   const { user } = useAuth();
 
@@ -35,19 +33,16 @@ export default function FrequenciaChamadaScreen({ route }: any) {
   const [loading, setLoading] = useState(false);
 
   const dataHoje = new Date().toLocaleDateString('pt-BR');
-
   const mesmaData = (data1: string, data2: string) => data1 === data2;
 
   const loadData = async () => {
     setLoading(true);
-
     try {
       const [listaAlunos, listaFreq] = await Promise.all([
         getAlunosDaTurma(turmaId),
         getFrequenciaPorTurma(turmaId)
       ]);
 
-      // ✅ normaliza alunos
       const alunosFormatados: IAlunoTurma[] = listaAlunos.map((aluno: any, index: number) => ({
         id: aluno.id || aluno.aluno_id || index.toString(),
         full_name: aluno.full_name || aluno.nome || "Sem nome",
@@ -56,13 +51,8 @@ export default function FrequenciaChamadaScreen({ route }: any) {
         turma_id: aluno.turma_id || turmaId
       }));
 
-     
-
       setAlunos(alunosFormatados);
-
-      console.log("TURMA ID:", turmaId);
-
-
+      setHistorico(listaFreq || []);
     } catch (e) {
       Alert.alert("Erro", "Falha ao carregar dados.");
     } finally {
@@ -70,39 +60,23 @@ export default function FrequenciaChamadaScreen({ route }: any) {
     }
   };
 
-  useEffect(() => {
-    loadData();
-  }, [turmaId]);
+  useEffect(() => { loadData(); }, [turmaId]);
 
-  // ✅ REGISTRAR
   const handleRegistrar = async (alunoId: string, status: boolean) => {
     try {
-
-      // ✅ ID corrigido
-      const id = `${Date.now()}_${alunoId}`;
-
       const payload = {
         turma_id: turmaId,
         professor_id: user?.id || '',
         data: dataHoje,
-        alunos: [
-          {
-            aluno_id: alunoId,
-            status
-          }
-        ]
+        alunos: [{ aluno_id: alunoId, status }]
       };
-
       await registrarFrequencias(payload);
-
       loadData();
-
     } catch (e: any) {
       Alert.alert("Erro", e.message);
     }
   };
 
-  // ✅ UPDATE
   const handleUpdate = async (id: string, statusAtual: boolean) => {
     try {
       await atualizarFrequencia(id, !statusAtual);
@@ -112,7 +86,6 @@ export default function FrequenciaChamadaScreen({ route }: any) {
     }
   };
 
-  // ✅ DELETE
   const handleDelete = (id: string) => {
     Alert.alert("Excluir", "Remover este registro?", [
       { text: "Cancelar" },
@@ -127,63 +100,76 @@ export default function FrequenciaChamadaScreen({ route }: any) {
   };
 
   const renderItem = ({ item }: { item: IAlunoTurma }) => {
-
     const registroHoje = historico.find(
-      f =>
-        f.aluno_id === item.id &&
-        mesmaData(f.data, dataHoje)
+      f => f.aluno_id === item.id && mesmaData(f.data, dataHoje)
     );
 
     return (
       <View style={[
         styles.subjectCard,
-        { backgroundColor: isLightTheme ? '#fff' : '#1e293b' }
+        { 
+          backgroundColor: isLightTheme ? '#fff' : '#1e293b',
+          elevation: 0,
+          shadowOpacity: 0,
+          borderWidth: 1,
+          borderColor: isLightTheme ? '#e2e8f0' : '#334155',
+          padding: 16,
+          marginBottom: 12,
+          flexDirection: 'row',
+          alignItems: 'center'
+        }
       ]}>
-
         <View style={{ flex: 1 }}>
           <Text style={[
             styles.subjectName,
-            { color: isLightTheme ? '#1e293b' : '#fff' }
+            { color: isLightTheme ? '#1e293b' : '#fff', fontSize: 15, fontWeight: '600' }
           ]}>
             {item.full_name}
           </Text>
 
-          <Text style={styles.courseTag}>
+          <Text style={{ 
+            fontSize: 12, 
+            marginTop: 4, 
+            color: registroHoje ? (registroHoje.status ? '#059669' : '#dc2626') : '#94a3b8',
+            fontWeight: registroHoje ? 'bold' : '400'
+          }}>
             {registroHoje
               ? `Status: ${registroHoje.status ? 'Presente' : 'Falta'}`
               : 'Pendente hoje'}
           </Text>
         </View>
 
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {!registroHoje ? (
             <>
               <TouchableOpacity
                 onPress={() => handleRegistrar(item.id!, true)}
-                style={{ marginRight: 15 }}
+                style={{ padding: 5, marginRight: 10 }}
               >
-                <MaterialCommunityIcons name="check-circle-outline" size={32} color="#059669" />
+                <MaterialCommunityIcons name="check-circle" size={34} color="#059669" />
               </TouchableOpacity>
 
               <TouchableOpacity
                 onPress={() => handleRegistrar(item.id!, false)}
+                style={{ padding: 5 }}
               >
-                <MaterialCommunityIcons name="close-circle-outline" size={32} color="#dc2626" />
+                <MaterialCommunityIcons name="close-circle" size={34} color="#dc2626" />
               </TouchableOpacity>
             </>
           ) : (
             <>
               <TouchableOpacity
                 onPress={() => handleUpdate(registroHoje.id!, registroHoje.status)}
-                style={{ marginRight: 15 }}
+                style={{ padding: 8, marginRight: 6 }}
               >
-                <MaterialCommunityIcons name="cached" size={28} color="#2563eb" />
+                <MaterialCommunityIcons name="cached" size={26} color="#2563eb" />
               </TouchableOpacity>
 
               <TouchableOpacity
                 onPress={() => handleDelete(registroHoje.id!)}
+                style={{ padding: 8 }}
               >
-                <MaterialCommunityIcons name="trash-can-outline" size={28} color="#dc2626" />
+                <MaterialCommunityIcons name="trash-can-outline" size={26} color="#dc2626" />
               </TouchableOpacity>
             </>
           )}
@@ -195,39 +181,55 @@ export default function FrequenciaChamadaScreen({ route }: any) {
   return (
     <SafeAreaView style={[
       globalStyles.container,
-      { backgroundColor: isLightTheme ? '#f5f7fa' : '#0f172a' }
+      { backgroundColor: isLightTheme ? '#f8fafc' : '#0f172a' }
     ]}>
       <View style={styles.content}>
 
         <View style={styles.headerSection}>
-          <Text style={[
-            styles.title,
-            { color: isLightTheme ? '#1e3a8a' : '#fff' }
-          ]}>
-            Frequência: {turmaNome}
-          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
+            <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: 12 }}>
+              <MaterialCommunityIcons name="arrow-left" size={28} color={isLightTheme ? '#1e293b' : '#fff'} />
+            </TouchableOpacity>
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.title, { color: isLightTheme ? '#1e293b' : '#fff' }]}>Chamada</Text>
+              <Text style={styles.subtitle} numberOfLines={1}>{turmaNome}</Text>
+            </View>
+          </View>
 
-          <Text style={styles.subtitle}>
-            Data: {dataHoje}
-          </Text>
+          <View style={{ 
+            flexDirection: 'row', 
+            alignItems: 'center', 
+            backgroundColor: isLightTheme ? '#fff' : '#1e293b',
+            padding: 14, 
+            borderRadius: 12, 
+            borderWidth: 1,
+            borderColor: isLightTheme ? '#e2e8f0' : '#334155'
+          }}>
+            <MaterialCommunityIcons name="calendar-check" size={22} color="#2563eb" style={{ marginRight: 10 }} />
+            <View>
+              <Text style={{ fontSize: 10, color: '#64748b', textTransform: 'uppercase' }}>Data do Registro</Text>
+              <Text style={{ fontSize: 15, fontWeight: 'bold', color: isLightTheme ? '#1e293b' : '#fff' }}>{dataHoje}</Text>
+            </View>
+          </View>
         </View>
 
         {loading ? (
-          <ActivityIndicator size="large" color="#059669" />
+          <ActivityIndicator size="large" color="#2563eb" style={{ marginTop: 40 }} />
         ) : (
           <FlatList
             data={alunos}
             keyExtractor={(item, index) => item.id ?? index.toString()}
             renderItem={renderItem}
             showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 30 }}
             ListEmptyComponent={
-              <Text style={{ textAlign: 'center', marginTop: 20 }}>
-                Nenhum aluno encontrado
-              </Text>
+              <View style={{ alignItems: 'center', marginTop: 40 }}>
+                <MaterialCommunityIcons name="account-search-outline" size={48} color="#94a3b8" />
+                <Text style={{ color: '#94a3b8', marginTop: 10 }}>Nenhum aluno encontrado</Text>
+              </View>
             }
           />
         )}
-
       </View>
     </SafeAreaView>
   );

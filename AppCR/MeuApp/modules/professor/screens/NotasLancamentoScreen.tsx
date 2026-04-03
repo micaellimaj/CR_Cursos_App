@@ -22,13 +22,10 @@ export default function NotasLancamentoScreen({ route, navigation }: any) {
   const globalStyles = getGlobalStyles(theme);
   const isLightTheme = theme === 'light';
 
-  // Estados de Dados
   const [disciplinas, setDisciplinas] = useState<IDisciplinaProfessor[]>([]);
   const [selectedDisciplina, setSelectedDisciplina] = useState<{id: string, nome: string} | null>(null);
   const [alunos, setAlunos] = useState<IAlunoTurma[]>([]);
   const [notas, setNotas] = useState<INota[]>([]);
-  
-  // Estados de UI
   const [loading, setLoading] = useState(false);
   const [showDiscModal, setShowDiscModal] = useState(false);
   const [inputValue, setInputValue] = useState<Record<string, string>>({});
@@ -36,28 +33,21 @@ export default function NotasLancamentoScreen({ route, navigation }: any) {
   const [selectedNota, setSelectedNota] = useState<INota | null>(null);
   const [editValor, setEditValor] = useState('');
 
-  // Carrega lista de disciplinas do professor
   const loadInitialData = async () => {
     setLoading(true);
     try {
       const listaDisc = await getMyDisciplinas(user?.id);
       setDisciplinas(listaDisc);
-      
-      // Prioriza a disciplina vinda da navegação, senão seleciona a primeira da lista
       if (route.params?.disciplinaId) {
-        setSelectedDisciplina({ 
-          id: route.params.disciplinaId, 
-          nome: route.params.disciplinaNome 
-        });
+        setSelectedDisciplina({ id: route.params.disciplinaId, nome: route.params.disciplinaNome });
       } else if (listaDisc.length > 0) {
         setSelectedDisciplina({ id: listaDisc[0].id, nome: listaDisc[0].nome });
       }
     } catch (e: any) {
-      Alert.alert("Erro", e.message || "Falha ao carregar disciplinas.");
+      Alert.alert("Erro", "Falha ao carregar disciplinas.");
     } finally { setLoading(false); }
   };
 
-  // Carrega alunos e notas sempre que mudar a disciplina ou turma
   const loadAlunosENotas = async () => {
     if (!selectedDisciplina) return;
     setLoading(true);
@@ -69,7 +59,7 @@ export default function NotasLancamentoScreen({ route, navigation }: any) {
       setAlunos(listaAlunos);
       setNotas(listaNotas);
     } catch (e) {
-      Alert.alert("Erro", "Falha ao carregar notas dos alunos.");
+      Alert.alert("Erro", "Falha ao carregar dados.");
     } finally { setLoading(false); }
   };
 
@@ -77,40 +67,35 @@ export default function NotasLancamentoScreen({ route, navigation }: any) {
   useEffect(() => { loadAlunosENotas(); }, [selectedDisciplina]);
 
   const handleCriar = async (alunoId: string) => {
-    if (!selectedDisciplina) return Alert.alert("Aviso", "Selecione uma disciplina primeiro.");
     const valor = inputValue[alunoId];
-    if (!valor || isNaN(parseFloat(valor))) return Alert.alert("Aviso", "Insira um valor numérico.");
-
+    if (!valor) return Alert.alert("Aviso", "Insira a nota.");
     try {
       await criarNota({
         alunoId,
-        disciplinaId: selectedDisciplina.id,
+        disciplinaId: selectedDisciplina?.id || '',
         turmaId,
         professorId: user?.id || '',
-        valor: parseFloat(valor),
-        descricao: `Nota: ${selectedDisciplina.nome}`
+        valor: parseFloat(valor.replace(',', '.')),
+        descricao: `Nota: ${selectedDisciplina?.nome}`
       });
       setInputValue({ ...inputValue, [alunoId]: '' });
       loadAlunosENotas();
-    } catch (e: any) { Alert.alert("Erro", e.message); }
+    } catch (e: any) { Alert.alert("Erro", "Não foi possível salvar."); }
   };
 
   const handleAtualizar = async () => {
     if (!selectedNota?.id) return;
     try {
-      await atualizarNota(selectedNota.id, parseFloat(editValor), selectedNota.descricao);
+      await atualizarNota(selectedNota.id, parseFloat(editValor.replace(',', '.')), selectedNota.descricao);
       setModalEditVisible(false);
       loadAlunosENotas();
-    } catch (e: any) { Alert.alert("Erro", "Falha ao atualizar nota."); }
+    } catch (e: any) { Alert.alert("Erro", "Falha ao atualizar."); }
   };
 
   const handleDeletar = (id: string) => {
-    Alert.alert("Excluir", "Deseja apagar esta nota definitivamente?", [
-      { text: "Cancelar", style: "cancel" },
-      { text: "Excluir", style: "destructive", onPress: async () => { 
-          await deletarNota(id); 
-          loadAlunosENotas(); 
-      }}
+    Alert.alert("Excluir", "Apagar nota definitiva?", [
+      { text: "Não", style: "cancel" },
+      { text: "Sim", style: "destructive", onPress: async () => { await deletarNota(id); loadAlunosENotas(); }}
     ]);
   };
 
@@ -120,19 +105,20 @@ export default function NotasLancamentoScreen({ route, navigation }: any) {
     return (
       <View style={[styles.subjectCard, { 
         backgroundColor: isLightTheme ? '#fff' : '#1e293b',
-        alignItems: 'center',
-        paddingVertical: 14 
+        paddingVertical: 16, // Aumentado para tirar o aspecto "amassado"
+        paddingHorizontal: 16,
+        marginBottom: 12,
       }]}>
         <View style={{ flex: 1 }}>
-          <Text numberOfLines={1} style={[styles.subjectName, { color: isLightTheme ? '#1e293b' : '#fff' }]}>
+          <Text numberOfLines={1} style={[styles.subjectName, { color: isLightTheme ? '#1e293b' : '#fff', fontSize: 15 }]}>
             {item.full_name}
           </Text>
-          <Text style={[styles.courseTag, { color: notaExistente ? '#059669' : '#64748b' }]}>
-            {notaExistente ? `Nota Atual: ${notaExistente.valor || notaExistente.nota}` : 'Sem nota lançada'}
+          <Text style={{ fontSize: 12, color: notaExistente ? '#2563eb' : '#94a3b8', marginTop: 4, fontWeight: notaExistente ? '600' : '400' }}>
+            {notaExistente ? `Lançada: ${notaExistente.valor || notaExistente.nota}` : 'Aguardando nota'}
           </Text>
         </View>
 
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 10 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 12 }}>
           {!notaExistente ? (
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <TextInput
@@ -142,19 +128,14 @@ export default function NotasLancamentoScreen({ route, navigation }: any) {
                 value={inputValue[item.id!] || ''}
                 onChangeText={(v) => setInputValue({...inputValue, [item.id!]: v})}
                 style={{ 
-                  width: 55, 
-                  height: 40,
-                  borderWidth: 1, 
-                  borderColor: isLightTheme ? '#cbd5e1' : '#475569',
-                  borderRadius: 8,
-                  color: isLightTheme ? '#000' : '#fff', 
-                  textAlign: 'center',
-                  marginRight: 8,
-                  backgroundColor: isLightTheme ? '#fff' : '#0f172a'
+                  width: 55, height: 42, // Tamanho confortável para toque
+                  borderWidth: 1.5, borderColor: isLightTheme ? '#e2e8f0' : '#475569',
+                  borderRadius: 8, color: isLightTheme ? '#000' : '#fff', 
+                  textAlign: 'center', marginRight: 10, backgroundColor: isLightTheme ? '#f8fafc' : '#0f172a'
                 }}
               />
               <TouchableOpacity onPress={() => handleCriar(item.id!)}>
-                <MaterialCommunityIcons name="check-circle" size={34} color="#059669" />
+                <MaterialCommunityIcons name="check-circle" size={36} color="#2563eb" />
               </TouchableOpacity>
             </View>
           ) : (
@@ -165,12 +146,12 @@ export default function NotasLancamentoScreen({ route, navigation }: any) {
                   setEditValor(String(notaExistente.valor || notaExistente.nota)); 
                   setModalEditVisible(true); 
                 }} 
-                style={{ padding: 8, marginRight: 5 }}
+                style={{ padding: 8, marginRight: 6 }}
               >
-                <MaterialCommunityIcons name="pencil-outline" size={24} color="#2563eb" />
+                <MaterialCommunityIcons name="square-edit-outline" size={26} color="#2563eb" />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => handleDeletar(notaExistente.id!)} style={{ padding: 8 }}>
-                <MaterialCommunityIcons name="trash-can-outline" size={24} color="#dc2626" />
+                <MaterialCommunityIcons name="trash-can-outline" size={26} color="#ef4444" />
               </TouchableOpacity>
             </View>
           )}
@@ -180,39 +161,34 @@ export default function NotasLancamentoScreen({ route, navigation }: any) {
   };
 
   return (
-    <SafeAreaView style={[globalStyles.container, { backgroundColor: isLightTheme ? '#f5f7fa' : '#0f172a' }]}>
+    <SafeAreaView style={[globalStyles.container, { backgroundColor: isLightTheme ? '#f8fafc' : '#0f172a' }]}>
       <View style={styles.content}>
         
-        {/* Header com Seletor de Disciplina */}
         <View style={styles.headerSection}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 15 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
             <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: 12 }}>
-              <MaterialCommunityIcons name="arrow-left" size={28} color={isLightTheme ? '#1e3a8a' : '#fff'} />
+              <MaterialCommunityIcons name="arrow-left" size={28} color={isLightTheme ? '#1e293b' : '#fff'} />
             </TouchableOpacity>
             <View>
-              <Text style={[styles.title, { color: isLightTheme ? '#1e3a8a' : '#fff' }]}>Lançamento</Text>
-              <Text style={styles.subtitle}>Turma: {turmaNome}</Text>
+              <Text style={[styles.title, { color: isLightTheme ? '#1e293b' : '#fff' }]}>Lançamento</Text>
+              <Text style={styles.subtitle}>Turma {turmaNome}</Text>
             </View>
           </View>
 
           <TouchableOpacity 
             onPress={() => setShowDiscModal(true)}
             style={{ 
-              flexDirection: 'row', 
-              alignItems: 'center', 
+              flexDirection: 'row', alignItems: 'center', 
               backgroundColor: isLightTheme ? '#fff' : '#1e293b',
-              padding: 14,
-              borderRadius: 12,
-              borderWidth: 1,
-              borderColor: isLightTheme ? '#e2e8f0' : '#334155',
-              elevation: 2
+              padding: 16, borderRadius: 12, borderWidth: 1,
+              borderColor: isLightTheme ? '#e2e8f0' : '#334155', elevation: 2
             }}
           >
-            <MaterialCommunityIcons name="book-open-variant" size={20} color="#059669" style={{ marginRight: 10 }} />
+            <MaterialCommunityIcons name="book-open-outline" size={22} color="#2563eb" style={{ marginRight: 12 }} />
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 11, color: '#64748b', textTransform: 'uppercase' }}>Disciplina</Text>
+              <Text style={{ fontSize: 11, color: '#64748b', textTransform: 'uppercase', letterSpacing: 0.5 }}>Disciplina Selecionada</Text>
               <Text style={{ fontSize: 15, fontWeight: 'bold', color: isLightTheme ? '#1e293b' : '#fff' }}>
-                {selectedDisciplina?.nome || "Escolha uma disciplina"}
+                {selectedDisciplina?.nome || "Escolha uma..."}
               </Text>
             </View>
             <MaterialCommunityIcons name="chevron-down" size={22} color="#64748b" />
@@ -220,76 +196,60 @@ export default function NotasLancamentoScreen({ route, navigation }: any) {
         </View>
 
         {loading ? (
-          <ActivityIndicator size="large" color="#059669" style={{ marginTop: 40 }} />
+          <ActivityIndicator size="large" color="#2563eb" style={{ marginTop: 40 }} />
         ) : (
           <FlatList 
             data={alunos} 
             keyExtractor={item => item.id || Math.random().toString()} 
             renderItem={renderItem}
-            contentContainerStyle={{ paddingBottom: 40 }}
+            contentContainerStyle={{ paddingBottom: 30 }}
             showsVerticalScrollIndicator={false}
           />
         )}
 
-        {/* Modal: Seleção de Disciplina */}
+        {/* Modal de Disciplinas */}
         <Modal visible={showDiscModal} transparent animationType="fade">
-          <View style={{ flex: 1, justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.6)', padding: 20 }}>
-            <View style={{ backgroundColor: isLightTheme ? '#fff' : '#1e293b', borderRadius: 20, padding: 20, maxHeight: '70%' }}>
-              <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 15, color: isLightTheme ? '#1e293b' : '#fff', textAlign: 'center' }}>
-                Selecionar Disciplina
-              </Text>
-              <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={{ flex: 1, justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.6)', padding: 25 }}>
+            <View style={{ backgroundColor: isLightTheme ? '#fff' : '#1e293b', borderRadius: 20, padding: 20 }}>
+              <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 20, color: isLightTheme ? '#1e293b' : '#fff', textAlign: 'center' }}>Selecionar Disciplina</Text>
+              <ScrollView style={{ maxHeight: 300 }}>
                 {disciplinas.map((d) => (
                   <TouchableOpacity 
                     key={d.id} 
                     onPress={() => { setSelectedDisciplina({id: d.id, nome: d.nome}); setShowDiscModal(false); }}
-                    style={{ 
-                      paddingVertical: 15, 
-                      borderBottomWidth: 1, 
-                      borderBottomColor: isLightTheme ? '#f1f5f9' : '#334155',
-                      flexDirection: 'row',
-                      justifyContent: 'space-between'
-                    }}
+                    style={{ paddingVertical: 15, borderBottomWidth: 1, borderBottomColor: isLightTheme ? '#f1f5f9' : '#334155' }}
                   >
-                    <Text style={{ fontSize: 16, color: isLightTheme ? '#334155' : '#cbd5e1' }}>{d.nome}</Text>
-                    {selectedDisciplina?.id === d.id && <MaterialCommunityIcons name="check" size={20} color="#059669" />}
+                    <Text style={{ fontSize: 16, color: selectedDisciplina?.id === d.id ? '#2563eb' : (isLightTheme ? '#334155' : '#cbd5e1'), fontWeight: selectedDisciplina?.id === d.id ? 'bold' : '400' }}>{d.nome}</Text>
                   </TouchableOpacity>
                 ))}
               </ScrollView>
-              <TouchableOpacity onPress={() => setShowDiscModal(false)} style={{ marginTop: 20, alignItems: 'center', backgroundColor: '#f1f5f9', padding: 12, borderRadius: 10 }}>
+              <TouchableOpacity onPress={() => setShowDiscModal(false)} style={{ marginTop: 20, padding: 15, backgroundColor: '#f1f5f9', borderRadius: 10, alignItems: 'center' }}>
                 <Text style={{ color: '#64748b', fontWeight: 'bold' }}>Fechar</Text>
               </TouchableOpacity>
             </View>
           </View>
         </Modal>
 
-        {/* Modal: Edição de Nota */}
+        {/* Modal Edição */}
         <Modal visible={modalEditVisible} transparent animationType="fade">
-          <KeyboardAvoidingView 
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={{ flex: 1, justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.6)', padding: 20 }}
-          >
+          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1, justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.7)', padding: 30 }}>
             <View style={{ backgroundColor: isLightTheme ? '#fff' : '#1e293b', padding: 25, borderRadius: 20 }}>
-              <Text style={{ fontSize: 17, fontWeight: 'bold', marginBottom: 20, color: isLightTheme ? '#1e293b' : '#fff', textAlign: 'center' }}>
-                Editar Nota
-              </Text>
+              <Text style={{ fontSize: 17, fontWeight: 'bold', marginBottom: 20, color: isLightTheme ? '#1e293b' : '#fff', textAlign: 'center' }}>Editar Nota</Text>
               <TextInput 
                 value={editValor} 
                 onChangeText={setEditValor} 
                 keyboardType="numeric" 
-                autoFocus
                 style={{ 
-                  backgroundColor: isLightTheme ? '#f1f5f9' : '#334155', 
-                  padding: 15, borderRadius: 12, marginBottom: 25,
-                  fontSize: 22, textAlign: 'center', color: isLightTheme ? '#000' : '#fff', fontWeight: 'bold'
+                  backgroundColor: isLightTheme ? '#f1f5f9' : '#334155', padding: 15, borderRadius: 12, marginBottom: 20,
+                  fontSize: 26, textAlign: 'center', color: isLightTheme ? '#1e293b' : '#fff', fontWeight: 'bold'
                 }} 
               />
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <View style={{ flexDirection: 'row', gap: 10 }}>
                 <TouchableOpacity onPress={() => setModalEditVisible(false)} style={{ flex: 1, padding: 15, alignItems: 'center' }}>
-                  <Text style={{ color: '#64748b', fontWeight: '600' }}>Cancelar</Text>
+                  <Text style={{ color: '#64748b', fontWeight: 'bold' }}>Voltar</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleAtualizar} style={{ flex: 1, backgroundColor: '#2563eb', padding: 15, borderRadius: 12, alignItems: 'center' }}>
-                  <Text style={{ fontWeight: 'bold', color: '#fff' }}>Salvar</Text>
+                  <Text style={{ color: '#fff', fontWeight: 'bold' }}>Salvar</Text>
                 </TouchableOpacity>
               </View>
             </View>

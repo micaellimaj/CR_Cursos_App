@@ -1,17 +1,18 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-  content: { flex: 1, paddingHorizontal: 16, paddingTop: 10 },
-  headerSection: { width: '100%', marginBottom: 25 },
+  content: { flex: 1, paddingHorizontal: 12, paddingTop: 10, width: '100%' },
+  headerSection: { width: '100%', marginBottom: 15 },
   title: { fontSize: 22, fontWeight: 'bold' },
   subtitle: { fontSize: 13, color: '#64748b' },
   
   subjectCard: {
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 12,
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 10,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
@@ -65,6 +66,15 @@ export default StyleSheet.create({
   },
   tagText: { fontSize: 11, marginLeft: 4, fontWeight: '700' },
   
-  emptyContainer: { alignItems: 'center', marginTop: 50 },
-  emptyText: { marginTop: 10, color: '#64748b', textAlign: 'center' }
+  emptyContainer: { 
+    flex: 1,
+    alignItems: 'center', 
+    justifyContent: 'center',
+    marginTop: 50 
+  },
+  emptyText: { 
+    marginTop: 10, 
+    color: '#64748b', 
+    textAlign: 'center' 
+  }
 });
