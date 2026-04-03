@@ -8,7 +8,7 @@ import axios from 'axios';
  */
 export const getProfessorProfile = async (id: string): Promise<IProfessor> => {
   try {
-    const response = await api.get(`/professor/${id}`);
+    const response = await api.get(`/professores/${id}`);
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
@@ -27,7 +27,7 @@ export const updateProfessorProfile = async (
   dados: IUpdateProfessorPayload
 ): Promise<IProfessorActionResponse> => {
   try {
-    const response = await api.put(`/professor/${id}`, dados);
+    const response = await api.put(`/professores/${id}`, dados);
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {

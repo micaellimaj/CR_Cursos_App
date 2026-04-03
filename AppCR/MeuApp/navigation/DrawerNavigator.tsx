@@ -27,6 +27,9 @@ import MyTurmasScreen from '../modules/professor/screens/MyTurmasScreen';
 import FrequenciaChamadaScreen from 'modules/professor/screens/FrequenciaChamadaScreen';
 import NotasLancamentoScreen from 'modules/professor/screens/NotasLancamentoScreen';
 import DisciplinaMateriaisScreen from 'modules/professor/screens/DisciplinaMateriaisScreen';
+import ClasseScreen from 'modules/professor/screens/ClasseScreen';
+import PrivadoScreen from 'modules/professor/screens/PrivadoScreen';
+import ProfessorTabNavigator from './ProfessorTabNavigator';
 import { useAuth } from '../contexts/AuthContext'; 
 import AdminTabNavigator from './AdminTabNavigator';
 
@@ -73,60 +76,21 @@ export default function DrawerNavigator() {
       {/* ROTAS DE PROFESSOR: Só existem se for Professor ou Admin */}
       {(userType === 'professor') && (
         <>
+          {/* Tela Principal com Tabs */}
           <Drawer.Screen 
-            name="ProfileProfessor" 
-            component={ProfileProfessor} 
-            options={{ title: 'Meu Perfil' }}
+            name="ProfessorHome" 
+            component={ProfessorTabNavigator} 
+            options={{ title: 'Área do Professor' }}
           />
-          <Drawer.Screen 
-            name="MyDisciplinas" 
-            component={MyDisciplinasScreen} 
-            options={{ title: 'Minhas Disciplinas' }}
-          />
-           <Drawer.Screen 
-            name="MyTurmas" 
-            component={MyTurmasScreen} 
-            options={{ title: 'Minhas Turmas' }}
-          />
-          
-          {/* TELAS DE APOIO (Ocultas no Drawer via DrawerItem, mas registradas no Navigator) */}
-          <Drawer.Screen 
-            name="DisciplinaDetail" 
-            component={DisciplinaDetailScreen} 
-            options={{ title: 'Detalhes da Disciplina' }}
-          />
-          <Drawer.Screen 
-            name="ConteudoProfessor" 
-            component={ConteudoProfessorScreen} 
-            options={{ title: 'Conteúdos' }}
-          />
-          <Drawer.Screen 
-            name="AtividadeProfessor" 
-            component={AtividadeProfessorScreen} 
-            options={{ title: 'Atividades' }}
-          />
-          <Drawer.Screen 
-            name="TurmaDetail" 
-            component={TurmaDetailScreen} 
-            options={{ title: 'Detalhes da Turma' }}
-          />
-          <Drawer.Screen 
-            name="DisciplinaMateriais" 
-            component={DisciplinaMateriaisScreen} 
-            options={{ title: 'Materiais' }}
-          />
-          
-          <Drawer.Screen 
-            name="FrequenciaChamada" 
-            component={FrequenciaChamadaScreen} 
-            options={{ title: 'Frequência e Chamada' }}
-          />
-          <Drawer.Screen 
-            name="NotasLancamento" 
-            component={NotasLancamentoScreen} 
-            options={{ title: 'Lançamento de Notas' }}
-          />
-          
+          <Drawer.Screen name="ProfileProfessor" component={ProfileProfessor} options={{ title: 'Perfil do Professor' }} />
+
+          {/* TELAS DE APOIO (Continuam no Drawer para navegação via Stack, mas não precisam estar no Tab) */}
+          <Drawer.Screen name="DisciplinaDetail" component={DisciplinaDetailScreen} />
+          <Drawer.Screen name="TurmaDetail" component={TurmaDetailScreen} />
+          <Drawer.Screen name="DisciplinaMateriais" component={DisciplinaMateriaisScreen} />
+          <Drawer.Screen name="FrequenciaChamada" component={FrequenciaChamadaScreen} />
+          <Drawer.Screen name="NotasLancamento" component={NotasLancamentoScreen} />
+          {/* Adicione outras sub-telas aqui se necessário */}
         </>
       )}
 

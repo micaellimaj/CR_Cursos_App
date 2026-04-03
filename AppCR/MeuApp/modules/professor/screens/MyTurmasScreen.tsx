@@ -7,7 +7,6 @@ import { useTheme } from '../../../contexts/ThemeContext';
 import { getGlobalStyles } from '../../../styles/globalStyles';
 import styles from '../styles/MyDisciplinasStyles'; 
 
-// Controllers e Tipagens
 import { getMyTurmas } from '../controllers/turmaController';
 import { useAuth } from '../../../contexts/AuthContext'; 
 import { ITurmaProfessor } from '../types';
@@ -22,12 +21,11 @@ export default function MyTurmasScreen({ navigation }: any) {
   const [loading, setLoading] = useState(false);
 
   const fetchTurmas = async () => {
+    if (!user?.id) return;
     try {
       setLoading(true);
-      if (user?.id) {
-        const data = await getMyTurmas(user.id);
-        setTurmas(data);
-      }
+      const data = await getMyTurmas(user.id);
+      setTurmas(data);
     } catch (error: any) {
       Alert.alert("Erro", error.message || "Falha ao carregar turmas.");
     } finally {
@@ -37,7 +35,7 @@ export default function MyTurmasScreen({ navigation }: any) {
 
   useEffect(() => {
     fetchTurmas();
-  }, []);
+  }, [user?.id]);
 
   const renderTurmaCard = (item: ITurmaProfessor) => (
     <TouchableOpacity 
@@ -51,8 +49,9 @@ export default function MyTurmasScreen({ navigation }: any) {
       })}
       activeOpacity={0.7}
     >
-      <View style={[styles.iconContainer, { backgroundColor: 'rgba(5, 150, 105, 0.1)' }]}>
-        <MaterialCommunityIcons name="google-classroom" size={24} color="#059669" />
+      {/* 1. Fundo do ícone principal alterado de verde para azul transparente */}
+      <View style={[styles.iconContainer, { backgroundColor: 'rgba(37, 99, 235, 0.1)' }]}>
+        <MaterialCommunityIcons name="google-classroom" size={24} color="#2563eb" />
       </View>
 
       <View style={styles.subjectInfo}>
@@ -62,9 +61,10 @@ export default function MyTurmasScreen({ navigation }: any) {
         <Text style={styles.courseTag}>Início: {new Date(item.data_inicio).toLocaleDateString('pt-BR')}</Text>
         
         <View style={styles.tagRow}>
-          <View style={[styles.infoTag, { backgroundColor: 'rgba(5, 150, 105, 0.1)' }]}>
-            <MaterialCommunityIcons name="account-tie" size={14} color="#059669" />
-            <Text style={[styles.tagText, { color: '#059669' }]}>
+          {/* 2. Fundo da tag 'Titular/Colaborador' alterado para azul transparente */}
+          <View style={[styles.infoTag, { backgroundColor: 'rgba(37, 99, 235, 0.1)' }]}>
+            <MaterialCommunityIcons name="account-tie" size={14} color="#2563eb" />
+            <Text style={[styles.tagText, { color: '#2563eb' }]}>
               {item.professor_principal_id === user?.id ? 'Titular' : 'Colaborador'}
             </Text>
           </View>
@@ -80,16 +80,23 @@ export default function MyTurmasScreen({ navigation }: any) {
   );
 
   return (
-    <SafeAreaView style={[globalStyles.container, { backgroundColor: isLightTheme ? '#f5f7fa' : '#0f172a' }]}>
+    <SafeAreaView 
+      style={[
+        globalStyles.container, 
+        { 
+          backgroundColor: isLightTheme ? '#f8fafc' : '#0f172a',
+          paddingHorizontal: 0 
+        }
+      ]}
+    >
       <View style={styles.content}>
         
         <View style={styles.headerSection}>
-          {/* Corrigido de <div> para <View> */}
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 2 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
             <MaterialCommunityIcons 
               name="account-group-outline" 
-              size={26} 
-              color={isLightTheme ? '#1e3a8a' : '#fff'} 
+              size={28} 
+              color={isLightTheme ? '#1e3a8a' : '#60a5fa'} 
               style={{ marginRight: 10 }} 
             />
             <Text style={[styles.title, { color: isLightTheme ? '#1e3a8a' : '#fff' }]}>
@@ -100,18 +107,18 @@ export default function MyTurmasScreen({ navigation }: any) {
         </View>
 
         {loading ? (
-          <ActivityIndicator color="#059669" size="large" style={{ marginTop: 20 }} />
+          <ActivityIndicator color="#2563eb" size="large" style={{ marginTop: 20 }} />
         ) : (
           <FlatList
             data={turmas}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => renderTurmaCard(item)}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingBottom: 20 }}
+            contentContainerStyle={styles.flatListContent}
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
-                <MaterialCommunityIcons name="account-off-outline" size={48} color="#64748b" />
-                <Text style={styles.emptyText}>Você não possui turmas vinculadas.</Text>
+                <MaterialCommunityIcons name="account-off-outline" size={64} color="#cbd5e1" />
+                <Text style={styles.emptyText}>Você não possui turmas vinculadas no momento.</Text>
               </View>
             }
           />

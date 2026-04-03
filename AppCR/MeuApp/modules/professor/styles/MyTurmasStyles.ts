@@ -22,13 +22,13 @@ export default StyleSheet.create({
   cardMainContent: {
   flexDirection: 'row',
   alignItems: 'center',
-  padding: 16,
+  padding: 12,
 },
   iconContainer: {
-    width: 48,
+    width: 42,
     height: 48,
     borderRadius: 12,
-    backgroundColor: 'rgba(5, 150, 105, 0.1)', // Tom verde para Turmas
+    backgroundColor: 'rgba(37, 99, 235, 0.1)', // Tom azul para Turmas
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -55,7 +55,7 @@ export default StyleSheet.create({
   alignItems: 'center',
 },
   
-  tagRow: { flexDirection: 'row', marginTop: 8 },
+  tagRow: { flexDirection: 'row', marginTop: 4 },
   infoTag: {
     flexDirection: 'row',
     alignItems: 'center',

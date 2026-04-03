@@ -7,7 +7,7 @@ import axios from 'axios';
  */
 export const getClassesByTurma = async (turmaId: string): Promise<IClasse[]> => {
   try {
-    const response = await api.get(`/classes/turma/${turmaId}`);
+    const response = await api.get(`/classe/turma/${turmaId}`);
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
@@ -45,7 +45,7 @@ export const createClassePost = async (payload: ICreateClassePayload): Promise<I
       });
     }
 
-    const response = await api.post('/classes', formData, {
+    const response = await api.post('/classe', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
 
@@ -63,7 +63,7 @@ export const createClassePost = async (payload: ICreateClassePayload): Promise<I
  */
 export const deleteClassePost = async (id: string): Promise<IClasseResponse> => {
   try {
-    const response = await api.delete(`/classes/${id}`);
+    const response = await api.delete(`/classe/${id}`);
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
@@ -79,7 +79,7 @@ export const deleteClassePost = async (id: string): Promise<IClasseResponse> => 
  */
 export const updateClassePost = async (id: string, dados: Partial<IClasse>): Promise<IClasseResponse> => {
   try {
-    const response = await api.put(`/classes/${id}`, dados);
+    const response = await api.put(`/classe/${id}`, dados);
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {

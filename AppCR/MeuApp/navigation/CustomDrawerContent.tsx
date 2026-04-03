@@ -87,35 +87,33 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
         </View>
       )}
 
-      {/* SEÇÃO: PROFESSOR - Visível para Professor e Admin */}
-      {(userType === 'professor') && (
-        <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: labelColor }]}>ÁREA DO PROFESSOR</Text>
-          <DrawerItem 
-            label="Perfil Professor" 
-            icon={({ size }) => <FontAwesome5 name="chalkboard-teacher" size={size-4} color={iconColor} />}
-            onPress={() => props.navigation.navigate('ProfileProfessor')}
-            style={styles.drawerItem}
-            labelStyle={[styles.drawerLabel, { color: labelColor }]}
-          />
-          <DrawerItem 
-            label="Minhas Disciplinas" 
-            icon={({ size }) => <MaterialCommunityIcons name="book-open" size={size} color={iconColor} />}
-            onPress={() => props.navigation.navigate('MyDisciplinas')}
-            style={styles.drawerItem}
-            labelStyle={[styles.drawerLabel, { color: labelColor }]}
-          />
-          <DrawerItem 
-            label="Minhas Turmas" 
-            icon={({ size }) => <MaterialCommunityIcons name="book-open" size={size} color={iconColor} />}
-            onPress={() => props.navigation.navigate('MyTurmas')}
-            style={styles.drawerItem}
-            labelStyle={[styles.drawerLabel, { color: labelColor }]}
-          />
-          
-          
-        </View>
-      )}
+      {/* SEÇÃO: PROFESSOR - Visível para Professor */}
+      
+      {/* SEÇÃO: PROFESSOR */}
+    {(userType === 'professor') && (
+      <View style={styles.section}>
+        <Text style={[styles.sectionTitle, { color: labelColor }]}>ÁREA DO PROFESSOR</Text>
+        
+
+
+        <DrawerItem 
+          label="Perfil" 
+          icon={({ size }) => <MaterialCommunityIcons name="account-group" size={size} color={iconColor} />}
+          onPress={() => props.navigation.navigate('ProfileProfessor', { screen: 'ProfileProfessor' })}
+          style={styles.drawerItem}
+          labelStyle={[styles.drawerLabel, { color: labelColor }]}
+        />
+
+         <DrawerItem 
+          label="Dashboard" 
+          icon={({ size }) => <MaterialCommunityIcons name="view-dashboard-variant" size={size} color={iconColor} />}
+          onPress={() => props.navigation.navigate('ProfessorHome', { screen: 'Dashboard' })}
+          style={styles.drawerItem}
+          labelStyle={[styles.drawerLabel, { color: labelColor }]}
+        />
+
+      </View>
+    )}
 
       {/* SEÇÃO: ADMINISTRADOR - SÓ para Admin */}
       {userType === 'admin' && (

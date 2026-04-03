@@ -9,11 +9,22 @@ export interface IDisciplinaProfessor {
   updated_at: string | null;
 }
 
-export interface IProfessorProfile {
+export interface IProfessor {
   id: string;
   full_name: string;
   email: string;
-  especialidade?: string;
+  telefone: string | null;
+  data_nascimento: string;
+  idade: number;
+  tipo: 'professor';
+}
+
+export interface IUpdateProfessorPayload {
+  full_name?: string;
+  email?: string;
+  senha?: string; 
+  telefone?: string;
+  data_nascimento?: string;
 }
 
 export interface GetDisciplinasResponse {

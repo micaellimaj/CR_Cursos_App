@@ -50,8 +50,9 @@ export default function MyDisciplinasScreen({ navigation }: any) {
       })}
       activeOpacity={0.7}
     >
-      <View style={styles.iconContainer}>
-        <MaterialCommunityIcons name="book-outline" size={24} color="#2563eb" />
+      {/* Ícone com fundo azul suave (estilo sombra quadrangular) */}
+      <View style={[styles.iconContainer, { backgroundColor: 'rgba(37, 99, 235, 0.1)' }]}>
+        <MaterialCommunityIcons name="book-outline" size={22} color="#2563eb" />
       </View>
 
       <View style={styles.subjectInfo}>
@@ -63,7 +64,9 @@ export default function MyDisciplinasScreen({ navigation }: any) {
         <View style={styles.tagRow}>
           <View style={[styles.infoTag, { backgroundColor: 'rgba(37, 99, 235, 0.1)' }]}>
             <MaterialCommunityIcons name="account-group" size={14} color="#2563eb" />
-            <Text style={styles.tagText}>{item.turmasAssociadas?.length || 0} Turmas</Text>
+            <Text style={[styles.tagText, { color: '#2563eb' }]}>
+              {item.turmasAssociadas?.length || 0} Turmas
+            </Text>
           </View>
         </View>
       </View>
@@ -77,15 +80,22 @@ export default function MyDisciplinasScreen({ navigation }: any) {
   );
 
   return (
-    <SafeAreaView style={[globalStyles.container, { backgroundColor: isLightTheme ? '#f5f7fa' : '#0f172a' }]}>
+    <SafeAreaView 
+      style={[
+        globalStyles.container, 
+        { 
+          backgroundColor: isLightTheme ? '#f8fafc' : '#0f172a',
+          paddingHorizontal: 0 // Zera o recuo lateral do globalStyles
+        }
+      ]}
+    >
       <View style={styles.content}>
-        
         <View style={styles.headerSection}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 2 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }}>
             <MaterialCommunityIcons 
               name="book-open-page-variant" 
               size={26} 
-              color={isLightTheme ? '#1e3a8a' : '#fff'} 
+              color={isLightTheme ? '#1e3a8a' : '#60a5fa'} 
               style={{ marginRight: 10 }} 
             />
             <Text style={[styles.title, { color: isLightTheme ? '#1e3a8a' : '#fff' }]}>
@@ -103,11 +113,11 @@ export default function MyDisciplinasScreen({ navigation }: any) {
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => renderSubjectCard(item)}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingBottom: 20 }}
+            contentContainerStyle={styles.flatListContent}
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
                 <MaterialCommunityIcons name="clipboard-text-search-outline" size={48} color="#64748b" />
-                <Text style={styles.emptyText}>Nenhuma disciplina vinculada ao seu perfil.</Text>
+                <Text style={styles.emptyText}>Nenhuma disciplina vinculada.</Text>
               </View>
             }
           />

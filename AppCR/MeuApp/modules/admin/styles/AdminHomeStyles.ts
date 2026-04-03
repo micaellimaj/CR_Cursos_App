@@ -130,6 +130,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 
+  footerInfo: {
+    marginTop: 30,
+    alignItems: 'center',
+    paddingBottom: 20,
+  },
+  footerText: {
+    color: '#94a3b8',
+    fontSize: 12,
+    textAlign: 'center',
+  },
+
 });
 
 export default styles;
