@@ -129,7 +129,7 @@ export default function ProfessorHomeScreen() {
               loading={loading} 
               cardBg={cardBg} 
               titleColor={titleColor}
-              icon={<Ionicons name="chatbox-ellipses-outline" size={22} color="#2563eb" />}
+              icon={<Ionicons name="checkmark-circle" size={22} color="#2563eb" />}
             />
 
             <StatCard 

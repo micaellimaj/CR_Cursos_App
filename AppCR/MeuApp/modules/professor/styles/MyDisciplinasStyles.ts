@@ -6,7 +6,7 @@ export default StyleSheet.create({
     flex: 1, 
     paddingHorizontal: 16, // Padding equilibrado
     paddingTop: 15 ,
-    width: '95%',
+    width: '100%',
   },
   
   headerSection: { 
