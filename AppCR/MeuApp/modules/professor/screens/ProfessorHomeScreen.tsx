@@ -4,8 +4,8 @@ import { FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-ico
 import { useTheme } from '../../../contexts/ThemeContext';
 import { useAuth } from '../../../contexts/AuthContext';
 import { getGlobalStyles } from '../../../styles/globalStyles';
-import styles from '../../admin/styles/AdminHomeStyles'; // Reaproveitando a estrutura de estilos
-import { StatCard } from '../../admin/components/StatCard'; // Reaproveitando o componente de card
+import styles from '../../admin/styles/AdminHomeStyles'; 
+import { StatCard } from '../../admin/components/StatCard'; 
 import { getProfessorDashboardStats, IProfessorStats } from '../controllers/professorDashboardController';
 
 export default function ProfessorHomeScreen() {
@@ -20,7 +20,6 @@ export default function ProfessorHomeScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  // Estado para os KPIs do Professor
   const [stats, setStats] = useState<IProfessorStats>({
     meusAlunos: 0,
     minhasTurmas: 0,
@@ -35,12 +34,10 @@ export default function ProfessorHomeScreen() {
 
     try {
       setLoading(true);
-      // CHAMADA REAL:
       const data = await getProfessorDashboardStats(user.id);
       setStats(data);
     } catch (error) {
       console.error(error);
-      // Você pode exibir um Alert aqui se desejar
     } finally {
       setLoading(false);
       setRefreshing(false);

@@ -18,7 +18,7 @@ import { getProfessorProfile, updateProfessorProfile } from '../controllers/prof
 import { IProfessor, IUpdateProfessorPayload } from '../types';
 
 export default function ProfileprofessorScreen() {
-  const { user } = useAuth(); // Usando o contexto de autenticação
+  const { user } = useAuth();
   const { theme } = useTheme();
   const isLightTheme = theme === 'light';
   const { width } = useWindowDimensions();
@@ -59,9 +59,9 @@ export default function ProfileprofessorScreen() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      // O user!.id força o TS a entender que aqui ele não é null
+
       const data = await getProfessorProfile(user!.id);
-      console.log("Dados recebidos do Back:", data); // Debug para ver se os campos batem
+      console.log("Dados recebidos do Back:", data);
       setProfessor(data);
     } catch (error: any) {
       Alert.alert('Erro', 'Não foi possível carregar o perfil: ' + error.message);
@@ -76,14 +76,13 @@ export default function ProfileprofessorScreen() {
     try {
       setUpdating(true);
       
-      // Ajustado conforme o validador do seu Back-end
+
       const updatePayload: IUpdateProfessorPayload = {
         full_name: professor.full_name,
         telefone: professor.telefone || "",
         data_nascimento: professor.data_nascimento,
       };
 
-      // No seu back o campo é 'senha', não 'password'
       if (passwordInput !== '********' && passwordInput.length >= 6) {
         updatePayload.senha = passwordInput;
       }

@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { 
   View, Text, FlatList, TouchableOpacity, Modal, Alert, 
-  ActivityIndicator, SafeAreaView, KeyboardAvoidingView, Platform, ScrollView 
+  ActivityIndicator, SafeAreaView, ScrollView 
 } from 'react-native';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTheme } from '../../../contexts/ThemeContext';
 import { getGlobalStyles } from '../../../styles/globalStyles';
-import CustomButton from '../../../components/CustomButton';
-import { FormInput } from '../../admin/components/FormInput'; 
 import styles from '../styles/ConteudoStyles';
+
+import { ConteudoCard } from '../components/ConteudoCard';
+import { ConteudoFormModal } from '../components/ConteudoFormModal';
+
 import { 
   getConteudosByDisciplina, 
   createConteudo, 
   deleteConteudo, 
-  updateConteudo // Importando a nova rota
+  updateConteudo 
 } from '../controllers/conteudoController';
 import { getMyDisciplinas } from '../controllers/disciplinaController';
 import { useAuth } from '../../../contexts/AuthContext';
@@ -31,8 +33,6 @@ export default function ConteudoScreen({ route, navigation }: any) {
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [showDiscModal, setShowDiscModal] = useState(false);
-  
-  // Estado para controlar se estamos editando
   const [editingId, setEditingId] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
@@ -73,7 +73,6 @@ export default function ConteudoScreen({ route, navigation }: any) {
   useEffect(() => { loadDisciplinas(); }, []);
   useEffect(() => { fetchConteudos(); }, [selectedDisc]);
 
-  // Abre o modal para edição preenchendo os campos
   const handleEdit = (item: IConteudo) => {
     setEditingId(item.id);
     setFormData({
@@ -86,7 +85,6 @@ export default function ConteudoScreen({ route, navigation }: any) {
     setModalVisible(true);
   };
 
-  // Reseta o formulário ao fechar o modal ou após salvar
   const resetForm = () => {
     setEditingId(null);
     setFormData({ titulo: '', descricao: '', tipo: 'texto', valor: '', url: '' });
@@ -99,7 +97,6 @@ export default function ConteudoScreen({ route, navigation }: any) {
 
     try {
       setLoading(true);
-
       const payload: any = {
         titulo: formData.titulo,
         descricao: formData.descricao,
@@ -115,13 +112,7 @@ export default function ConteudoScreen({ route, navigation }: any) {
         payload.valor = null;
       }
 
-      if (editingId) {
-        // Lógica de Edição
-        await updateConteudo(editingId, payload);
-      } else {
-        // Lógica de Criação
-        await createConteudo(payload);
-      }
+      editingId ? await updateConteudo(editingId, payload) : await createConteudo(payload);
       
       resetForm();
       fetchConteudos();
@@ -144,26 +135,6 @@ export default function ConteudoScreen({ route, navigation }: any) {
     ]);
   };
 
-  const TipoSelector = () => (
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15 }}>
-      {(['texto', 'link', 'video'] as TConteudoTipo[]).map((t) => (
-        <TouchableOpacity 
-          key={t}
-          onPress={() => setFormData({...formData, tipo: t})}
-          style={{
-            padding: 10,
-            borderRadius: 8,
-            backgroundColor: formData.tipo === t ? '#2563eb' : inputBg,
-            width: '30%',
-            alignItems: 'center'
-          }}
-        >
-          <Text style={{ color: formData.tipo === t ? '#fff' : '#64748b', fontSize: 11, fontWeight: 'bold', textTransform: 'uppercase' }}>{t}</Text>
-        </TouchableOpacity>
-      ))}
-    </View>
-  );
-
   return (
     <SafeAreaView style={[globalStyles.container, { backgroundColor: isLightTheme ? '#f8fafc' : '#0f172a' }]}>
       <View style={styles.content}>
@@ -172,14 +143,8 @@ export default function ConteudoScreen({ route, navigation }: any) {
         <TouchableOpacity 
           onPress={() => setShowDiscModal(true)}
           style={{ 
-            padding: 16, 
-            backgroundColor: cardBg, 
-            borderRadius: 16, 
-            marginBottom: 20,
-            borderWidth: 1,
-            borderColor: borderColor,
-            flexDirection: 'row',
-            alignItems: 'center',
+            padding: 16, backgroundColor: cardBg, borderRadius: 16, marginBottom: 20,
+            borderWidth: 1, borderColor: borderColor, flexDirection: 'row', alignItems: 'center',
           }}
         >
           <View style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: '#2563eb15', justifyContent: 'center', alignItems: 'center', marginRight: 12 }}>
@@ -209,23 +174,14 @@ export default function ConteudoScreen({ route, navigation }: any) {
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
-              <TouchableOpacity 
-                style={[styles.cardConteudo, { backgroundColor: cardBg, borderColor: borderColor }]}
-                onPress={() => handleEdit(item)} // Clicar no card abre a edição
-              >
-                <View style={styles.infoContainer}>
-                  <Text style={[styles.nomeConteudo, { color: textColor }]}>{item.titulo}</Text>
-                  <Text style={[styles.tipoBadge, { backgroundColor: '#2563eb15', color: '#2563eb' }]}>
-                    {item.tipo}
-                  </Text>
-                </View>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Feather name="edit-2" size={18} color="#2563eb" style={{ marginRight: 15 }} />
-                  <TouchableOpacity onPress={() => handleDelete(item.id)}>
-                    <Feather name="trash-2" size={20} color="#ef4444" />
-                  </TouchableOpacity>
-                </View>
-              </TouchableOpacity>
+              <ConteudoCard 
+                item={item}
+                textColor={textColor}
+                cardBg={cardBg}
+                borderColor={borderColor}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
             )}
             ListEmptyComponent={
               <View style={{ alignItems: 'center', marginTop: 40 }}>
@@ -260,67 +216,18 @@ export default function ConteudoScreen({ route, navigation }: any) {
         </View>
       </Modal>
 
-      {/* Modal: Cadastro/Edição */}
-      <Modal visible={modalVisible} animationType="slide" transparent statusBarTranslucent>
-        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' }}>
-          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-            <View style={[styles.modalContent, { backgroundColor: cardBg, borderTopLeftRadius: 25, borderTopRightRadius: 25, padding: 20 }]}>
-              <View style={styles.modalHeader}>
-                <Text style={{ fontSize: 20, fontWeight: 'bold', color: textColor }}>
-                  {editingId ? "Editar Conteúdo" : "Novo Conteúdo"}
-                </Text>
-                <TouchableOpacity onPress={resetForm}>
-                  <Feather name="x" size={26} color={textColor} />
-                </TouchableOpacity>
-              </View>
-
-              <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 20 }}>
-                <Text style={{ color: textColor, marginBottom: 8, fontSize: 14, fontWeight: '600' }}>Tipo de Material:</Text>
-                <TipoSelector />
-
-                <FormInput 
-                  label="Título do Conteúdo" 
-                  value={formData.titulo} 
-                  onChangeText={t => setFormData({...formData, titulo: t})}
-                  inputBg={inputBg} textColor={textColor}
-                />
-
-                <FormInput 
-                  label="Descrição curta (Opcional)" 
-                  value={formData.descricao} 
-                  onChangeText={t => setFormData({...formData, descricao: t})}
-                  inputBg={inputBg} textColor={textColor}
-                />
-
-                {formData.tipo === 'texto' ? (
-                  <FormInput 
-                    label="Texto da Aula" 
-                    value={formData.valor} 
-                    onChangeText={t => setFormData({...formData, valor: t})}
-                    inputBg={inputBg} textColor={textColor}
-                    multiline={true}
-                  />
-                ) : (
-                  <FormInput 
-                    label="Link / URL do Material" 
-                    value={formData.url} 
-                    onChangeText={t => setFormData({...formData, url: t})}
-                    inputBg={inputBg} textColor={textColor}
-                  />
-                )}
-
-                <View style={{ marginTop: 15 }}>
-                  <CustomButton 
-                    title={editingId ? "Salvar Alterações" : "Publicar Agora"} 
-                    onPress={handleSave} 
-                    loading={loading} 
-                  />
-                </View>
-              </ScrollView>
-            </View>
-          </KeyboardAvoidingView>
-        </View>
-      </Modal>
+      <ConteudoFormModal 
+        visible={modalVisible}
+        editingId={editingId}
+        formData={formData}
+        setFormData={setFormData}
+        onClose={resetForm}
+        onSave={handleSave}
+        loading={loading}
+        textColor={textColor}
+        cardBg={cardBg}
+        inputBg={inputBg}
+      />
     </SafeAreaView>
   );
 }

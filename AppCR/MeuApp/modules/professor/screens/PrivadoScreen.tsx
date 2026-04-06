@@ -3,12 +3,14 @@ import {
   View, Text, FlatList, TouchableOpacity, Modal, Alert, 
   ActivityIndicator, SafeAreaView, KeyboardAvoidingView, Platform, ScrollView 
 } from 'react-native';
-import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import { useTheme } from '../../../contexts/ThemeContext';
 import { getGlobalStyles } from '../../../styles/globalStyles';
 import CustomButton from '../../../components/CustomButton';
 import { FormInput } from '../../admin/components/FormInput'; 
+import { PrivadoCard } from '../components/PrivadoCard';
 import styles from '../styles/ConteudoStyles';
+
 import { 
   getConteudoPrivadoByAluno, 
   enviarConteudoPrivado, 
@@ -37,25 +39,15 @@ export default function PrivadoScreen() {
   const [showTurmaModal, setShowTurmaModal] = useState(false);
   const [showAlunoModal, setShowAlunoModal] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-
   const [formData, setFormData] = useState({ mensagem: '', links: '' });
 
   const textColor = isLightTheme ? '#1e293b' : '#f8fafc';
-  const inputBg = isLightTheme ? '#f1f5f9' : '#0f172a';
   const cardBg = isLightTheme ? '#fff' : '#1e293b';
   const borderColor = isLightTheme ? '#e2e8f0' : '#334155';
 
-  useEffect(() => {
-    if (user?.id) loadTurmas();
-  }, [user?.id]);
-
-  useEffect(() => {
-    if (selectedTurma) loadAlunos();
-  }, [selectedTurma]);
-
-  useEffect(() => {
-    if (selectedAluno) fetchMensagens();
-  }, [selectedAluno]);
+  useEffect(() => { if (user?.id) loadTurmas(); }, [user?.id]);
+  useEffect(() => { if (selectedTurma) loadAlunos(); }, [selectedTurma]);
+  useEffect(() => { if (selectedAluno) fetchMensagens(); }, [selectedAluno]);
 
   const loadTurmas = async () => {
     try {
@@ -69,7 +61,7 @@ export default function PrivadoScreen() {
     try {
       const lista = await getAlunosDaTurma(selectedTurma.id);
       setAlunos(lista);
-      setSelectedAluno(null); // Reseta aluno ao trocar de turma
+      setSelectedAluno(null);
       setMensagens([]);
     } catch (e) { Alert.alert("Erro", "Falha ao carregar alunos."); }
   };
@@ -106,9 +98,7 @@ export default function PrivadoScreen() {
       fetchMensagens();
     } catch (error: any) {
       Alert.alert("Erro", error.message);
-    } finally {
-      setLoading(false);
-    }
+    } finally { setLoading(false); }
   };
 
   const handleDelete = (msgId: string) => {
@@ -134,7 +124,7 @@ export default function PrivadoScreen() {
     <SafeAreaView style={[globalStyles.container, { backgroundColor: isLightTheme ? '#f8fafc' : '#0f172a' }]}>
       <View style={styles.content}>
         
-        {/* Seletores */}
+        {/* Seletores Superiores */}
         <View style={{ flexDirection: 'row', gap: 10, marginBottom: 20 }}>
           <TouchableOpacity 
             onPress={() => setShowTurmaModal(true)}
@@ -153,109 +143,108 @@ export default function PrivadoScreen() {
           </TouchableOpacity>
         </View>
 
+        {/* Título e Botão Adicionar */}
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
           <Text style={[styles.title, { color: textColor }]}>Privado</Text>
           <TouchableOpacity 
             onPress={() => { resetForm(); setModalVisible(true); }}
             style={{ backgroundColor: '#2563eb', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 10 }}
           >
-            <Feather name="send" size={18} color="#fff" />
+            <Feather name="plus" size={20} color="#fff" />
           </TouchableOpacity>
         </View>
 
-        {loading ? <ActivityIndicator color="#2563eb" /> : (
+        {loading ? (
+          <ActivityIndicator color="#2563eb" style={{ marginTop: 20 }} />
+        ) : (
           <FlatList
             data={mensagens}
             keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
-              <View style={[styles.cardConteudo, { backgroundColor: cardBg, borderColor: borderColor, flexDirection: 'column', alignItems: 'flex-start' }]}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginBottom: 8 }}>
-                  <Text style={{ color: '#64748b', fontSize: 12 }}>{item.created_at ? new Date(item.created_at).toLocaleDateString() : ''}</Text>
-                  <View style={{ flexDirection: 'row', gap: 15 }}>
-                    <TouchableOpacity onPress={() => { setEditingId(item.id); setFormData({ mensagem: item.mensagem, links: '' }); setModalVisible(true); }}>
-                      <Feather name="edit-2" size={16} color="#2563eb" />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleDelete(item.id)}>
-                      <Feather name="trash-2" size={16} color="#ef4444" />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-                <Text style={{ color: textColor, fontSize: 15 }}>{item.mensagem}</Text>
-                {item.arquivos?.length > 0 && (
-                   <View style={{ marginTop: 10, flexDirection: 'row', flexWrap: 'wrap', gap: 5 }}>
-                     {item.arquivos.map((arq, idx) => (
-                       <View key={idx} style={{ backgroundColor: '#2563eb15', padding: 5, borderRadius: 5 }}>
-                         <Text style={{ color: '#2563eb', fontSize: 10 }}>{arq.nome}</Text>
-                       </View>
-                     ))}
-                   </View>
-                )}
-              </View>
+              <PrivadoCard 
+                item={item}
+                isLightTheme={isLightTheme}
+                onEdit={() => { setEditingId(item.id); setFormData({ mensagem: item.mensagem, links: '' }); setModalVisible(true); }}
+                onDelete={() => handleDelete(item.id)}
+              />
             )}
+            ListEmptyComponent={
+              <View style={{ alignItems: 'center', marginTop: 40 }}>
+                <Feather name="mail" size={48} color={borderColor} />
+                <Text style={{ color: '#64748b', marginTop: 10 }}>Nenhuma mensagem para este aluno.</Text>
+              </View>
+            }
           />
         )}
       </View>
 
-      {/* Modal Turma */}
+      {/* Modal Selecionar Turma */}
       <Modal visible={showTurmaModal} transparent animationType="fade">
         <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', padding: 25 }}>
           <View style={{ backgroundColor: cardBg, borderRadius: 20, padding: 20 }}>
-            <Text style={{ fontWeight: 'bold', color: textColor, marginBottom: 10 }}>Selecionar Turma</Text>
-            {turmas.map(t => (
-              <TouchableOpacity key={t.id} style={{ paddingVertical: 12, borderBottomWidth: 0.5, borderColor }} onPress={() => { setSelectedTurma(t); setShowTurmaModal(false); }}>
-                <Text style={{ color: textColor }}>{t.nome}</Text>
-              </TouchableOpacity>
-            ))}
-            <TouchableOpacity onPress={() => setShowTurmaModal(false)} style={{ marginTop: 10, alignSelf: 'center' }}>
-              <Text style={{ color: '#ef4444' }}>Fechar</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-
-      {/* Modal Aluno */}
-      <Modal visible={showAlunoModal} transparent animationType="fade">
-        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', padding: 25 }}>
-          <View style={{ backgroundColor: cardBg, borderRadius: 20, padding: 20 }}>
-            <Text style={{ fontWeight: 'bold', color: textColor, marginBottom: 10 }}>Selecionar Aluno</Text>
+            <Text style={{ fontWeight: 'bold', color: textColor, marginBottom: 15, fontSize: 16 }}>Selecionar Turma</Text>
             <ScrollView style={{ maxHeight: 300 }}>
-              {alunos.map(a => (
-                <TouchableOpacity key={a.id} style={{ paddingVertical: 12, borderBottomWidth: 0.5, borderColor }} onPress={() => { setSelectedAluno(a); setShowAlunoModal(false); }}>
-                  <Text style={{ color: textColor }}>{a.full_name}</Text>
+              {turmas.map(t => (
+                <TouchableOpacity key={t.id} style={{ paddingVertical: 15, borderBottomWidth: 0.5, borderColor }} onPress={() => { setSelectedTurma(t); setShowTurmaModal(false); }}>
+                  <Text style={{ color: textColor, fontSize: 15 }}>{t.nome}</Text>
                 </TouchableOpacity>
               ))}
             </ScrollView>
-            <TouchableOpacity onPress={() => setShowAlunoModal(false)} style={{ marginTop: 10, alignSelf: 'center' }}>
-              <Text style={{ color: '#ef4444' }}>Fechar</Text>
+            <TouchableOpacity onPress={() => setShowTurmaModal(false)} style={{ marginTop: 15, padding: 10, alignItems: 'center' }}>
+              <Text style={{ color: '#ef4444', fontWeight: 'bold' }}>Fechar</Text>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
 
-      {/* Modal Enviar/Editar */}
+      {/* Modal Selecionar Aluno */}
+      <Modal visible={showAlunoModal} transparent animationType="fade">
+        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', padding: 25 }}>
+          <View style={{ backgroundColor: cardBg, borderRadius: 20, padding: 20 }}>
+            <Text style={{ fontWeight: 'bold', color: textColor, marginBottom: 15, fontSize: 16 }}>Selecionar Aluno</Text>
+            <ScrollView style={{ maxHeight: 300 }}>
+              {alunos.map(a => (
+                <TouchableOpacity key={a.id} style={{ paddingVertical: 15, borderBottomWidth: 0.5, borderColor }} onPress={() => { setSelectedAluno(a); setShowAlunoModal(false); }}>
+                  <Text style={{ color: textColor, fontSize: 15 }}>{a.full_name}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+            <TouchableOpacity onPress={() => setShowAlunoModal(false)} style={{ marginTop: 15, padding: 10, alignItems: 'center' }}>
+              <Text style={{ color: '#ef4444', fontWeight: 'bold' }}>Fechar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Modal Enviar/Editar Mensagem */}
       <Modal visible={modalVisible} animationType="slide" transparent>
         <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' }}>
-          <View style={[styles.modalContent, { backgroundColor: cardBg }]}>
+          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={[styles.modalContent, { backgroundColor: cardBg, borderTopLeftRadius: 25, borderTopRightRadius: 25 }]}>
             <View style={styles.modalHeader}>
-              <Text style={{ fontSize: 18, fontWeight: 'bold', color: textColor }}>{editingId ? "Editar Mensagem" : "Enviar para Aluno"}</Text>
+              <Text style={{ fontSize: 18, fontWeight: 'bold', color: textColor }}>
+                {editingId ? "Editar Mensagem" : "Nova Mensagem Privada"}
+              </Text>
               <TouchableOpacity onPress={resetForm}><Feather name="x" size={24} color={textColor} /></TouchableOpacity>
             </View>
             <FormInput 
-              label="Mensagem Privada" 
+              label="Conteúdo da Mensagem" 
               value={formData.mensagem} 
               onChangeText={t => setFormData({...formData, mensagem: t})}
-              inputBg={inputBg} textColor={textColor} multiline
+              inputBg={isLightTheme ? '#f8fafc' : '#0f172a'} textColor={textColor} multiline
             />
             {!editingId && (
               <FormInput 
-                label="Links (opcional)" 
+                label="Links de apoio (opcional, separe por vírgula)" 
                 value={formData.links} 
                 onChangeText={t => setFormData({...formData, links: t})}
-                inputBg={inputBg} textColor={textColor}
+                inputBg={isLightTheme ? '#f8fafc' : '#0f172a'} textColor={textColor}
               />
             )}
-            <CustomButton title={editingId ? "Atualizar" : "Enviar"} onPress={handleSave} loading={loading} />
-          </View>
+            <View style={{ marginTop: 10 }}>
+              <CustomButton title={editingId ? "Atualizar Mensagem" : "Enviar Mensagem"} onPress={handleSave} loading={loading} />
+            </View>
+          </KeyboardAvoidingView>
         </View>
       </Modal>
     </SafeAreaView>

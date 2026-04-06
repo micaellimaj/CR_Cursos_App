@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { 
   View, Text, FlatList, TouchableOpacity, Modal, Alert, 
-  ActivityIndicator, SafeAreaView, KeyboardAvoidingView, Platform, ScrollView 
+  ActivityIndicator, SafeAreaView, ScrollView 
 } from 'react-native';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTheme } from '../../../contexts/ThemeContext';
 import { getGlobalStyles } from '../../../styles/globalStyles';
-import CustomButton from '../../../components/CustomButton';
-import { FormInput } from '../../admin/components/FormInput'; 
 import styles from '../styles/AtividadeStyles';
+
+import { AtividadeCard } from '../components/AtividadeCard';
+import { AtividadeModal } from '../components/AtividadeModal';
 
 import { 
   getAtividadesByDisciplina, 
@@ -26,12 +27,10 @@ export default function AtividadeProfessorScreen({ route }: any) {
   const globalStyles = getGlobalStyles(theme);
   const isLightTheme = theme === 'light';
 
-  // Estados de Dados
   const [disciplinas, setDisciplinas] = useState<IDisciplinaProfessor[]>([]);
   const [selectedDisc, setSelectedDisc] = useState<{id: string, nome: string} | null>(null);
   const [atividades, setAtividades] = useState<IAtividade[]>([]);
   
-  // Estados de UI
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [showDiscModal, setShowDiscModal] = useState(false);
@@ -51,13 +50,10 @@ export default function AtividadeProfessorScreen({ route }: any) {
   const cardBg = isLightTheme ? '#fff' : '#1e293b';
   const borderColor = isLightTheme ? '#e2e8f0' : '#334155';
 
-  // Carregamento Inicial
   const loadInitialData = async () => {
     try {
       const lista = await getMyDisciplinas(user?.id);
       setDisciplinas(lista);
-      
-      // Se veio via parâmetro de rota (navegação direta), seleciona
       if (route.params?.disciplinaId) {
         setSelectedDisc({ id: route.params.disciplinaId, nome: route.params.disciplinaNome });
       } else if (lista.length > 0) {
@@ -80,7 +76,6 @@ export default function AtividadeProfessorScreen({ route }: any) {
   useEffect(() => { loadInitialData(); }, []);
   useEffect(() => { fetchAtividades(); }, [selectedDisc]);
 
-  // CRUD Actions
   const handleEdit = (item: IAtividade) => {
     setEditingId(item.id);
     setFormData({
@@ -106,8 +101,6 @@ export default function AtividadeProfessorScreen({ route }: any) {
 
     try {
       setLoading(true);
-      
-      // Monta o Payload conforme os campos exigidos (Types)
       const payload: any = {
         titulo: formData.titulo,
         descricao: formData.descricao,
@@ -116,13 +109,12 @@ export default function AtividadeProfessorScreen({ route }: any) {
         dataEntrega: formData.dataEntrega
       };
 
-      // Lógica condicional de campos
       if (formData.tipo === 'texto') {
         payload.conteudoTexto = formData.conteudoTexto;
         payload.arquivo = null;
       } else {
         payload.conteudoTexto = null;
-        payload.arquivo = formData.arquivo; // Aqui iria o binário do picker
+        payload.arquivo = formData.arquivo;
       }
 
       if (editingId) {
@@ -155,22 +147,16 @@ export default function AtividadeProfessorScreen({ route }: any) {
     <SafeAreaView style={[globalStyles.container, { backgroundColor: isLightTheme ? '#f8fafc' : '#0f172a' }]}>
       <View style={styles.content}>
         
-        {/* Seletor de Disciplina (Reutilizando padrão da ConteudoScreen) */}
+        {/* Seletor de Disciplina */}
         <TouchableOpacity 
           onPress={() => setShowDiscModal(true)}
           style={{ 
-            padding: 16, 
-            backgroundColor: cardBg, 
-            borderRadius: 16, 
-            marginBottom: 20,
-            borderWidth: 1,
-            borderColor: borderColor,
-            flexDirection: 'row',
-            alignItems: 'center',
+            padding: 16, backgroundColor: cardBg, borderRadius: 16, marginBottom: 20,
+            borderWidth: 1, borderColor: borderColor, flexDirection: 'row', alignItems: 'center',
           }}
         >
-          <View style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: '#05966915', justifyContent: 'center', alignItems: 'center', marginRight: 12 }}>
-             <MaterialCommunityIcons name="clipboard-text-outline" size={20} color="#059669" />
+          <View style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: '#2563eb15', justifyContent: 'center', alignItems: 'center', marginRight: 12 }}>
+             <MaterialCommunityIcons name="clipboard-text-outline" size={20} color="#2563eb" />
           </View>
           <View style={{ flex: 1 }}>
             <Text style={{ fontSize: 11, color: '#64748b', fontWeight: 'bold' }}>DISCIPLINA DAS ATIVIDADES</Text>
@@ -182,36 +168,24 @@ export default function AtividadeProfessorScreen({ route }: any) {
         <View style={styles.headerSection}>
           <Text style={[styles.title, { color: textColor }]}>Atividades</Text>
           <TouchableOpacity onPress={() => { resetForm(); setModalVisible(true); }}>
-            <MaterialCommunityIcons name="plus-box" size={38} color="#059669" />
+            <MaterialCommunityIcons name="plus-box" size={38} color="#2563eb" />
           </TouchableOpacity>
         </View>
 
-        {loading ? <ActivityIndicator color="#059669" size="large" /> : (
+        {loading ? <ActivityIndicator color="#2563eb" size="large" /> : (
           <FlatList
             data={atividades}
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
-              <TouchableOpacity 
-                style={[styles.cardAtividade, { backgroundColor: cardBg, borderColor: borderColor, borderWidth: 1, elevation: 0 }]}
-                onPress={() => handleEdit(item)}
-              >
-                <View style={styles.row}>
-                  <View style={styles.infoContainer}>
-                    <Text style={[styles.nomeAtividade, { color: textColor }]}>{item.titulo}</Text>
-                    <Text style={[styles.descricao, { color: '#64748b' }]} numberOfLines={2}>{item.descricao}</Text>
-                  </View>
-                  <TouchableOpacity onPress={() => handleDeleteAtividade(item.id)} style={{ padding: 5 }}>
-                    <Feather name="trash-2" size={20} color="#ef4444" />
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.footerCard}>
-                  <MaterialCommunityIcons name="calendar-clock" size={14} color="#ef4444" />
-                  <Text style={styles.deadline}>Entrega: {item.dataEntrega || 'Sem data'}</Text>
-                  <View style={{ flex: 1 }} />
-                  <Text style={{ fontSize: 10, color: '#059669', fontWeight: 'bold', textTransform: 'uppercase' }}>{item.tipo}</Text>
-                </View>
-              </TouchableOpacity>
+              <AtividadeCard 
+                item={item}
+                textColor={textColor}
+                cardBg={cardBg}
+                borderColor={borderColor}
+                onEdit={handleEdit}
+                onDelete={handleDeleteAtividade}
+              />
             )}
             ListEmptyComponent={
               <View style={{ alignItems: 'center', marginTop: 50 }}>
@@ -246,54 +220,20 @@ export default function AtividadeProfessorScreen({ route }: any) {
         </View>
       </Modal>
 
-      {/* Modal: Cadastro/Edição de Atividade */}
-      <Modal visible={modalVisible} animationType="slide" transparent statusBarTranslucent>
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.modalOverlay}>
-          <View style={[styles.modalContent, { backgroundColor: cardBg }]}>
-            <ScrollView showsVerticalScrollIndicator={false}>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-                <Text style={[styles.title, { fontSize: 20, color: textColor }]}>
-                  {editingId ? "Editar Atividade" : "Nova Atividade"}
-                </Text>
-                <TouchableOpacity onPress={resetForm}>
-                  <Feather name="x" size={24} color={textColor} />
-                </TouchableOpacity>
-              </View>
-              
-              <FormInput label="Título" value={formData.titulo} onChangeText={t => setFormData({...formData, titulo: t})} inputBg={inputBg} textColor={textColor} />
-              <FormInput label="Descrição" value={formData.descricao} onChangeText={t => setFormData({...formData, descricao: t})} inputBg={inputBg} textColor={textColor} multiline />
-              
-              <Text style={[styles.label, { color: textColor }]}>Tipo de Atividade</Text>
-              <View style={styles.typeSelector}>
-                {(['texto', 'pdf', 'slide'] as TAtividadeTipo[]).map(t => (
-                  <TouchableOpacity 
-                    key={t} 
-                    style={[styles.typeButton, { backgroundColor: formData.tipo === t ? '#059669' : inputBg, borderColor: formData.tipo === t ? '#059669' : borderColor }]}
-                    onPress={() => setFormData({...formData, tipo: t})}
-                  >
-                    <Text style={{ color: formData.tipo === t ? '#fff' : textColor, fontSize: 11, fontWeight: 'bold' }}>{t.toUpperCase()}</Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-
-              {formData.tipo === 'texto' ? (
-                <FormInput label="Conteúdo da Atividade" value={formData.conteudoTexto} onChangeText={t => setFormData({...formData, conteudoTexto: t})} inputBg={inputBg} textColor={textColor} multiline />
-              ) : (
-                <TouchableOpacity style={{ padding: 20, backgroundColor: inputBg, borderRadius: 10, borderStyle: 'dashed', borderWidth: 1, borderColor: '#64748b', alignItems: 'center', marginBottom: 15 }}>
-                  <Feather name="upload-cloud" size={24} color="#64748b" />
-                  <Text style={{ color: '#64748b', fontSize: 12, marginTop: 5 }}>Selecionar arquivo {formData.tipo.toUpperCase()}</Text>
-                </TouchableOpacity>
-              )}
-
-              <FormInput label="Data de Entrega" placeholder="DD/MM/AAAA" value={formData.dataEntrega} onChangeText={t => setFormData({...formData, dataEntrega: t})} inputBg={inputBg} textColor={textColor} />
-
-              <View style={{ marginTop: 20 }}>
-                <CustomButton title={editingId ? "Salvar Alterações" : "Criar Atividade"} onPress={handleSave} loading={loading} />
-              </View>
-            </ScrollView>
-          </View>
-        </KeyboardAvoidingView>
-      </Modal>
+      {/* Modal: Cadastro/Edição */}
+      <AtividadeModal 
+        visible={modalVisible}
+        editingId={editingId}
+        formData={formData}
+        setFormData={setFormData}
+        onClose={resetForm}
+        onSave={handleSave}
+        loading={loading}
+        textColor={textColor}
+        cardBg={cardBg}
+        inputBg={inputBg}
+        borderColor={borderColor}
+      />
     </SafeAreaView>
   );
 }
