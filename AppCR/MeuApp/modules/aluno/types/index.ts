@@ -119,3 +119,43 @@ export interface IFrequenciaResumoResponse {
   };
   historico: IFrequencia[];
 }
+
+export interface IPrivadoArquivo {
+  nome: string;
+  url: string;
+  tipo: string;
+}
+
+export interface IPrivado {
+  id: string;
+  professor_id: string;
+  aluno_id: string;
+  turma_id: string;
+  mensagem: string;
+  arquivos: IPrivadoArquivo[];
+  visualizado: boolean;
+  collection: string;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
+export type TClasseTipo = 'material' | 'aviso' | 'aula';
+
+export interface IClasseAnexo {
+  nome: string;
+  url: string;
+  tipo: string;
+}
+
+export interface IClasse {
+  id: string;
+  turma_id: string;
+  professor_id: string;
+  titulo: string;
+  descricao: string;
+  tipo: TClasseTipo;
+  anexos: IClasseAnexo[];
+  collection: string;
+  created_at: string | null;
+  updated_at: string | null;
+}
