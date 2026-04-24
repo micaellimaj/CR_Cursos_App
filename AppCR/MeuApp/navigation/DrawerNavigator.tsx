@@ -2,15 +2,8 @@ import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { useTheme } from '../contexts/ThemeContext';
 import LoginScreen from '../modules/auth/screens/LoginScreen';
-import HomeScreen from '../modules/aluno/screens/HomeScreen';
-import Profilealuno from '../modules/aluno/screens/Profilealuno';
 import CustomDrawerContent from './CustomDrawerContent';
 import RegisterScreen from '../modules/admin/screens/UsuarioManagementScreen';
-import AulasScreen from '../modules/aluno/screens/AulasScreen';
-import ConteudoScreen from '../modules/aluno/screens/ConteudoScreen';
-import Notas from '../modules/aluno/screens/Notas';
-import TelaConteudos from '../modules/aluno/screens/TelaConteudos';
-import Cursos from '../modules/aluno/screens/Cursos';
 import TermsOfUseScreen from '../modules/auth/screens/TermosdeUso';
 import ProfileProfessor from '../modules/professor/screens/Profileprofessor'
 import AdminHomeScreen from '../modules/admin/screens/AdminHomeScreen';
@@ -29,6 +22,13 @@ import NotasLancamentoScreen from 'modules/professor/screens/NotasLancamentoScre
 import DisciplinaMateriaisScreen from 'modules/professor/screens/DisciplinaMateriaisScreen';
 import ClasseScreen from 'modules/professor/screens/ClasseScreen';
 import PrivadoScreen from 'modules/professor/screens/PrivadoScreen';
+import ProfileAlunoScreen from 'modules/aluno/screens/ProfileAlunoScreen';
+import CursosScreen from 'modules/aluno/screens/CursosScreen';
+import DisciplinasAlunoScreen from 'modules/aluno/screens/DisciplinasAlunoScreen';
+import DisciplinaDetailAluno from 'modules/aluno/screens/DisciplinaDetailScreen';
+import ConteudoAlunoScreen from '../modules/aluno/screens/ConteudoAlunoScreen';
+import AtividadeAlunoScreen from '../modules/aluno/screens/AtividadeAlunoScreen';
+import NotasAlunoScreen from '../modules/aluno/screens/NotasAlunoScreen';
 import ProfessorTabNavigator from './ProfessorTabNavigator';
 import { useAuth } from '../contexts/AuthContext'; 
 import AdminTabNavigator from './AdminTabNavigator';
@@ -60,20 +60,50 @@ export default function DrawerNavigator() {
       )}
 
       {/* ROTAS DE ALUNO: Só existem se for Aluno ou Admin */}
-      {(userType === 'aluno' ) && (
+      {/* ROTAS DE ALUNO: Só existem se for Aluno */}
+      {(userType === 'aluno') && (
         <>
-          <Drawer.Screen name="Home" component={HomeScreen} />
-          <Drawer.Screen name="Profilealuno" component={Profilealuno} />
-          <Drawer.Screen name="AulasScreen" component={AulasScreen} />
-          <Drawer.Screen name="Notas" component={Notas} />
-          <Drawer.Screen name="TelaConteudos" component={TelaConteudos} />
-          <Drawer.Screen name="Cursos" component={Cursos} />
-          <Drawer.Screen name="ConteudoScreen" component={ConteudoScreen} />
-          {/* Adicione as outras telas de aluno aqui */}
+          <Drawer.Screen 
+            name="ProfileAluno" 
+            component={ProfileAlunoScreen} 
+            options={{ title: 'Meu Perfil' }}
+          />
+          <Drawer.Screen 
+            name="Cursos" 
+            component={CursosScreen} 
+            options={{ title: 'Meus Cursos' }}
+          />
+          {/* Registre DisciplinasAluno aqui para poder navegar até ela, 
+              mesmo que não queira que ela apareça no menu lateral */}
+          <Drawer.Screen 
+            name="DisciplinasAluno" 
+            component={DisciplinasAlunoScreen} 
+            options={{ title: 'Disciplinas' }}
+          />
+          <Drawer.Screen 
+            name="DisciplinaDetailAluno" // Mudei o name para evitar conflito de navegação
+            component={DisciplinaDetailAluno} 
+            options={{ title: 'Detalhes da Disciplina' }}
+          />
+          <Drawer.Screen 
+            name="ConteudoAluno" // Este é o nome que deve bater com o screen do seu array
+            component={ConteudoAlunoScreen} 
+            options={{ title: 'Materiais de Estudo' }}
+          />
+          <Drawer.Screen
+            name="AtividadeAluno"
+            component={AtividadeAlunoScreen}
+            options={{ title: 'Minhas Atividades' }}
+            />
+            <Drawer.Screen 
+              name="NotasAluno" 
+              component={NotasAlunoScreen} 
+              options={{ title: 'Meu Desempenho' }}
+            />
         </>
       )}
 
-      {/* ROTAS DE PROFESSOR: Só existem se for Professor ou Admin */}
+            {/* ROTAS DE PROFESSOR: Só existem se for Professor ou Admin */}
       {(userType === 'professor') && (
         <>
           {/* Tela Principal com Tabs */}

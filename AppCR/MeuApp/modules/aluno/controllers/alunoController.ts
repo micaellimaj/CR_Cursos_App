@@ -7,7 +7,7 @@ import axios from 'axios';
  */
 export const getAlunoById = async (id: string): Promise<IAluno> => {
   try {
-    const response = await api.get(`/aluno/${id}`);
+    const response = await api.get(`/alunos/${id}`);
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
@@ -25,7 +25,7 @@ export const updateAluno = async (
   payload: IUpdateAlunoPayload
 ): Promise<IAlunoResponse> => {
   try {
-    const response = await api.put(`/aluno/${id}`, payload);
+    const response = await api.put(`/alunos/${id}`, payload);
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {

@@ -36,7 +36,7 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
           <Text style={styles.headerTitle}>CR Cursos</Text>
           {user && (
             <Text style={{ color: '#fff', fontSize: 12, marginTop: 5 }}>
-              Olá, {user.nome}
+              Olá, {user.full_name || user.nome}
             </Text>
           )}
         </View>
@@ -57,79 +57,73 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
           <DrawerItem 
             label="Sair" 
             icon={({ size }) => <MaterialIcons name="logout" size={size} color="#f56565" />}
-            onPress={() => {
-              logout();
-            }} 
+            onPress={() => logout()} 
             labelStyle={{ color: '#f56565' }}
           />
         )}
       </View>
 
-      {/* SEÇÃO: ALUNO - Visível para Alunos e Admin */}
-      {(userType === 'aluno' ) && (
+      {/* SEÇÃO: ALUNO */}
+      {userType === 'aluno' && (
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: labelColor }]}>ÁREA DO ALUNO</Text>
-          <DrawerItem 
-            label="Início Aluno" 
-            icon={({ size }) => <Ionicons name="home" size={size} color={iconColor} />}
-            onPress={() => props.navigation.navigate('Home')}
-            style={styles.drawerItem}
-            labelStyle={[styles.drawerLabel, { color: labelColor }]}
-          />
+          
           <DrawerItem 
             label="Meu Perfil" 
-            icon={({ size }) => <Ionicons name="person-circle" size={size} color={iconColor} />}
-            onPress={() => props.navigation.navigate('Profilealuno')}
+            icon={({ size }) => <MaterialCommunityIcons name="account-circle-outline" size={size} color={iconColor} />}
+            onPress={() => props.navigation.navigate('ProfileAluno')}
             style={styles.drawerItem}
             labelStyle={[styles.drawerLabel, { color: labelColor }]}
           />
-          
+
+          <DrawerItem 
+            label="Meus Cursos" 
+            icon={({ size }) => <MaterialCommunityIcons name="school-outline" size={size} color={iconColor} />}
+            onPress={() => props.navigation.navigate('Cursos')} // Agora o nome bate com o Navigator
+            style={styles.drawerItem}
+            labelStyle={[styles.drawerLabel, { color: labelColor }]}
+          />
         </View>
       )}
 
-      {/* SEÇÃO: PROFESSOR - Visível para Professor */}
-      
       {/* SEÇÃO: PROFESSOR */}
-    {(userType === 'professor') && (
-      <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: labelColor }]}>ÁREA DO PROFESSOR</Text>
-        
+      {userType === 'professor' && (
+        <View style={styles.section}>
+          <Text style={[styles.sectionTitle, { color: labelColor }]}>ÁREA DO PROFESSOR</Text>
+          
+          <DrawerItem 
+            label="Perfil" 
+            icon={({ size }) => <MaterialCommunityIcons name="account-tie-outline" size={size} color={iconColor} />}
+            onPress={() => props.navigation.navigate('ProfileProfessor')}
+            style={styles.drawerItem}
+            labelStyle={[styles.drawerLabel, { color: labelColor }]}
+          />
 
+          <DrawerItem 
+            label="Dashboard" 
+            icon={({ size }) => <MaterialCommunityIcons name="view-dashboard-variant" size={size} color={iconColor} />}
+            onPress={() => props.navigation.navigate('ProfessorHome', { screen: 'Dashboard' })}
+            style={styles.drawerItem}
+            labelStyle={[styles.drawerLabel, { color: labelColor }]}
+          />
+        </View>
+      )}
 
-        <DrawerItem 
-          label="Perfil" 
-          icon={({ size }) => <MaterialCommunityIcons name="account-group" size={size} color={iconColor} />}
-          onPress={() => props.navigation.navigate('ProfileProfessor', { screen: 'ProfileProfessor' })}
-          style={styles.drawerItem}
-          labelStyle={[styles.drawerLabel, { color: labelColor }]}
-        />
-
-         <DrawerItem 
-          label="Dashboard" 
-          icon={({ size }) => <MaterialCommunityIcons name="view-dashboard-variant" size={size} color={iconColor} />}
-          onPress={() => props.navigation.navigate('ProfessorHome', { screen: 'Dashboard' })}
-          style={styles.drawerItem}
-          labelStyle={[styles.drawerLabel, { color: labelColor }]}
-        />
-
-      </View>
-    )}
-
-      {/* SEÇÃO: ADMINISTRADOR - SÓ para Admin */}
+      {/* SEÇÃO: ADMINISTRADOR */}
       {userType === 'admin' && (
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: labelColor }]}>PERFIL ADMIN</Text>
           <DrawerItem 
-            label="Perfil" 
-            icon={({ size }) => <MaterialIcons name="person" size={size} color={iconColor} />}
-            onPress={() => props.navigation.navigate('ProfileAdmin', { screen: 'Perfil' })}
+            label="Perfil Admin" 
+            icon={({ size }) => <MaterialIcons name="admin-panel-settings" size={size} color={iconColor} />}
+            onPress={() => props.navigation.navigate('ProfileAdmin')}
             style={styles.drawerItem}
             labelStyle={[styles.drawerLabel, { color: labelColor }]}
           />
         </View>
       )}
 
-      {/* SEÇÃO: CONFIGURAÇÕES (Sempre visível) */}
+      {/* SEÇÃO: CONFIGURAÇÕES */}
       <View style={styles.section}>
         <Text style={[styles.sectionTitle, { color: labelColor }]}>CONFIGURAÇÕES</Text>
         <DrawerItem
