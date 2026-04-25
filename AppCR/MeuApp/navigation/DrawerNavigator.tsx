@@ -29,6 +29,7 @@ import DisciplinaDetailAluno from 'modules/aluno/screens/DisciplinaDetailScreen'
 import ConteudoAlunoScreen from '../modules/aluno/screens/ConteudoAlunoScreen';
 import AtividadeAlunoScreen from '../modules/aluno/screens/AtividadeAlunoScreen';
 import NotasAlunoScreen from '../modules/aluno/screens/NotasAlunoScreen';
+import ClasseAlunoScreen from '../modules/aluno/screens/ClasseAlunoScreen';
 import ProfessorTabNavigator from './ProfessorTabNavigator';
 import { useAuth } from '../contexts/AuthContext'; 
 import AdminTabNavigator from './AdminTabNavigator';
@@ -99,6 +100,11 @@ export default function DrawerNavigator() {
               name="NotasAluno" 
               component={NotasAlunoScreen} 
               options={{ title: 'Meu Desempenho' }}
+            />
+            <Drawer.Screen 
+              name="ClasseAluno" 
+              component={ClasseAlunoScreen} 
+              options={{ title: 'Mural da Classe' }}
             />
         </>
       )}

@@ -83,6 +83,16 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
             style={styles.drawerItem}
             labelStyle={[styles.drawerLabel, { color: labelColor }]}
           />
+          
+          <DrawerItem 
+            label="Mural da Classe" 
+            icon={({ size }) => (
+              <MaterialCommunityIcons name="google-classroom" size={size} color={iconColor} />
+            )}
+            onPress={() => props.navigation.navigate('ClasseAluno')}
+            style={styles.drawerItem}
+            labelStyle={[styles.drawerLabel, { color: labelColor }]}
+          />
         </View>
       )}
 

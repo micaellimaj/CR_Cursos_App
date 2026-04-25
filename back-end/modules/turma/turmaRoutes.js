@@ -9,6 +9,7 @@ const {
     getTurmaById, 
     updateTurma, 
     deleteTurma, 
+    getTurmaByAluno,
 } = require('./turmaController');
 
 const authMiddleware = require('../../shared/middlewares/authMiddleware');
@@ -431,5 +432,7 @@ router.put('/:id', authMiddleware, verificarAdmin, updateTurma);
  *         description: Erro interno do servidor.
  */
 router.delete('/:id', authMiddleware, verificarAdmin, deleteTurma);
+
+router.get('/aluno/:alunoId', authMiddleware, getTurmaByAluno);
 
 module.exports = router;

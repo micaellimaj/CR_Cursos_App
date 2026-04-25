@@ -39,6 +39,8 @@ export default function LoginScreen({ navigation }: any) {
   }
 };
 
+
+
   return (
     <SafeAreaView style={[styles.container, isDarkTheme ? styles.containerDark : styles.containerLight]}>
       <View style={styles.content}>

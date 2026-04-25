@@ -159,3 +159,12 @@ export interface IClasse {
   created_at: string | null;
   updated_at: string | null;
 }
+
+export interface ITurmaAluno {
+  id: string;
+  nome: string;
+  curso_id: string;
+  data_inicio: string;
+  data_fim: string;
+  collection: string;
+}

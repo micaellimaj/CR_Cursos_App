@@ -6,6 +6,7 @@ const getAllTurmasUC = require('./use-cases/getAllTurmas');
 const getTurmaByIdUC = require('./use-cases/getTurmaById'); 
 const updateTurmaUC = require('./use-cases/updateTurma');
 const deleteTurmaUC = require('./use-cases/deleteTurma');
+const getTurmaByAlunoIdUC = require('./use-cases/getTurmaByAlunoId');
 
 const createTurma = async (req, res) => {
     try {
@@ -93,6 +94,21 @@ const getAlunosDaTurma = async (req, res) => {
     }
 };
 
+const getTurmaByAluno = async (req, res) => {
+    try {
+        const alunoId = req.params.alunoId;
+        const turma = await getTurmaByAlunoIdUC(alunoId);
+        
+        if (!turma) {
+            return res.status(404).json({ message: 'Nenhuma turma encontrada para este aluno.' });
+        }
+
+        res.status(200).json(turma);
+    } catch (error) {
+        res.status(error.status || 500).json({ message: error.message || 'Erro ao buscar turma do aluno' });
+    }
+};
+
 
 module.exports = {
     createTurma,
@@ -103,4 +119,5 @@ module.exports = {
     matricularAluno,
     associarProfessor,
     getAlunosDaTurma,
+    getTurmaByAluno,
 };
