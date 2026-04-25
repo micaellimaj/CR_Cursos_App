@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
     flex: 1, 
     paddingHorizontal: 20, 
     paddingTop: 15,
-    width: '100%' 
+    width: '105%' 
   },
   headerSection: { 
     width: '100%', 

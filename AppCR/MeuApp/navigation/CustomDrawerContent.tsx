@@ -64,7 +64,7 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
       </View>
 
       {/* SEÇÃO: ALUNO */}
-      {userType === 'aluno' && (
+     {userType === 'aluno' && (
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: labelColor }]}>ÁREA DO ALUNO</Text>
           
@@ -76,20 +76,10 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
             labelStyle={[styles.drawerLabel, { color: labelColor }]}
           />
 
-          <DrawerItem 
-            label="Meus Cursos" 
-            icon={({ size }) => <MaterialCommunityIcons name="school-outline" size={size} color={iconColor} />}
-            onPress={() => props.navigation.navigate('Cursos')} // Agora o nome bate com o Navigator
-            style={styles.drawerItem}
-            labelStyle={[styles.drawerLabel, { color: labelColor }]}
-          />
-          
-          <DrawerItem 
-            label="Mural da Classe" 
-            icon={({ size }) => (
-              <MaterialCommunityIcons name="google-classroom" size={size} color={iconColor} />
-            )}
-            onPress={() => props.navigation.navigate('ClasseAluno')}
+          <DrawerItem
+            label="Início / Dashboard"
+            icon={({ size }) => <MaterialCommunityIcons name="view-dashboard-outline" size={size} color={iconColor} />}
+            onPress={() => props.navigation.navigate('AlunoHomePrincipal', { screen: 'Início' })}
             style={styles.drawerItem}
             labelStyle={[styles.drawerLabel, { color: labelColor }]}
           />

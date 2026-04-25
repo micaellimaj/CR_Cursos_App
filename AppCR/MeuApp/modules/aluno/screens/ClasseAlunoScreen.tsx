@@ -10,7 +10,7 @@ import { useAuth } from '../../../contexts/AuthContext';
 import styles from '../styles/ClasseAlunoStyles';
 import { ClasseAlunoCard } from '../components/ClasseAlunoCard';
 import { getClassesByTurma } from '../controllers/classeController';
-import { getTurmaDoAluno } from '../controllers/turmaController'; // Novo controller
+import { getTurmaByAlunoId } from '../controllers/turmaController'; // Novo controller
 import { IClasse, IAluno, ITurmaAluno } from '../types';
 
 export default function ClasseAlunoScreen() {
@@ -30,26 +30,24 @@ export default function ClasseAlunoScreen() {
 
   // Função para carregar tudo
   const loadInitialData = async () => {
-    if (!aluno?.turma_id) {
-      console.log("Aluno sem turma_id no perfil");
-      return;
-    }
+  if (!user?.id) return;
 
-    setLoading(true);
-    try {
-      // 1. Busca os detalhes da turma (para pegar o Nome)
-      const dadosTurma = await getTurmaDoAluno(aluno.turma_id);
-      setTurmaInfo(dadosTurma);
+  setLoading(true);
+  try {
+    // 1. Pergunta ao back: "Qual a turma do aluno X?"
+    const dadosTurma = await getTurmaByAlunoId(user.id);
+    setTurmaInfo(dadosTurma);
 
-      // 2. Busca as postagens daquela turma
-      const mural = await getClassesByTurma(aluno.turma_id);
-      setPosts(mural);
-    } catch (error: any) {
-      Alert.alert("Aviso", "Não foi possível carregar os dados da sua turma.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    // 2. Com o ID da turma em mãos, busca as postagens (classes)
+    const mural = await getClassesByTurma(dadosTurma.id);
+    setPosts(mural);
+    
+  } catch (error) {
+    console.log("Erro ao identificar turma automaticamente:", error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     loadInitialData();
@@ -68,7 +66,7 @@ export default function ClasseAlunoScreen() {
           padding: 16, backgroundColor: cardBg, borderRadius: 16, marginBottom: 20,
           borderWidth: 1, borderColor: borderColor, flexDirection: 'row', alignItems: 'center',
         }}>
-          <View style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: '#2563eb15', justifyContent: 'center', alignItems: 'center', marginRight: 12 }}>
+          <View style={{ width: 30, height: 20, borderRadius: 10, backgroundColor: '#2563eb15', justifyContent: 'center', alignItems: 'center', marginRight: 12 }}>
              <MaterialCommunityIcons name="google-classroom" size={20} color="#2563eb" />
           </View>
           <View style={{ flex: 1 }}>

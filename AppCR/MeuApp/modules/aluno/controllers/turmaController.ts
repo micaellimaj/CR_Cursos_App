@@ -3,16 +3,13 @@ import { ITurmaAluno } from '../types';
 import axios from 'axios';
 
 /**
- * Busca os detalhes da turma que o aluno pertence
+ * Busca a turma vinculada ao ID do aluno
  */
-export const getTurmaDoAluno = async (turmaId: string): Promise<ITurmaAluno> => {
+export const getTurmaByAlunoId = async (alunoId: string): Promise<ITurmaAluno> => {
   try {
-    const response = await api.get(`/turma/${turmaId}`);
+    const response = await api.get(`/turma/aluno/${alunoId}`);
     return response.data;
   } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data?.message || "Erro ao buscar dados da turma");
-    }
-    throw new Error("Erro inesperado ao carregar turma");
+    throw new Error("Não foi possível localizar sua turma.");
   }
 };

@@ -30,7 +30,11 @@ import ConteudoAlunoScreen from '../modules/aluno/screens/ConteudoAlunoScreen';
 import AtividadeAlunoScreen from '../modules/aluno/screens/AtividadeAlunoScreen';
 import NotasAlunoScreen from '../modules/aluno/screens/NotasAlunoScreen';
 import ClasseAlunoScreen from '../modules/aluno/screens/ClasseAlunoScreen';
+import PrivadoAlunoScreen from 'modules/aluno/screens/PrivadoAlunoScreen';
+import FrequenciaAlunoScreen from 'modules/aluno/screens/FrequenciaAlunoScreen';
 import ProfessorTabNavigator from './ProfessorTabNavigator';
+import AlunoTabNavigator from './AlunoTabNavigator';
+import AlunoHomeScreen from 'modules/aluno/screens/AlunoHomeScreen';
 import { useAuth } from '../contexts/AuthContext'; 
 import AdminTabNavigator from './AdminTabNavigator';
 
@@ -64,51 +68,23 @@ export default function DrawerNavigator() {
       {/* ROTAS DE ALUNO: Só existem se for Aluno */}
       {(userType === 'aluno') && (
         <>
+          {/* TELA PRINCIPAL COM TABS */}
           <Drawer.Screen 
-            name="ProfileAluno" 
-            component={ProfileAlunoScreen} 
-            options={{ title: 'Meu Perfil' }}
+            name="AlunoHomePrincipal" 
+            component={AlunoTabNavigator} 
+            options={{ title: 'Área do Aluno' }}
           />
-          <Drawer.Screen 
-            name="Cursos" 
-            component={CursosScreen} 
-            options={{ title: 'Meus Cursos' }}
-          />
-          {/* Registre DisciplinasAluno aqui para poder navegar até ela, 
-              mesmo que não queira que ela apareça no menu lateral */}
-          <Drawer.Screen 
-            name="DisciplinasAluno" 
-            component={DisciplinasAlunoScreen} 
-            options={{ title: 'Disciplinas' }}
-          />
-          <Drawer.Screen 
-            name="DisciplinaDetailAluno" // Mudei o name para evitar conflito de navegação
-            component={DisciplinaDetailAluno} 
-            options={{ title: 'Detalhes da Disciplina' }}
-          />
-          <Drawer.Screen 
-            name="ConteudoAluno" // Este é o nome que deve bater com o screen do seu array
-            component={ConteudoAlunoScreen} 
-            options={{ title: 'Materiais de Estudo' }}
-          />
-          <Drawer.Screen
-            name="AtividadeAluno"
-            component={AtividadeAlunoScreen}
-            options={{ title: 'Minhas Atividades' }}
-            />
-            <Drawer.Screen 
-              name="NotasAluno" 
-              component={NotasAlunoScreen} 
-              options={{ title: 'Meu Desempenho' }}
-            />
-            <Drawer.Screen 
-              name="ClasseAluno" 
-              component={ClasseAlunoScreen} 
-              options={{ title: 'Mural da Classe' }}
-            />
+
+          {/* TELAS DE APOIO NO DRAWER (Acessíveis via navegação, mas limpas no menu lateral) */}
+          <Drawer.Screen name="ProfileAluno" component={ProfileAlunoScreen} options={{ title: 'Meu Perfil' }} />
+          <Drawer.Screen name="DisciplinasAluno" component={DisciplinasAlunoScreen} />
+          <Drawer.Screen name="DisciplinaDetailAluno" component={DisciplinaDetailAluno} />
+          <Drawer.Screen name="ConteudoAluno" component={ConteudoAlunoScreen} />
+          <Drawer.Screen name="AtividadeAluno" component={AtividadeAlunoScreen} />
+          <Drawer.Screen name="NotasAluno" component={NotasAlunoScreen} />
+          {/* As outras telas como Frequencia/Cursos já estão no TabNavigator */}
         </>
       )}
-
             {/* ROTAS DE PROFESSOR: Só existem se for Professor ou Admin */}
       {(userType === 'professor') && (
         <>
