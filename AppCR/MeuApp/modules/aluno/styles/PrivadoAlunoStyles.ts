@@ -29,7 +29,6 @@ export const getPrivadoAlunoStyles = (theme: 'light' | 'dark') => {
       marginBottom: 16,
       borderWidth: 1,
       borderColor: isLight ? '#e2e8f0' : '#334155',
-      // Sombra leve para destacar o conteúdo
       shadowColor: '#000',
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.05,

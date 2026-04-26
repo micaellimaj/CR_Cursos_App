@@ -7,7 +7,6 @@ export const getFrequenciaAlunoStyles = (theme: 'light' | 'dark') => {
     header: { marginBottom: 20 },
     title: { fontSize: 24, fontWeight: 'bold', color: isLight ? '#1e293b' : '#fff' },
     
-    // Cards de Resumo (Stats)
     statsRow: { flexDirection: 'row', gap: 12, marginBottom: 24 },
     statCard: {
       flex: 1,
@@ -21,7 +20,6 @@ export const getFrequenciaAlunoStyles = (theme: 'light' | 'dark') => {
     statValue: { fontSize: 22, fontWeight: 'bold', marginVertical: 4 },
     statLabel: { fontSize: 12, color: '#64748b', fontWeight: '600', textTransform: 'uppercase' },
 
-    // Lista de Histórico
     sectionTitle: { 
       fontSize: 16, 
       fontWeight: 'bold', 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { getDashboardAlunoStyles } from '../styles/DashboardAlunoStyles'; // Nome atualizado
+import { getDashboardAlunoStyles } from '../styles/DashboardAlunoStyles';
 
 interface AlunoStatCardProps {
   label: string;
@@ -10,7 +10,7 @@ interface AlunoStatCardProps {
 }
 
 export const AlunoStatCard: React.FC<AlunoStatCardProps> = ({ label, value, icon, theme }) => {
-  const styles = getDashboardAlunoStyles(theme); // Nome atualizado
+  const styles = getDashboardAlunoStyles(theme);
   const isLight = theme === 'light';
 
   return (

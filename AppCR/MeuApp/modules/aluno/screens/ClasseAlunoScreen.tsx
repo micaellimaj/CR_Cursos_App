@@ -28,17 +28,14 @@ export default function ClasseAlunoScreen() {
   const cardBg = isLightTheme ? '#fff' : '#1e293b';
   const borderColor = isLightTheme ? '#e2e8f0' : '#334155';
 
-  // Função para carregar tudo
   const loadInitialData = async () => {
   if (!user?.id) return;
 
   setLoading(true);
   try {
-    // 1. Pergunta ao back: "Qual a turma do aluno X?"
     const dadosTurma = await getTurmaByAlunoId(user.id);
     setTurmaInfo(dadosTurma);
 
-    // 2. Com o ID da turma em mãos, busca as postagens (classes)
     const mural = await getClassesByTurma(dadosTurma.id);
     setPosts(mural);
     

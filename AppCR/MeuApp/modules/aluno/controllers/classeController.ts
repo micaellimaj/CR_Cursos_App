@@ -23,7 +23,6 @@ export const getClasseById = async (id: string): Promise<IClasse> => {
  */
 export const getClassesByTurma = async (turmaId: string): Promise<IClasse[]> => {
   try {
-    // Assumindo que sua rota de listagem suporte filtro por turma ou retorne tudo para filtrar no front
     const response = await api.get(`/classe/turma/${turmaId}`);
     return response.data;
   } catch (error: unknown) {

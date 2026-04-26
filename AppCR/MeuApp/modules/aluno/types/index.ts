@@ -41,7 +41,6 @@ export interface IDisciplina {
   updated_at: string | null;
 }
 
-// Caso precise tipar uma lista de disciplinas
 export type IDisciplinaList = IDisciplina[];
 
 export interface ICurso {
@@ -92,7 +91,7 @@ export interface INota {
   professorId: string;
   turmaId: string;
   valor: number;
-  nota?: number; // Compatibilidade com campo antigo
+  nota?: number;
   descricao: string;
   created_at: string | null;
 }
@@ -103,7 +102,7 @@ export interface IFrequencia {
   aluno_id: string;
   turma_id: string;
   professor_id: string;
-  data: string; // Formato DD/MM/AAAA conforme seu schema
+  data: string;
   status: boolean;
   observacao: string | null;
   collection: string;

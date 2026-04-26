@@ -22,7 +22,7 @@ export default function PrivadoAlunoScreen() {
   const loadData = async () => {
     if (!user?.id) return;
     try {
-      // Carrega as mensagens e a turma em paralelo
+
       const [dataMensagens, dataTurma] = await Promise.all([
         getConteudoPrivadoByAluno(user.id),
         getTurmaByAlunoId(user.id)

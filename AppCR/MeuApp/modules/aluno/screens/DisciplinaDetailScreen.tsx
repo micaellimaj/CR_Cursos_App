@@ -9,7 +9,7 @@ const ALUNO_ITEMS = [
   { 
     title: 'Conteúdos', 
     icon: 'file-document-outline', 
-    screen: 'ConteudoAluno', // Ajuste conforme o nome das futuras telas
+    screen: 'ConteudoAluno',
     color: '#2563eb', 
     desc: 'Materiais de estudo e aulas' 
   },
@@ -17,20 +17,19 @@ const ALUNO_ITEMS = [
     title: 'Atividades', 
     icon: 'clipboard-edit-outline', 
     screen: 'AtividadeAluno', 
-    color: '#10b981', // Verde para atividades
+    color: '#10b981',
     desc: 'Tarefas e avaliações' 
   },
   { 
     title: 'Minhas Notas', 
     icon: 'chart-bar', 
     screen: 'NotasAluno', 
-    color: '#f59e0b', // Amarelo/Laranja para notas
+    color: '#f59e0b',
     desc: 'Desempenho acadêmico' 
   },
 ];
 
 export default function DisciplinaDetailScreen({ route, navigation }: any) {
-  // Recebe o nome da disciplina do card anterior
   const { disciplinaNome, disciplinaId } = route.params;
   const { theme } = useTheme();
   const isLightTheme = theme === 'light';

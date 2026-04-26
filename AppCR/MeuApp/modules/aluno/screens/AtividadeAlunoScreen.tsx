@@ -29,7 +29,6 @@ export default function AtividadeAlunoScreen({ route, navigation }: any) {
   useEffect(() => { fetchAtividades(); }, [disciplinaId]);
 
   const handleOpenAtividade = (item: IAtividade) => {
-    // No futuro, levar para uma tela de envio de resposta
     Alert.alert(item.titulo, "Aqui você poderá ver os detalhes e enviar sua resposta.");
   };
 

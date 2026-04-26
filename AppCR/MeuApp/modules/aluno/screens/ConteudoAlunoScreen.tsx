@@ -32,8 +32,6 @@ export default function ConteudoAlunoScreen({ route, navigation }: any) {
   useEffect(() => { fetchConteudos(); }, [disciplinaId]);
 
   const handleOpenConteudo = (item: IConteudo) => {
-    // Aqui no futuro você decidirá se abre um WebView, 
-    // mostra o texto em um modal ou faz download do arquivo.
     Alert.alert(item.titulo, `Abrindo conteúdo do tipo ${item.tipo}...`);
   };
 

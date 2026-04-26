@@ -24,7 +24,6 @@ export const getAllDisciplinas = async (): Promise<IDisciplina[]> => {
 export const getDisciplinasByCurso = async (cursoId: string): Promise<IDisciplina[]> => {
   try {
     const todasDisciplinas = await getAllDisciplinas();
-    // Filtra para mostrar apenas as disciplinas do curso do aluno
     return todasDisciplinas.filter(disciplina => disciplina.cursoId === cursoId);
   } catch (error) {
     throw error;

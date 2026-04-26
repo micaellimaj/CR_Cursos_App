@@ -47,7 +47,6 @@ export const getAlunoHomeStyles = (theme: 'light' | 'dark') => {
       justifyContent: 'space-between',
       flexWrap: 'wrap',
     },
-    // Estilo do Card de Estatística
     statGridCard: {
       width: '48%',
       padding: 20,

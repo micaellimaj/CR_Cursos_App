@@ -28,7 +28,6 @@ export default function NotasAlunoScreen({ route, navigation }: any) {
 
   useEffect(() => { fetchNotas(); }, [disciplinaId]);
 
-  // Cálculo da média simples
   const media = notas.length > 0 
     ? (notas.reduce((acc, n) => acc + (n.valor ?? n.nota ?? 0), 0) / notas.length).toFixed(1)
     : "0.0";

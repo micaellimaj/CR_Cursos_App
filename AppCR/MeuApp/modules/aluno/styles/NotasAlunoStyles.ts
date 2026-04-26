@@ -6,7 +6,6 @@ export default StyleSheet.create({
   title: { fontSize: 24, fontWeight: '800', letterSpacing: -0.5 },
   subtitle: { fontSize: 14, color: '#64748b', marginTop: 4 },
   
-  // Card de Resumo (Média)
   scoreOverview: {
     padding: 20,
     borderRadius: 20,
@@ -17,7 +16,6 @@ export default StyleSheet.create({
   averageValue: { fontSize: 42, fontWeight: '800', color: '#2563eb' },
   averageLabel: { fontSize: 12, fontWeight: '700', color: '#64748b', textTransform: 'uppercase' },
 
-  // Lista de Notas
   listTitle: { fontSize: 16, fontWeight: '700', marginBottom: 15 },
   notaCard: {
     flexDirection: 'row',

@@ -20,7 +20,6 @@ export const getNotasByAluno = async (alunoId: string): Promise<INota[]> => {
 
 /**
  * Busca as notas de um aluno filtradas por uma disciplina específica.
- * Útil para a tela de detalhes da disciplina.
  */
 export const getNotasByDisciplina = async (disciplinaId: string): Promise<INota[]> => {
   try {

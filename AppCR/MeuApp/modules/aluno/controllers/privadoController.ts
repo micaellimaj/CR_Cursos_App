@@ -8,7 +8,6 @@ import axios from 'axios';
  */
 export const getConteudoPrivadoByAluno = async (alunoId: string): Promise<IPrivado[]> => {
   try {
-    // Rota baseada no seu backend: /aluno/:alunoId (ou a rota que você definiu para o getConteudoByAluno)
     const response = await api.get(`/privado/aluno/${alunoId}`);
     return response.data;
   } catch (error: unknown) {

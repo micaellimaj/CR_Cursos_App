@@ -1,35 +1,76 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, RefreshControl, SafeAreaView } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, ScrollView, RefreshControl, SafeAreaView, ActivityIndicator } from 'react-native';
 import { Ionicons, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import { useTheme } from '../../../contexts/ThemeContext';
 import { useAuth } from '../../../contexts/AuthContext';
 import { getGlobalStyles } from '../../../styles/globalStyles';
 import { getDashboardAlunoStyles } from '../styles/DashboardAlunoStyles';
 import { AlunoStatCard } from '../components/AlunoStatCard';
+import { getAlunoDashboardStats } from '../controllers/dashboardController';
+import { IAluno } from '../types';
+import { getAlunoById } from '../controllers/alunoController'
+import { getTurmaByAlunoId } from '../controllers/turmaController';
 
 export default function AlunoHomeScreen() {
   const { theme } = useTheme();
-  const { user } = useAuth();
+  const { user } = useAuth(); 
   const globalStyles = getGlobalStyles(theme);
   const styles = getDashboardAlunoStyles(theme);
   
   const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
+    disciplinas: 0,
+    atividades: 0,
+    mediaGeral: "0.0",
+    presencaTotal: "0%",
+    materiaisNovos: 0,
+    mensagensPrivadas: 0
+  });
 
-  // Dados Estáticos para o Dashboard
-  const stats = {
-    disciplinas: 6,
-    atividadesPendentes: 3,
-    mediaGeral: "8.5",
-    presencaTotal: "92%",
-    materiaisNovos: 12,
-    mensagensPrivadas: 2
-  };
+  const loadDashboardData = useCallback(async () => {
+  if (!user?.id) return;
+
+  try {
+    setLoading(true);
+    
+    const turmaData = await getTurmaByAlunoId(user.id);
+
+    if (turmaData && turmaData.curso_id) {
+      const data = await getAlunoDashboardStats(
+        user.id,         
+        turmaData.id,
+        turmaData.curso_id 
+      );
+      
+      setStats(data);
+    } else {
+      console.warn("Turma ou Curso não localizados para este aluno.");
+    }
+  } catch (error) {
+    console.error("Erro ao carregar dashboard:", error);
+  } finally {
+    setLoading(false);
+    setRefreshing(false);
+  }
+}, [user]);
+
+  useEffect(() => {
+    loadDashboardData();
+  }, [user]);
 
   const onRefresh = () => {
     setRefreshing(true);
-    // Simula um delay de carregamento
-    setTimeout(() => setRefreshing(false), 1500);
+    loadDashboardData();
   };
+
+  if (loading && !refreshing) {
+    return (
+      <View style={[globalStyles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color="#2563eb" />
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView style={[globalStyles.container, { backgroundColor: theme === 'light' ? '#f8fafc' : '#0f172a' }]}>
@@ -41,20 +82,13 @@ export default function AlunoHomeScreen() {
         <View style={styles.header}>
           <View style={{ flex: 1 }}>
             <Text style={[globalStyles.headerTitle, { fontSize: 24 }]}>
-              Olá, {user?.full_name?.split(' ')[0] || 'Aluno'}
+              Olá, {user?.full_name?.split(' ')[0] || user?.nome}
             </Text>
             <Text style={styles.subtitle}>Foco nos estudos! Veja seu resumo.</Text>
           </View>
-          <MaterialCommunityIcons 
-            name="bell-outline" 
-            size={24} 
-            color={theme === 'light' ? '#1e293b' : '#fff'} 
-          />
         </View>
-        
 
         <View style={styles.content}>
-          {/* Card Principal de Destaque */}
           <View style={styles.mainCard}>
             <View style={{ flex: 1 }}>
               <Text style={styles.mainCardTitle}>Área do Aluno</Text>
@@ -75,7 +109,7 @@ export default function AlunoHomeScreen() {
 
             <AlunoStatCard 
               label="Atividades" 
-              value={stats.atividadesPendentes} 
+              value={stats.atividades} 
               theme={theme}
               icon={<Ionicons name="document-text" size={22} color="#2563eb" />}
             />
